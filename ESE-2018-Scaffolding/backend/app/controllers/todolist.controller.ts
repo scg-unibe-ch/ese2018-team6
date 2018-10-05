@@ -2,6 +2,8 @@ import {Router, Request, Response} from 'express';
 import {TodoList} from '../models/todolist.model';
 
 const router: Router = Router();
+
+
 router.get('/', async (req: Request, res: Response) => {
   const instances = await TodoList.findAll();
   res.statusCode = 200;

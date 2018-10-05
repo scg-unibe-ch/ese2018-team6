@@ -3,6 +3,8 @@ import {TodoList} from '../models/todolist.model';
 import {TodoItem} from '../models/todoitem.model';
 
 const router: Router = Router();
+
+
 router.get('/', async (req: Request, res: Response) => {
   const todoListId = parseInt(req.query.todoListId);
   let options = {};
