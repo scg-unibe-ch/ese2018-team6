@@ -12,7 +12,7 @@ export class JobItemComponent implements OnInit {
   @Input()
   jobItem: JobItem;
   @Output()
-  delete = new EventEmitter<JobItem>();
+  destroy = new EventEmitter<JobItem>();
 
   constructor(private httpClient: HttpClient) { }
 
@@ -27,9 +27,9 @@ export class JobItemComponent implements OnInit {
     }).subscribe();
   }
 
-  onDelete() {
+  onDestroy() {
     this.httpClient.delete('http://localhost:3000/jobitem/' + this.jobItem.id).subscribe(() => {
-      this.delete.emit(this.jobItem);
+      this.destroy.emit(this.jobItem);
     });
   }
 }

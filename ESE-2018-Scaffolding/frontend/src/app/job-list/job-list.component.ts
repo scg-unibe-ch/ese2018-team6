@@ -15,7 +15,7 @@ export class JobListComponent implements OnInit {
   jobItem: JobItem = new JobItem(null, null, '', '', '');
   jobItems: JobItem[] = [];
   @Output()
-  delete = new EventEmitter<JobList>();
+  destroy = new EventEmitter<JobList>();
 
   constructor(private httpClient: HttpClient) { }
 
@@ -34,9 +34,9 @@ export class JobListComponent implements OnInit {
     }).subscribe();
   }
 
-  onDelete() {
+  onDestroy() {
     this.httpClient.delete('http://localhost:3000/joblist/' + this.jobList.id).subscribe(() => {
-      this.delete.emit(this.jobList);
+      this.destroy.emit(this.jobList);
     });
   }
 
@@ -54,7 +54,7 @@ export class JobListComponent implements OnInit {
     });
   }
 
-  onJobItemDelete(jobItem: JobItem) {
+  onJobItemDestroy(jobItem: JobItem) {
     this.jobItems.splice(this.jobItems.indexOf(jobItem), 1);
   }
 }
