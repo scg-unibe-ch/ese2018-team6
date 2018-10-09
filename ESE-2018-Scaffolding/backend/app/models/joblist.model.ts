@@ -1,14 +1,14 @@
 import {Table, Column, Model, HasMany} from 'sequelize-typescript';
-import {TodoItem} from './todoitem.model';
+import {JobItem} from './jobitem.model';
 
 @Table
-export class TodoList extends Model<TodoList> {
+export class JobList extends Model<JobList> {
 
   @Column
   name!: string;
 
-  @HasMany(() => TodoItem)
-  todoItems!: TodoItem[];
+  @HasMany(() => JobItem)
+  jobItems!: JobItem[];
 
   toSimplification(): any {
     return {

@@ -1,27 +1,27 @@
 import {Router, Request, Response} from 'express';
-import {TodoList} from '../models/todolist.model';
-import {TodoItem} from '../models/todoitem.model';
+import {JobList} from '../models/joblist.model';
+import {JobItem} from '../models/jobitem.model';
 
 const router: Router = Router();
 router.get('/', async (req: Request, res: Response) => {
-  const todoListId = parseInt(req.query.todoListId);
+  const jobListId = parseInt(req.query.jobListId);
   let options = {};
-  if (todoListId != null) {
+  if (jobListId != null) {
     options = {
       include: [{
-        model: TodoList,
+        model: JobList,
         where: {
-          id: todoListId
+          id: jobListId
         }
       }]
     };
   }
-  const instances = await TodoItem.findAll(options);
+  const instances = await JobItem.findAll(options);
   res.statusCode = 200;
   res.send(instances.map(e => e.toSimplification()));
 });
 router.post('/', async (req: Request, res: Response) => {
-  const instance = new TodoItem();
+  const instance = new JobItem();
   instance.fromSimplification(req.body);
   await instance.save();
   res.statusCode = 201;
@@ -29,7 +29,7 @@ router.post('/', async (req: Request, res: Response) => {
 });
 router.get('/:id', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
-  const instance = await TodoItem.findById(id);
+  const instance = await JobItem.findById(id);
   if (instance == null) {
     res.statusCode = 404;
     res.json({
@@ -42,7 +42,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 });
 router.put('/:id', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
-  const instance = await TodoItem.findById(id);
+  const instance = await JobItem.findById(id);
   if (instance == null) {
     res.statusCode = 404;
     res.json({
@@ -57,7 +57,7 @@ router.put('/:id', async (req: Request, res: Response) => {
 });
 router.delete('/:id', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
-  const instance = await TodoItem.findById(id);
+  const instance = await JobItem.findById(id);
   if (instance == null) {
     res.statusCode = 404;
     res.json({
@@ -71,4 +71,4 @@ router.delete('/:id', async (req: Request, res: Response) => {
   res.send();
 });
 
-export const TodoItemController: Router = router;
+export const JobItemController: Router = router;

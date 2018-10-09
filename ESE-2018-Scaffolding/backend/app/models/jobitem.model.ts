@@ -1,8 +1,8 @@
 import {Table, Column, Model, HasMany, BelongsTo, ForeignKey} from 'sequelize-typescript';
-import {TodoList} from './todolist.model';
+import {JobList} from './joblist.model';
 
 @Table
-export class TodoItem extends Model<TodoItem> {
+export class JobItem extends Model<JobItem> {
 
   @Column
   name!: string;
@@ -10,12 +10,12 @@ export class TodoItem extends Model<TodoItem> {
   @Column
   done!: boolean;
 
-  @ForeignKey(() => TodoList)
+  @ForeignKey(() => JobList)
   @Column
-  todoListId!: number;
+  jobListId!: number;
 
-  @BelongsTo(() => TodoList)
-  todoList!: TodoList;
+  @BelongsTo(() => JobList)
+  jobList!: JobList;
 
   toSimplification(): any {
     return {
@@ -28,7 +28,7 @@ export class TodoItem extends Model<TodoItem> {
   fromSimplification(simplification: any): void {
     this.name = simplification['name'];
     this.done = simplification['done'];
-    this.todoListId = simplification['todoListId'];
+    this.jobListId = simplification['jobListId'];
   }
 
 }
