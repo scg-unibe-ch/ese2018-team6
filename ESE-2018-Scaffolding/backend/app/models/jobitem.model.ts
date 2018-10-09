@@ -1,14 +1,22 @@
-import {Table, Column, Model, HasMany, BelongsTo, ForeignKey} from 'sequelize-typescript';
+import {Table, Column, Model, HasMany, BelongsTo, ForeignKey, PrimaryKey} from 'sequelize-typescript';
 import {JobList} from './joblist.model';
+import {Sequelize} from 'sequelize';
 
 @Table
 export class JobItem extends Model<JobItem> {
 
   @Column
-  name!: string;
+  title!: string;
 
   @Column
-  done!: boolean;
+  description!: string;
+
+  @Column
+  skills!: string;
+
+  @PrimaryKey
+  @Column
+  jobItemId!: number;
 
   @ForeignKey(() => JobList)
   @Column
@@ -19,16 +27,19 @@ export class JobItem extends Model<JobItem> {
 
   toSimplification(): any {
     return {
-      'id': this.id,
-      'name': this.name,
-      'done': this.done
+      'id': this.jobItemId,
+      'title': this.title,
+      'description': this.description,
+      'skills': this.skills,
+      'jobListId': this.jobListId
     };
   }
 
   fromSimplification(simplification: any): void {
-    this.name = simplification['name'];
-    this.done = simplification['done'];
+    this.title = simplification['title'];
+    this.description = simplification['description'];
     this.jobListId = simplification['jobListId'];
+    this.skills = simplification['skills'];
   }
 
 }
