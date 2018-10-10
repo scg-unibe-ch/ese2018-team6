@@ -14,10 +14,6 @@ export class JobItem extends Model<JobItem> {
   @Column
   skills!: string;
 
-  @PrimaryKey
-  @Column
-  jobItemId!: number;
-
   @ForeignKey(() => JobList)
   @Column
   jobListId!: number;
@@ -27,7 +23,7 @@ export class JobItem extends Model<JobItem> {
 
   toSimplification(): any {
     return {
-      'id': this.jobItemId,
+      'id': this.id,
       'title': this.title,
       'description': this.description,
       'skills': this.skills,
