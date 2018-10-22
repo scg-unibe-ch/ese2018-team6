@@ -1,10 +1,10 @@
 import {Router, Request, Response} from 'express';
-import {JobList} from '../models/joblist.model';
+// import {JobList} from '../models/joblist.model';
 import {JobItem} from '../models/jobitem.model';
 
 const router: Router = Router();
 router.get('/', async (req: Request, res: Response) => {
-  const jobListId = parseInt(req.query.jobListId);
+  /* const jobListId = parseInt(req.query.jobListId);
   let options = {};
   if (jobListId != null) {
     options = {
@@ -16,7 +16,8 @@ router.get('/', async (req: Request, res: Response) => {
       }]
     };
   }
-  const instances = await JobItem.findAll(options);
+  */
+  const instances = await JobItem.findAll();
   res.statusCode = 200;
   res.send(instances.map(e => e.toSimplification()));
 });
