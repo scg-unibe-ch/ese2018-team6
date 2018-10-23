@@ -1,7 +1,5 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {JobList} from '../job-list';
-import {JobItem} from '../job-item';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Job} from '../job.model';
 
 @Component({
   selector: 'app-job-list',
@@ -10,51 +8,116 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 })
 export class JobListComponent implements OnInit {
 
-  @Input()
-  jobList: JobList;
-  jobItem: JobItem = new JobItem(null, null, '', '', '');
-  jobItems: JobItem[] = [];
+  // Some dummy data to test the layout
+  jobs: Job[] = [
+    new Job(
+      'Java Developer',
+      'We\'re looking for a Java developer',
+      'Java',
+      new Date(2019, 0, 0),
+      new Date(2019, 11, 31),
+      new Date(2018, 11, 31),
+      50,
+      100,
+      'German, English',
+      'Bern',
+      'monthly',
+      7800
+    ),
+    new Job(
+      'Web Developer',
+      'We want to hire a Web Developer',
+      'HTML, CSS, Javascript',
+      new Date(2020, 0, 0),
+      new Date(2020, 11, 31),
+      new Date(2019, 11, 31),
+      80,
+      100,
+      'German, English',
+      'Zürich',
+      'hourly',
+      50
+    ),
+    new Job(
+      'C++ Developer',
+      'We need a graphics programmer',
+      'C++',
+      new Date(2021, 0, 0),
+      new Date(2021, 11, 31),
+      new Date(2020, 11, 31),
+      100,
+      100,
+      'German, English',
+      'Basel',
+      'oneTime',
+      100
+    ),
+    new Job(
+      'Web Developer',
+      'We want to hire a Web Developer',
+      'HTML, CSS, Javascript',
+      new Date(2020, 0, 0),
+      new Date(2020, 11, 31),
+      new Date(2019, 11, 31),
+      80,
+      100,
+      'German, English',
+      'Zürich',
+      'hourly',
+      50
+    ),
+    new Job(
+      'C++ Developer',
+      'We need a graphics programmer',
+      'C++',
+      new Date(2021, 0, 0),
+      new Date(2021, 11, 31),
+      new Date(2020, 11, 31),
+      100,
+      100,
+      'German, English',
+      'Basel',
+      'oneTime',
+      100
+    ),
+    new Job(
+      'Web Developer',
+      'We want to hire a Web Developer',
+      'HTML, CSS, Javascript',
+      new Date(2020, 0, 0),
+      new Date(2020, 11, 31),
+      new Date(2019, 11, 31),
+      80,
+      100,
+      'German, English',
+      'Zürich',
+      'hourly',
+      50
+    ),
+    new Job(
+      'C++ Developer',
+      'We need a graphics programmer',
+      'C++',
+      new Date(2021, 0, 0),
+      new Date(2021, 11, 31),
+      new Date(2020, 11, 31),
+      100,
+      100,
+      'German, English',
+      'Basel',
+      'oneTime',
+      100
+    )
+  ];
+
   @Output()
-  destroy = new EventEmitter<JobList>();
+  selectedComponent = new EventEmitter<string>();
 
-  constructor(private httpClient: HttpClient) { }
+  constructor() { }
 
-  ngOnInit() {
-    this.httpClient.get('http://localhost:3000/jobitem', {
-      params:  new HttpParams().set('jobListId', '' + this.jobList.id)
-    }).subscribe((instances: any) => {
-      this.jobItems = instances.map((instance) => new JobItem(instance.id,
-        instance.jobListId, instance.title, instance.description, instance.skills));
-    });
-  }
+  ngOnInit() { }
 
-  onSave() {
-    this.httpClient.put('http://localhost:3000/joblist/' + this.jobList.id, {
-      'name': this.jobList.name
-    }).subscribe();
-  }
-
-  onDestroy() {
-    this.httpClient.delete('http://localhost:3000/joblist/' + this.jobList.id).subscribe(() => {
-      this.destroy.emit(this.jobList);
-    });
-  }
-
-  onJobItemCreate() {
-    this.jobItem.jobListId = this.jobList.id;
-    this.httpClient.post('http://localhost:3000/jobitem', {
-      'jobListId': this.jobItem.jobListId,
-      'title': this.jobItem.title,
-      'description': this.jobItem.description,
-      'skills': this.jobItem.skills
-    }).subscribe((instance: any) => {
-      this.jobItem.id = instance.id;
-      this.jobItems.push(this.jobItem);
-      this.jobItem = new JobItem(null, this.jobList.id, '', '', '');
-    });
-  }
-
-  onJobItemDestroy(jobItem: JobItem) {
-    this.jobItems.splice(this.jobItems.indexOf(jobItem), 1);
+  onSelect(component: string) {
+    this.selectedComponent.emit(component);
   }
 }

@@ -1,0 +1,15 @@
+p {
+  min-height: 50px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #000;
+}
+
+.btn {
+  margin: 5px;
+  width: 40px;
+}
+
+.glyphicon {
+  vertical-align: middle;
+}

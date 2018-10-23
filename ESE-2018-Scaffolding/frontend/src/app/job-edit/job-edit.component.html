@@ -1,0 +1,123 @@
+<!-- Create New Job Posting - show if component is used to create a new job posting-->
+<h3>Create new Job Posting</h3>
+<hr>
+
+<!-- Edit Job Posting - show if component is used to edit an existing job posting using two-way databinding
+<h3>Edit Job Posting</h3>
+<hr>-->
+
+<form class="form-horizontal">
+
+  <div class="form-group">
+    <label class="col-md-3 control-label">Title</label>
+    <div class="col-md-9">
+      <input class="form-control" placeholder="Title">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="desc" class="col-md-3 control-label">Description</label>
+    <div class="col-md-9">
+      <textarea id="desc" rows="5" class="form-control" placeholder="Description"></textarea>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-3 control-label">Required Skills</label>
+    <div class="col-md-9">
+      <input class="form-control" placeholder="Required Skills">
+    </div>
+  </div>
+
+  <!-- Check for datepicker -->
+
+  <div class="form-group">
+    <label class="col-md-3 control-label">Start Date</label>
+    <div class="col-md-9">
+      <input class="form-control" placeholder="Start Date">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-3 control-label">End Date</label>
+    <div class="col-md-9">
+      <input class="form-control" placeholder="End Date">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-3 control-label">Posting Valid Until</label>
+    <div class="col-md-9">
+      <input class="form-control" placeholder="Posting Valid Until">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-3 control-label">Workload</label>
+    <div class="col-md-4">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Min">
+        <div class="input-group-addon">%</div>
+      </div>
+    </div>
+    <div class="col-md-offset-1 col-md-4">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Max">
+        <div class="input-group-addon">%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-3 control-label">Languages</label>
+    <div class="col-md-9">
+      <input class="form-control" placeholder="Languages">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-3 control-label">ZIP Code / Place</label>
+    <div class="col-md-2">
+      <input class="form-control" placeholder="ZIP Code">
+    </div>
+    <div class="col-md-7">
+      <input class="form-control" placeholder="Place">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-3 control-label">Salary Type</label>
+    <div class="col-md-9">
+      <select class="form-control">
+        <option>Monthly</option>
+        <option>Hourly</option>
+        <option>One Time Payment</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-3 control-label">Salary Amount</label>
+    <div class="col-md-9">
+      <div class="input-group">
+        <div class="input-group-addon">CHF</div>
+        <input type="text" class="form-control" placeholder="Salary Amount">
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit - show if component is used to create a new job posting-->
+  <div class="form-group">
+    <div class="col-md-offset-3 col-md-9">
+      <button type="submit" class="btn btn-success">Submit</button>
+    </div>
+  </div>
+
+  <!-- Save Changes - show if component is used to edit an existing job posting using two-way databinding
+  <div class="form-group">
+    <div class="col-md-offset-3 col-md-9">
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+    </div>
+  </div>-->
+
+</form>

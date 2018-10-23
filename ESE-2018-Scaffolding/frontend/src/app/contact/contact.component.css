@@ -1,0 +1,19 @@
+p {
+  font-size: 16px;
+  text-align: justify;
+  line-height: 1.8em;
+}
+
+.glyphicon {
+  width: 30px;
+}
+
+.glyphs {
+  padding: 0;
+  margin: 0;
+}
+
+ul {
+  font-size: 20px;
+  line-height: 2em;
+}

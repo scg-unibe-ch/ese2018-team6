@@ -1,0 +1,29 @@
+<nav class="navbar navbar-default navbar-inverse">
+  <div class="container-fluid">
+
+    <div class="navbar-header">
+      <a href="#" class="navbar-brand" (click)="onSelect('jobs')">Job Postings</a>
+    </div>
+
+    <div class="navbar-default navbar-inverse">
+      <ul class="nav navbar-nav">
+        <li><a href="#" (click)="onSelect('jobs')">Jobs</a></li>
+        <li><a href="#" (click)="onSelect('contact')">Contact</a></li>
+        <li><a href="#" (click)="onSelect('about-us')">About Us</a></li>
+      </ul>
+
+      <!-- For visitors - if not logged in-->
+      <div class="nav navbar-nav navbar-right">
+        <button type="button" class="btn btn-primary" (click)="onSelect('login')">Sign in</button>
+        <button type="button" class="btn btn-success" (click)="onSelect('register')">Register</button>
+      </div>
+
+      <!-- For active users - if logged in
+      <div class="nav navbar-nav navbar-right">
+        <button type="button" class="btn btn-default" (click)="onSelect('my-account')">My Account</button>
+        <button type="button" class="btn btn-danger">Sign Out</button>
+      </div>-->
+    </div>
+
+  </div>
+</nav>
