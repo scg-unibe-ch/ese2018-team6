@@ -1,4 +1,4 @@
-import {Table, Column, Model, HasMany, BelongsTo, ForeignKey, PrimaryKey, Unique} from 'sequelize-typescript';
+import {Table, Column, Model, HasMany, BelongsTo, ForeignKey, PrimaryKey, Unique, HasOne} from 'sequelize-typescript';
 import {unique} from 'sequelize-typescript/lib/utils/array';
 
 @Table
@@ -24,7 +24,7 @@ export class User extends Model<User> {
   }
 
   fromSimplification(simplification: any): void {
-    this.email = simplification['name'];
+    this.email = simplification['email'];
     this.password = simplification['password'];
     this.token = simplification['token'];
   }

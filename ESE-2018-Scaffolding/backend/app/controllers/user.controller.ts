@@ -5,10 +5,10 @@ import {Company} from '../models/company.model';
 import equals = require('validator/lib/equals');
 
 const router: Router = Router();
-router.get('/token/:email/:password', async (req: Request, res: Response) => {
-  const email = req.params.email;
-  const password = req.params.password;
-  const instance = await User.findById(email);
+router.post('/token', async (req: Request, res: Response) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const instance = await User.findOne({ where: {email: email }});
   if (instance == null) {
     res.statusCode = 404;
     res.json({
@@ -21,7 +21,10 @@ router.get('/token/:email/:password', async (req: Request, res: Response) => {
     instance.token = token;
     await instance.save();
     res.statusCode = 200;
-    res.send(token);
+    res.json({
+      id: instance.id,
+      token: token
+    });
   } else {
     res.statusCode = 401;
     res.json({
