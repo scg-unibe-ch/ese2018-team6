@@ -22,7 +22,6 @@ export class Company extends Model<Company> {
   @Column
   verified!: boolean;
 
-  @PrimaryKey
   @ForeignKey(() => User)
   @Column
   userId!: number;

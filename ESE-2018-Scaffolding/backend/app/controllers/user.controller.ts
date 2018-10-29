@@ -9,67 +9,46 @@ router.post('/token', async (req: Request, res: Response) => {
   const email = req.body.email;
   const password = req.body.password;
   const instance = await User.findOne({ where: {email: email }});
-  if (instance == null) {
-    res.statusCode = 404;
-    res.json({
-      'message': 'no user found for this email'
-    });
-    return;
-  } else if (instance.password === password) {
-    const crypto = require('crypto');
-    const token = crypto.randomBytes(64).toString('hex');
-    instance.token = token;
-    await instance.save();
-    res.statusCode = 200;
-    res.json({
-      id: instance.id,
-      token: token
-    });
-  } else {
-    res.statusCode = 401;
-    res.json({
-      'message': 'wrong password'
-    });
+  if (foundUser(instance, res) && instance !== null) {
+    if (instance.password === password) {
+      const crypto = require('crypto');
+      const token = crypto.randomBytes(64).toString('hex');
+      instance.token = token;
+      await instance.save();
+      res.statusCode = 200;
+      res.json({
+        id: instance.id,
+        token: token
+      });
+    } else {
+      res.statusCode = 401;
+      res.json({
+        'message': 'wrong password'
+      });
+    }
   }
-});
-/*
-router.post('/', async (req: Request, res: Response) => {
-  const instance = new TodoItem();
-  instance.fromSimplification(req.body);
-  await instance.save();
-  res.statusCode = 201;
-  res.send(instance.toSimplification());
 });
 
-router.put('/:id', async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
-  const instance = await TodoItem.findById(id);
+export function foundUser(instance: any, res: any) {
   if (instance == null) {
-    res.statusCode = 404;
+    res.statusCode = 404; // not found
     res.json({
-      'message': 'not found'
+      'message': 'user not found'
     });
-    return;
+    return false;
+  } else {
+    return true;
   }
-  instance.fromSimplification(req.body);
-  await instance.save();
-  res.statusCode = 200;
-  res.send(instance.toSimplification());
-});
-router.delete('/:id', async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
-  const instance = await TodoItem.findById(id);
-  if (instance == null) {
-    res.statusCode = 404;
+}
+export function checkToken(instance: any, res: any, token: string) {
+  if (token !== instance.token) {
+    res.statusCode = 401; // unauthorized
     res.json({
-      'message': 'not found'
+      'message': 'wrong token'
     });
-    return;
+    return false;
+  } else {
+    return true;
   }
-  instance.fromSimplification(req.body);
-  await instance.destroy();
-  res.statusCode = 204;
-  res.send();
-});
-*/
+}
 export const UserController: Router = router;
