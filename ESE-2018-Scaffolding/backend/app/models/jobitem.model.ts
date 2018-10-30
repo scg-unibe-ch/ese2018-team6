@@ -14,6 +14,9 @@ export class JobItem extends Model<JobItem> {
   @Column
   skills!: string;
 
+  @Column
+  accepted!: boolean;
+
   /*@ForeignKey(() => JobList)
   @Column
   jobListId!: number;
@@ -27,6 +30,7 @@ export class JobItem extends Model<JobItem> {
       'title': this.title,
       'description': this.description,
       'skills': this.skills,
+      'accepted': this.accepted,
       // 'jobListId': this.jobListId
     };
   }
@@ -36,6 +40,7 @@ export class JobItem extends Model<JobItem> {
     this.description = simplification['description'];
     // this.jobListId = simplification['jobListId'];
     this.skills = simplification['skills'];
+    this.accepted = simplification['accepted'];
   }
 
 }

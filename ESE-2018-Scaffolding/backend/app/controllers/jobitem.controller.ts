@@ -24,6 +24,7 @@ router.get('/', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const instance = new JobItem();
   instance.fromSimplification(req.body);
+  instance.accepted = false;
   await instance.save();
   res.statusCode = 201;
   res.send(instance.toSimplification());
