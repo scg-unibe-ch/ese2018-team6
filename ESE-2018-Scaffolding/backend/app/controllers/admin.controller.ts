@@ -5,11 +5,6 @@ import {User} from '../models/user.model';
 import {JobItem} from '../models/jobitem.model';
 
 const router: Router = Router();
-router.get('/allCompanies', async (req: Request, res: Response) => {
-  const instances = await Company.findAll();
-  res.statusCode = 200;
-  res.send(instances.map(e => e.toSimplification()));
-});
 
 router.get('/unverifiedCompanies', async (req: Request, res: Response) => {
   const instances = await Company.findAll({ where: {verified: false }});
@@ -43,5 +38,7 @@ router.put('/declineJobItem/:id', async (req: Request, res: Response) => {
     res.statusCode = 200;
   }
 });
-// TODO: testen, dann admin authentifizierung einrichten. wie nachricht senden, wenn jobitem abgelehnt wird?
+// TODO: testen, dann admin authentifizierung einrichten
+// questions: wie nachricht senden, wenn jobitem abgelehnt wird?
+// wie werden admins erstellt?
 export const AdminController: Router = router;

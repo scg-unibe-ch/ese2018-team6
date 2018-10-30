@@ -39,6 +39,12 @@ router.get('/:id', async (req: Request, res: Response) => {
   res.send(instance.toSimplification());
 });
 
+router.get('/allCompanies', async (req: Request, res: Response) => {
+  const instances = await Company.findAll();
+  res.statusCode = 200;
+  res.send(instances.map(e => e.toSimplification()));
+});
+
 router.put('/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
