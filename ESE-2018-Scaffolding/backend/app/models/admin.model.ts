@@ -7,7 +7,6 @@ export class Admin extends Model<Admin> {
   @Column
   name!: string;
 
-  @PrimaryKey
   @ForeignKey(() => User)
   @Column
   userId!: number;

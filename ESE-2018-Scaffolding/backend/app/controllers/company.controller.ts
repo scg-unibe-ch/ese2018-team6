@@ -31,7 +31,7 @@ router.get('/:id', async (req: Request, res: Response) => {
   if (instance == null) {
     res.statusCode = 404;
     res.json({
-      'message': 'not found'
+      'message': 'company not found'
     });
     return;
   }
