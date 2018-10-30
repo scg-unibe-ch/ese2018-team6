@@ -24,7 +24,8 @@ router.get('/', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const instance = new JobItem();
   instance.fromSimplification(req.body);
-  instance.accepted = false;
+  instance.accepted = false; // should not be decided by client
+  instance.messageFromAdmin = ''; // should not be decided by client
   await instance.save();
   res.statusCode = 201;
   res.send(instance.toSimplification());
@@ -52,7 +53,9 @@ router.put('/:id', async (req: Request, res: Response) => {
     });
     return;
   }
+  const oldMessage = instance.messageFromAdmin; // messageFromAdmin cannot be changed here
   instance.fromSimplification(req.body);
+  instance.messageFromAdmin = oldMessage;
   await instance.save();
   res.statusCode = 200;
   res.send(instance.toSimplification());

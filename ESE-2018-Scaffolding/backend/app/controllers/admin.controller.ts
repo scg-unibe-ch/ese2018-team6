@@ -32,13 +32,14 @@ router.put('/acceptJobItem/:id', async (req: Request, res: Response) => {
 
 router.put('/declineJobItem/:id', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
+  const message = req.body;
   const instance = await JobItem.findById(id);
   if (instance !== null) {
     instance.accepted = false;
+    instance.messageFromAdmin = message;
     res.statusCode = 200;
   }
 });
-// TODO: testen, dann admin authentifizierung einrichten
-// questions: wie nachricht senden, wenn jobitem abgelehnt wird?
-// wie werden admins erstellt?
+// TODO: testen, dann admin authentifizierung einrichten, delete requests
+
 export const AdminController: Router = router;
