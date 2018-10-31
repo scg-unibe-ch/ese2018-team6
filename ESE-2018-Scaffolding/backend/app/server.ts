@@ -3,7 +3,7 @@ import express from 'express';
 
 // import all the controllers. If you add a new controller, make sure to import it here as well.
 // import {JobListController,
-import {JobItemController, UserController, CompanyController} from './controllers';
+import {JobItemController, UserController, CompanyController, AdminController} from './controllers';
 import {Sequelize} from 'sequelize-typescript';
 // import {JobList} from './models/joblist.model';
 import {User} from './models/user.model';
@@ -41,6 +41,7 @@ app.use(function (req, res, next) {
 app.use('/jobitem', JobItemController);
 app.use('/user', UserController);
 app.use('/company', CompanyController);
+app.use('/admin', AdminController);
 
 sequelize.sync().then(() => {
 // start serving the application on the given port

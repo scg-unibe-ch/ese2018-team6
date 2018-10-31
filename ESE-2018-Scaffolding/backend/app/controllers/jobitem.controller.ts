@@ -24,6 +24,8 @@ router.get('/', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const instance = new JobItem();
   instance.fromSimplification(req.body);
+  instance.accepted = false; // should not be decided by client
+  instance.messageFromAdmin = ''; // should not be decided by client
   await instance.save();
   res.statusCode = 201;
   res.send(instance.toSimplification());
@@ -51,6 +53,7 @@ router.put('/:id', async (req: Request, res: Response) => {
     });
     return;
   }
+
   instance.fromSimplification(req.body);
   await instance.save();
   res.statusCode = 200;
@@ -66,7 +69,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
     });
     return;
   }
-  instance.fromSimplification(req.body);
+  // instance.fromSimplification(req.body);
   await instance.destroy();
   res.statusCode = 204;
   res.send();

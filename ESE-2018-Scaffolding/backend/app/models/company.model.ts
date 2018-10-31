@@ -22,7 +22,6 @@ export class Company extends Model<Company> {
   @Column
   verified!: boolean;
 
-  @PrimaryKey
   @ForeignKey(() => User)
   @Column
   userId!: number;
@@ -49,6 +48,6 @@ export class Company extends Model<Company> {
     this.contactPhone = simplification['contactPhone'];
     this.companyDescription = simplification['companyDescription'];
     this.userId = simplification['userId'];
-    this.verified = simplification['verified'];
+    // this.verified = simplification['verified'];
   }
 }
