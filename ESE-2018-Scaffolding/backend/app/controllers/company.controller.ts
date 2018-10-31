@@ -7,17 +7,19 @@ import {foundUser, checkToken} from './user.controller';
 const router: Router = Router();
 router.post('/', async (req: Request, res: Response) => {
   const instance = new User();
-  const company = new Company()
-  req.body.userId = instance.id;
+  const company = new Company();
   instance.fromSimplification(req.body);
   company.fromSimplification(req.body);
+  company.userId = instance.id;
   const testInstance = await User.findOne({ where: {email: instance.email }});
   if (testInstance == null) {
     company.verified = false;
     await instance.save();
     await company.save();
     res.statusCode = 201;
-    res.send(instance.toSimplification());
+    res.json({
+      id: instance.id
+    });
   } else { res.statusCode = 403;
   res.json({
     'message': 'email already used'
@@ -51,21 +53,20 @@ router.put('/:id/:token', async (req: Request, res: Response) => {
   const instance = await User.findById(id);
   if (foundUser(instance, res) && checkToken(instance, res, token) && instance !== null) {
     const companyInstance = await Company.findById(id);
-    if (companyInstance == null) {
-      res.statusCode = 404; // not found
-      res.json({
-        'message': 'company not found'
-      });
-      return;
-    }
-    const oldVerified = companyInstance.verified;
-    companyInstance.fromSimplification(req.body);
-    companyInstance.verified = oldVerified;
-    await companyInstance.save();
     const crypto = require('crypto');
     const newToken = crypto.randomBytes(64).toString('hex');
     instance.token = newToken;
     await instance.save();
+    if (companyInstance == null) {
+      res.statusCode = 404; // not found
+      res.json({
+        token: newToken,
+        'message': 'company not found'
+      });
+      return;
+    }
+    companyInstance.fromSimplification(req.body);
+    await companyInstance.save();
     res.statusCode = 200;
     res.json({
       token: newToken

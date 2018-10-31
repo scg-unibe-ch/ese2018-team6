@@ -53,11 +53,8 @@ router.put('/:id', async (req: Request, res: Response) => {
     });
     return;
   }
-  const oldAccepted = instance.accepted; // accepted status cannot be changed here
-  const oldMessage = instance.messageFromAdmin; // messageFromAdmin cannot be changed here
+
   instance.fromSimplification(req.body);
-  instance.messageFromAdmin = oldMessage;
-  instance.accepted = oldAccepted;
   await instance.save();
   res.statusCode = 200;
   res.send(instance.toSimplification());
@@ -72,7 +69,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
     });
     return;
   }
-  instance.fromSimplification(req.body);
+  // instance.fromSimplification(req.body);
   await instance.destroy();
   res.statusCode = 204;
   res.send();
