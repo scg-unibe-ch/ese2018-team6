@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Job} from '../job.model';
 
 @Component({
@@ -8,9 +8,12 @@ import {Job} from '../job.model';
 })
 export class JobListComponent implements OnInit {
 
+  //jobPostings: Job[] = [];
+
   // Some dummy data to test the layout
-  jobs: Job[] = [
+  jobPostings: Job[] = [
     new Job(
+      1,
       'Java Developer',
       'We\'re looking for a Java developer',
       'Java',
@@ -20,11 +23,13 @@ export class JobListComponent implements OnInit {
       50,
       100,
       'German, English',
+      3000,
       'Bern',
-      'monthly',
+      'Monthly',
       7800
     ),
     new Job(
+      2,
       'Web Developer',
       'We want to hire a Web Developer',
       'HTML, CSS, Javascript',
@@ -34,11 +39,13 @@ export class JobListComponent implements OnInit {
       80,
       100,
       'German, English',
+      8000,
       'Zürich',
-      'hourly',
+      'Hourly',
       50
     ),
     new Job(
+      3,
       'C++ Developer',
       'We need a graphics programmer',
       'C++',
@@ -48,11 +55,13 @@ export class JobListComponent implements OnInit {
       100,
       100,
       'German, English',
+      4000,
       'Basel',
-      'oneTime',
+      'One Time',
       100
     ),
     new Job(
+      4,
       'Web Developer',
       'We want to hire a Web Developer',
       'HTML, CSS, Javascript',
@@ -62,11 +71,13 @@ export class JobListComponent implements OnInit {
       80,
       100,
       'German, English',
+      8000,
       'Zürich',
-      'hourly',
+      'Hourly',
       50
     ),
     new Job(
+      5,
       'C++ Developer',
       'We need a graphics programmer',
       'C++',
@@ -76,11 +87,13 @@ export class JobListComponent implements OnInit {
       100,
       100,
       'German, English',
+      4000,
       'Basel',
-      'oneTime',
+      'One Time',
       100
     ),
     new Job(
+      6,
       'Web Developer',
       'We want to hire a Web Developer',
       'HTML, CSS, Javascript',
@@ -90,11 +103,13 @@ export class JobListComponent implements OnInit {
       80,
       100,
       'German, English',
+      8000,
       'Zürich',
-      'hourly',
+      'Hourly',
       50
     ),
     new Job(
+      7,
       'C++ Developer',
       'We need a graphics programmer',
       'C++',
@@ -104,20 +119,31 @@ export class JobListComponent implements OnInit {
       100,
       100,
       'German, English',
+      4000,
       'Basel',
-      'oneTime',
+      'One Time',
       100
+    ),
+    new Job(
+      8,
+      'Web Developer',
+      'We want to hire a Web Developer',
+      'HTML, CSS, Javascript',
+      new Date(2020, 0, 0),
+      new Date(2020, 11, 31),
+      new Date(2019, 11, 31),
+      80,
+      100,
+      'German, English',
+      8000,
+      'Zürich',
+      'Hourly',
+      50
     )
   ];
-
-  @Output()
-  selectedComponent = new EventEmitter<string>();
 
   constructor() { }
 
   ngOnInit() { }
 
-  onSelect(component: string) {
-    this.selectedComponent.emit(component);
-  }
 }

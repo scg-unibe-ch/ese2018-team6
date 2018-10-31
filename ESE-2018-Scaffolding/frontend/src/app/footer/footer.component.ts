@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-footer',
@@ -7,14 +7,8 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 })
 export class FooterComponent implements OnInit {
 
-  @Output()
-  selectedComponent = new EventEmitter<string>();
-
   constructor() { }
 
   ngOnInit() { }
 
-  onSelect(component: string) {
-    this.selectedComponent.emit(component);
-  }
 }

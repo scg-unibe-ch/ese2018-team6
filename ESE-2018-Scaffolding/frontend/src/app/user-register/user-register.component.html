@@ -6,21 +6,21 @@
   <div class="form-group">
     <label class="col-sm-3 control-label">E-Mail</label>
     <div class="col-sm-9">
-      <input type="email" class="form-control" placeholder="E-Mail">
+      <input type="email" class="form-control" placeholder="E-Mail" name="email" [(ngModel)]="userRegisterData.email">
     </div>
   </div>
 
   <div class="form-group">
     <label class="col-sm-3 control-label">Password</label>
     <div class="col-sm-9">
-      <input type="password" class="form-control" placeholder="Password">
+      <input type="password" class="form-control" placeholder="Password" name="password" [(ngModel)]="userRegisterData.password">
     </div>
   </div>
 
   <div class="form-group">
     <label class="col-sm-3 control-label">Confirm Password</label>
     <div class="col-sm-9">
-      <input type="password" class="form-control" placeholder="Confirm Password">
+      <input type="password" class="form-control" placeholder="Confirm Password" name="confirmPassword" [(ngModel)]="confirmedPassword">
     </div>
   </div>
 
@@ -29,14 +29,14 @@
   <div class="form-group">
     <label class="col-sm-3 control-label">Name</label>
     <div class="col-sm-9">
-      <input class="form-control" placeholder="Name">
+      <input class="form-control" placeholder="Name" name="name" [(ngModel)]="userRegisterData.name">
     </div>
   </div>
 
   <div class="form-group">
     <label class="col-sm-3 control-label">User Type</label>
     <div class="col-sm-9">
-      <select class="form-control">
+      <select class="form-control" name="userType" [(ngModel)]="userRegisterData.userType">
         <option>Company</option>
       </select>
     </div>
@@ -45,17 +45,17 @@
   <div class="form-group">
     <label class="col-sm-3 control-label">Street</label>
     <div class="col-sm-9">
-      <input class="form-control" placeholder="Street">
+      <input class="form-control" placeholder="Street" name="street" [(ngModel)]="userRegisterData.street">
     </div>
   </div>
 
   <div class="form-group">
     <label class="col-sm-3 control-label">ZIP Code / Place</label>
     <div class="col-sm-2">
-      <input class="form-control" placeholder="ZIP Code">
+      <input class="form-control" placeholder="ZIP Code" name="zipCode" [(ngModel)]="userRegisterData.zipCode">
     </div>
     <div class="col-sm-7">
-      <input class="form-control" placeholder="Place">
+      <input class="form-control" placeholder="Place" name="place" [(ngModel)]="userRegisterData.place">
     </div>
   </div>
 
@@ -64,7 +64,7 @@
     <div class="col-sm-9">
       <div class="input-group">
         <div class="input-group-addon">www.</div>
-        <input type="text" class="form-control" placeholder="Website">
+        <input type="text" class="form-control" placeholder="Website" name="website" [(ngModel)]="userRegisterData.website">
       </div>
     </div>
   </div>
@@ -72,14 +72,25 @@
   <div class="form-group">
     <label for="desc" class="col-sm-3 control-label">Description</label>
     <div class="col-sm-9">
-      <textarea id="desc" rows="5" class="form-control" placeholder="Description"></textarea>
+      <textarea id="desc" rows="5" class="form-control" placeholder="Description" name="description" [(ngModel)]="userRegisterData.description"></textarea>
     </div>
   </div>
 
   <div class="form-group">
     <div class="col-sm-offset-3 col-sm-9">
-      <button type="submit" class="btn btn-success">Register</button>
+      <button type="submit" class="btn btn-success" (click)="onRegister()">Register</button>
     </div>
   </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-3 col-sm-9">
+      <div id="errorMessageBox" class="alert alert-danger errorMessageBox" role="alert">
+        <strong>{{ errorTitle }} </strong><br>
+        {{ errorMessage }}
+      </div>
+    </div>
+  </div>
+
+
 
 </form>

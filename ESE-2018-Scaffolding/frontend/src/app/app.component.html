@@ -1,19 +1,11 @@
-<app-header (selectedComponent)="onNavigate($event)"></app-header>
+<app-header></app-header>
 
 <div class="row">
   <div class="col-md-offset-3 col-md-6">
-    <app-job-list *ngIf="currentComponent === 'jobs'" (selectedComponent)="onNavigate($event)"></app-job-list>
-    <app-job-edit *ngIf="currentComponent === 'edit'"></app-job-edit>
 
-    <app-contact *ngIf="currentComponent === 'contact'"></app-contact>
-    <app-about *ngIf="currentComponent === 'about-us'"></app-about>
+    <router-outlet></router-outlet>
 
-    <app-user-login *ngIf="currentComponent === 'login'"></app-user-login>
-    <app-user-register *ngIf="currentComponent === 'register'"></app-user-register>
-    <app-my-account *ngIf="currentComponent === 'my-account'"></app-my-account>
-
-    <app-admin *ngIf="currentComponent === 'admin'"></app-admin>
   </div>
 </div>
 
-<app-footer (selectedComponent)="onNavigate($event)"></app-footer>
+<app-footer></app-footer>

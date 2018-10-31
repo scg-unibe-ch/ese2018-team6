@@ -1,0 +1,30 @@
+<a class="list-group-item list-group-item-action clearfix">
+  <table>
+    <tr>
+
+      <td class="pull-left">
+        <h4 class="list-group-item-heading">{{ myJobPostingEntry.title }}</h4>
+        <small class="list-group-item-info">
+          {{ myJobPostingEntry.startDate.toLocaleDateString() }}
+          &nbsp;|&nbsp;&nbsp;
+          <strong>{{ myJobPostingEntry.place }}</strong>
+          &nbsp;|&nbsp;&nbsp;
+          {{ myJobPostingEntry.workloadMin }} - {{ myJobPostingEntry.workloadMax }}%
+        </small>
+        <p class="list-group-item-text">{{ myJobPostingEntry.description }}</p>
+      </td>
+
+      <td class="pull-right">
+        <!-- TODO: Send job item with routerLink to job-edit -->
+        <button type="button" class="btn btn-primary" routerLink="/jobs/edit">
+          <span class="glyphicon glyphicon-edit"></span>
+        </button>
+        <br>
+        <button type="button" class="btn btn-danger" (click)="onDeleteJobItem()">
+          <span class="glyphicon glyphicon-remove"></span>
+        </button>
+      </td>
+
+    </tr>
+  </table>
+</a>

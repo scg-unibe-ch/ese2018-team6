@@ -4,6 +4,7 @@ import {NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from '@angular/common/http';
+import {AppRoutingModule} from './app-routing.module';
 
 // Add css components from angular material
 import {MatButtonModule, MatCardModule, MatCheckboxModule, MatInputModule, MatListModule} from '@angular/material';
@@ -22,7 +23,8 @@ import { UserApplicationComponent } from './admin/user-application/user-applicat
 import { JobSubmissionComponent } from './admin/job-submission/job-submission.component';
 import { MyAccountComponent } from './my-account/my-account.component';
 import { JobDetailComponent } from './job-detail/job-detail.component';
-
+import { MyJobItemComponent } from './my-account/my-job-item/my-job-item.component';
+import { JobCreateComponent } from './job-create/job-create.component';
 
 @NgModule({
   declarations: [
@@ -41,8 +43,11 @@ import { JobDetailComponent } from './job-detail/job-detail.component';
     JobSubmissionComponent,
     MyAccountComponent,
     JobDetailComponent,
+    MyJobItemComponent,
+    JobCreateComponent,
   ],
   imports: [
+    AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,

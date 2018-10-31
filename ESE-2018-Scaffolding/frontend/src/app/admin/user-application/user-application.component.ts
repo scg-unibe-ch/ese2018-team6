@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { User } from '../../user.model';
 
 @Component({
   selector: 'app-user-application',
@@ -7,13 +8,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserApplicationComponent implements OnInit {
 
+  @Input()
+  userApplicationEntry: User;
+
+  @Output()
+  userApplicationApproved = new EventEmitter<User>();
+
+  @Output()
+  userApplicationDenied = new EventEmitter<User>();
+
   constructor() { }
 
   ngOnInit() { }
 
-  // User Application approved - change status in backend accordingly
-  onApprovedUserApplication() { }
+  onApprovedUserApplication() {
+    this.userApplicationApproved.emit(this.userApplicationEntry);
+  }
 
-  // User Application denied - delete application from backend and write message to user with reason
-  onDeniedUserApplication() { }
+  // TODO: Send message with reasoning behind denial to applicant.
+  onDeniedUserApplication() {
+    this.userApplicationDenied.emit(this.userApplicationEntry);
+  }
 }

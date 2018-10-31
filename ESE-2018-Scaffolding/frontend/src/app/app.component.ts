@@ -6,13 +6,8 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  currentComponent = 'jobs';
 
   constructor() { }
 
   ngOnInit() { }
-
-  onNavigate(component: string) {
-    this.currentComponent = component;
-  }
 }

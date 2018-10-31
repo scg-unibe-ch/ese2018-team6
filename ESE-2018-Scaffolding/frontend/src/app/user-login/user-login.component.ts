@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserLogin } from '../user-login.model';
 
 @Component({
   selector: 'app-user-login',
@@ -7,10 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserLoginComponent implements OnInit {
 
+  userLoginData: UserLogin = new UserLogin(
+    null,
+    null
+  );
+
   constructor() { }
 
   ngOnInit() { }
 
-  // Send the login data to the backend. Receive token if credentials are ok
-  onSignIn() { }
+  // TODO Send the login data to the backend. Receive token if credentials are ok
+  onSignIn() {
+    // TODO Give feedback for failed login
+  }
 }

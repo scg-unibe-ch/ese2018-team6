@@ -1,16 +1,21 @@
 <h3>User Applications</h3>
-<p>The following users registered on the site and await approval to be registered.</p>
-
-<!-- List all users from the database who's status is still 'open' -->
-<app-user-application></app-user-application>
-<app-user-application></app-user-application>
+<hr>
+<p><em>The following user applications await approval:</em></p>
+<app-user-application
+  *ngFor="let userApplication of userApplications"
+  [userApplicationEntry]="userApplication"
+  (userApplicationApproved)="approveUserApplication($event)"
+  (userApplicationDenied)="denyUserApplication($event)">
+</app-user-application>
 
 <br><br>
 
 <h3>Job Submissions</h3>
-<p>The following jobs were submitted and await approval to be posted.</p>
-
-<!-- List all job submissions from the database who's status is still 'open' -->
-<app-job-submission></app-job-submission>
-<app-job-submission></app-job-submission>
-<app-job-submission></app-job-submission>
+<hr>
+<p><em>The following job submissions await approval:</em></p>
+<app-job-submission
+  *ngFor="let jobSubmission of jobSubmissions"
+  [jobSubmissionEntry]="jobSubmission"
+  (jobSubmissionApproved)="approveJobSubmission($event)"
+  (jobSubmissionDenied)="denyJobSubmission($event)">
+</app-job-submission>

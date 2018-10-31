@@ -6,8 +6,13 @@
 }
 
 .navbar-nav {
+  padding-left: 15px;
   font-size: 15px;
   font-weight: 500;
+}
+
+.navbar-nav>li {
+  display: inline-block;
 }
 
 .navbar-brand {
@@ -16,11 +21,31 @@
   font-weight: 500;
 }
 
+.navbar-toggle-btn {
+  display: none;
+}
+
 .navbar-right {
   margin-right: -15px;
-  margin-left: 0;
+  margin-left: -15px;
+}
+
+.navbar-active {
+  background-color: #454545 !important;
+  font-weight: 500 !important;
+  color: #FFFFFF !important;
 }
 
 .btn {
   margin: 7px 10px 0 0;
+}
+
+.btn-dark {
+  background-color: #AAA !important;
+  padding-bottom: 5px;
+}
+
+@media(max-width: 767px){
+  .navbar-toggle-btn{display: inline-block}
+  .navbar-hidden{display: none}
 }

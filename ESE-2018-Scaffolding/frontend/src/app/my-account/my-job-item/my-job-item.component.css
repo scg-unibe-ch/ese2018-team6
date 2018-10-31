@@ -1,0 +1,29 @@
+table {
+  width: 100%;
+}
+
+a {
+  cursor: default;
+}
+
+small {
+  font-size: 85%;
+}
+
+.list-group-item-heading {
+  font-size: 16px;
+  font-weight: bolder;
+}
+
+.list-group-item-text {
+  margin-top: 7px;
+}
+
+.btn {
+  margin: 5px;
+  width: 40px;
+}
+
+.glyphicon {
+  vertical-align: middle;
+}

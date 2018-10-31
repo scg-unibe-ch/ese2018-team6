@@ -10,16 +10,16 @@
   bottom: 0;
 }
 
-.footer p {
+p {
   margin-bottom: 0;
   margin-right: 30px;
   bottom: 0;
 }
 
-.footer a {
+a {
   color: #FFFFFF;
 }
 
-.footer a:hover {
+a:hover {
   color: #DDDDDD;
 }

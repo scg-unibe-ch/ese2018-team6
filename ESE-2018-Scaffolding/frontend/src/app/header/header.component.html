@@ -2,27 +2,29 @@
   <div class="container-fluid">
 
     <div class="navbar-header">
-      <a href="#" class="navbar-brand" (click)="onSelect('jobs')">Job Postings</a>
+      <a routerLink="/jobs" class="navbar-brand">Job Postings</a>
+      <span class="pull-right">
+        <button type="button" class="btn btn-dark navbar-toggle-btn" (click)="toggleMenu()">
+          <span class="glyphicon glyphicon-remove"></span>
+        </button>
+      </span>
     </div>
 
-    <div class="navbar-default navbar-inverse">
+    <div id="navbar-toggable" class="navbar-default navbar-inverse navbar-hidden">
       <ul class="nav navbar-nav">
-        <li><a href="#" (click)="onSelect('jobs')">Jobs</a></li>
-        <li><a href="#" (click)="onSelect('contact')">Contact</a></li>
-        <li><a href="#" (click)="onSelect('about-us')">About Us</a></li>
+        <li><a routerLink="/jobs" routerLinkActive="navbar-active">Jobs</a></li>
+        <li><a routerLink="/contact" routerLinkActive="navbar-active">Contact</a></li>
+        <li><a routerLink="/about" routerLinkActive="navbar-active">About Us</a></li>
       </ul>
 
-      <!-- For visitors - if not logged in-->
       <div class="nav navbar-nav navbar-right">
-        <button type="button" class="btn btn-primary" (click)="onSelect('login')">Sign in</button>
-        <button type="button" class="btn btn-success" (click)="onSelect('register')">Register</button>
+        <!-- TODO Show only for visitors - if not logged in-->
+        <button type="button" class="btn btn-primary" routerLink="/login">Sign in</button>
+        <button type="button" class="btn btn-success" routerLink="/register">Register</button>
+        <!-- TODO Show only for active users - if logged in-->
+        <button type="button" class="btn btn-default" routerLink="/my-account">My Account</button>
+        <!--<button type="button" class="btn btn-danger" (click)="onSignOut()">Sign Out</button>-->
       </div>
-
-      <!-- For active users - if logged in
-      <div class="nav navbar-nav navbar-right">
-        <button type="button" class="btn btn-default" (click)="onSelect('my-account')">My Account</button>
-        <button type="button" class="btn btn-danger">Sign Out</button>
-      </div>-->
     </div>
 
   </div>

@@ -1,3 +1,72 @@
-<p>
-  Job-Detail: This component will show all details for a job posting.
-</p>
+<h3>{{ jobPostingEntry.title }}</h3>
+<hr>
+
+<div class="col-md-8">
+  <small>{{ jobPostingEntry.startDate.toLocaleDateString() }} | <strong>{{ jobPostingEntry.place }}</strong> |
+    {{ jobPostingEntry.workloadMin }}-{{ jobPostingEntry.workloadMax }}%</small>
+  <br>
+
+  <h4>Description</h4>
+  <p>{{ jobPostingEntry.description }}</p>
+  <br>
+
+  <h4>Details</h4>
+  <table class="table">
+    <tbody>
+    <tr>
+      <th scope="row" style="width: 30%;">Start Date</th>
+      <td style="width: 70%;">{{ jobPostingEntry.startDate.toLocaleDateString() }}</td>
+    </tr>
+    <tr>
+      <th scope="row">End Date</th>
+      <td>{{ jobPostingEntry.endDate.toLocaleDateString() }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Required Skills</th>
+      <td>{{ jobPostingEntry.skills }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Languages</th>
+      <td>{{ jobPostingEntry.languages }}</td>
+    </tr>
+    </tbody>
+  </table>
+  <br>
+
+  <h4>Salary</h4>
+  <table class="table">
+    <tr>
+      <th scope="row" style="width: 30%;">Type</th>
+      <td style="width: 70%;">{{ jobPostingEntry.salaryType }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Salary Amount</th>
+      <td>CHF {{ jobPostingEntry.salaryAmount }}</td>
+    </tr>
+  </table>
+</div>
+
+<div class="col-md-4 employer-box">
+  <h4>About the Employer:</h4>
+  <hr>
+
+  <p>
+    <strong>Company</strong><br>
+    {{ userEntry.name }}
+  </p>
+  <p>
+    <strong>Description</strong><br>
+    {{ userEntry.description }}
+  </p>
+  <p>
+    <strong>Address</strong><br>
+    {{ userEntry.name }}<br>
+    {{ userEntry.street }}<br>
+    {{ userEntry.zipCode }} {{ userEntry.place }}
+  </p>
+  <p>
+    <strong>Contact</strong><br>
+    <em>Website: </em><a href="{{ userEntry.website }}">{{ userEntry.website }}</a><br>
+    <em>E-Mail: </em><a>{{ userEntry.email }}</a>
+  </p>
+</div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -7,14 +7,15 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  @Output()
-  selectedComponent = new EventEmitter<string>();
-
   constructor() { }
 
   ngOnInit() { }
 
-  onSelect(component: string) {
-    this.selectedComponent.emit(component);
+  toggleMenu() {
+    const element = document.getElementById('navbar-toggable');
+    element.classList.toggle("navbar-hidden");
   }
+
+  // TODO Sign out the current user
+  onSignOut() { }
 }

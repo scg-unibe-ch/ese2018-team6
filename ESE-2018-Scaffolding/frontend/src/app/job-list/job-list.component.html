@@ -1,23 +1,11 @@
   <h3>
     Latest Job Postings
-    <span class="pull-right">
-      <button type="button" class="btn btn-primary" (click)="onSelect('edit')">Create New</button>
-    </span>
+    <span class="pull-right"><button type="button" class="btn btn-primary" routerLink="/jobs/create">Create New</button></span>
   </h3>
-
   <hr>
 
+  <app-job-item
+    *ngFor="let jobItem of jobPostings"
+    [jobItemEntry]="jobItem">
+  </app-job-item>
 
-  <!-- Template for some dummy data - to be replaced with Job-Items-->
-  <a href="#" class="list-group-item list-group-item-action clearfix" *ngFor="let job of jobs">
-    <div class="pull-left">
-      <h4 class="list-group-item-heading">{{ job.title }}</h4>
-      <p class="list-group-item-text">{{ job.description }}</p>
-      <small class="text-muted"><em>Required Skills: </em>{{ job.skills }}</small>
-    </div>
-    <span class="pull-right text-right">
-        <small class="text-muted">{{ 'Date Posted' }}</small><br>
-        <strong><small class="text-muted">{{ job.location }}</small></strong><br>
-        <small class="text-muted">{{ job.workloadMin}}-{{ job.workloadMax }}%</small>
-      </span>
-  </a>

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Job} from '../job.model';
 
 @Component({
   selector: 'app-job-edit',
@@ -7,16 +8,52 @@ import { Component, OnInit } from '@angular/core';
 })
 export class JobEditComponent implements OnInit {
 
+  /*
+  jobPostingEntry: Job = new Job(
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null
+  );
+  */
+
+  // Dummy Data for Job TODO DELETE Dummy Data
+  jobPostingEntry: Job = new Job(
+    1,
+    'Java Developer',
+    'We\'re looking for a Java developer. Nam lobortis egestas sem, vitae efficitur lectus tincidunt eu. Sed est orci, luctus ac pulvinar et, aliquet eget urna. Cras pharetra turpis a metus semper, non maximus ante malesuada. Fusce varius diam vitae volutpat tincidunt. Donec ac bibendum ligula, non scelerisque purus. Suspendisse scelerisque dolor urna, et fringilla augue scelerisque vitae. Mauris sodales viverra nibh at tincidunt.',
+    'Java',
+    new Date(2019, 0, 0),
+    new Date(2019, 11, 31),
+    new Date(2018, 11, 31),
+    50,
+    100,
+    'German, English',
+    3000,
+    'Bern',
+    'Monthly',
+    7800
+  );
+
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.onLoadingData();
+  }
 
-  // Function to load the data from an existing job posting into form fields to edit them.
+  // TODO Function to load the data from an existing job posting into form fields to edit them.
   onLoadingData() {}
 
-  // Creates new request for backend to create a new job posting with data from form fields.
-  onCreate() {}
-
-  // Creates new request for backend to update an existing job posting with the data from from fields.
+  // TODO Creates new request for backend to update an existing job posting with the data from from fields.
   onUpdate() {}
 }

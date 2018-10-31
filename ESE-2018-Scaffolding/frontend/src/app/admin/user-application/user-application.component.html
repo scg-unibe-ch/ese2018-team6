@@ -1,11 +1,46 @@
-<p>
+<table>
+  <tr>
 
-  <!-- Display the data from the user application-->
-  <strong>(I'm a User Application)</strong>
+    <td>
+      <p>
+        <strong>E-Mail</strong><br>
+        {{ userApplicationEntry.email }}
+      </p>
+      <p>
+        <strong>Name</strong><br>
+        {{ userApplicationEntry.name }}
+      </p>
+      <p>
+        <strong>User Type</strong><br>
+        {{ userApplicationEntry.userType }}
+      </p>
+      <p>
+        <strong>Street</strong><br>
+        {{ userApplicationEntry.street }}
+      </p>
+      <p>
+        <strong>ZIP Code / Place</strong><br>
+        {{ userApplicationEntry.zipCode }} {{ userApplicationEntry.place }}
+      </p>
+      <p>
+        <strong>Website</strong><br>
+        www.{{ userApplicationEntry.website }}
+      </p>
+      <p>
+        <strong>Description</strong><br>
+        {{ userApplicationEntry.description }}
+      </p>
+    </td>
 
-  <span class="pull-right">
-    <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span></button>
-    <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-  </span>
+    <td class="pull-right">
+      <button type="button" class="btn btn-success" (click)="onApprovedUserApplication()">
+        <span class="glyphicon glyphicon-ok"></span>
+      </button>
+      <br>
+      <button type="button" class="btn btn-danger" (click)="onDeniedUserApplication()">
+        <span class="glyphicon glyphicon-remove"></span>
+      </button>
+    </td>
 
-</p>
+  </tr>
+</table>

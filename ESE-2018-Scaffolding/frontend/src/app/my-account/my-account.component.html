@@ -1,10 +1,108 @@
-<div class="row">
-
-  <h3>My Account</h3>
+<div>
+  <h3>
+    My Account
+    <span class="pull-right"><button type="button" class="btn btn-danger" (click)="deleteAccount()">Delete Account</button></span>
+  </h3>
   <hr>
+  <p><em>Your current account settings:</em></p>
 
-  <!-- List current values of your account and make them editable (Two Way Databinding) -->
+  <form class="form-horizontal">
 
-  <!-- List your own job posting to make them editable -->
+    <div class="form-group">
+      <label class="col-sm-3 control-label">E-Mail</label>
+      <div class="col-sm-9">
+        <input type="email" class="form-control" placeholder="E-Mail" name="email" [(ngModel)]="userEntry.email">
+      </div>
+    </div>
 
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Password</label>
+      <div class="col-sm-9">
+        <input type="password" class="form-control" placeholder="Re-enter Password" name="password" [(ngModel)]="password">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Confirm Password</label>
+      <div class="col-sm-9">
+        <input type="password" class="form-control" placeholder="Confirm Password" name="confirm password" [(ngModel)]="confirmPassword">
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Name</label>
+      <div class="col-sm-9">
+        <input class="form-control" placeholder="Name" name="name" [(ngModel)]="userEntry.name">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">User Type</label>
+      <div class="col-sm-9">
+        <select class="form-control">
+          <option>Company</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Street</label>
+      <div class="col-sm-9">
+        <input class="form-control" placeholder="Street" name="street" [(ngModel)]="userEntry.street">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">ZIP Code / Place</label>
+      <div class="col-sm-2">
+        <input class="form-control" placeholder="ZIP Code" name="zipCode" [(ngModel)]="userEntry.zipCode">
+      </div>
+      <div class="col-sm-7">
+        <input class="form-control" placeholder="Place" name="place" [(ngModel)]="userEntry.place">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Website</label>
+      <div class="col-sm-9">
+        <div class="input-group">
+          <div class="input-group-addon">www.</div>
+          <input type="text" class="form-control" placeholder="Website" name="website" [(ngModel)]="userEntry.website">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="desc" class="col-sm-3 control-label">Description</label>
+      <div class="col-sm-9">
+        <textarea id="desc" rows="5" class="form-control" placeholder="Description" name="description" [(ngModel)]="userEntry.description"></textarea>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <button type="submit" class="btn btn-primary" (click)="updateAccount()">Save Changes</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<br><br>
+
+<div>
+  <h3>
+    My Job Postings
+    <span class="pull-right"><button type="button" class="btn btn-primary" routerLink="/jobs/create">Create New</button></span>
+  </h3>
+  <hr>
+  <p><em>Your current job postings:</em></p>
+
+  <app-my-job-item
+    *ngFor="let myJobItem of myJobPostings"
+    [myJobPostingEntry]="myJobItem"
+    (jobSubmissionEdit)="editJobSubmission($event)"
+    (jobSubmissionDelete)="deleteJobSubmission($event)">
+  </app-my-job-item>
 </div>

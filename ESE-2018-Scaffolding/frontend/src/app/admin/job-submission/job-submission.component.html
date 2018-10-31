@@ -1,11 +1,62 @@
-<p>
+<table>
+  <tr>
 
-  <!-- Display the data from the job submission-->
-  <strong>(I'm a Job Submission)</strong>
+    <td>
+      <p>
+        <strong>Title</strong><br>
+        {{ jobSubmissionEntry.title }}
+      </p>
+      <p>
+        <strong>Description</strong><br>
+        {{ jobSubmissionEntry.description }}
+      </p>
+      <p>
+        <strong>Required Skills</strong><br>
+        {{ jobSubmissionEntry.skills }}
+      </p>
+      <p>
+        <strong>Start Date</strong><br>
+        {{ jobSubmissionEntry.startDate.toLocaleDateString() }}
+      </p>
+      <p>
+        <strong>End Date</strong><br>
+        {{ jobSubmissionEntry.endDate.toLocaleDateString() }}
+      </p>
+      <p>
+        <strong>Posting Valid Until</strong><br>
+        {{ jobSubmissionEntry.validUntil.toLocaleDateString() }}
+      </p>
+      <p>
+        <strong>Workload</strong><br>
+        {{ jobSubmissionEntry.workloadMin }} - {{ jobSubmissionEntry.workloadMax }}%
+      </p>
+      <p>
+        <strong>Languages</strong><br>
+        {{ jobSubmissionEntry.languages }}
+      </p>
+      <p>
+        <strong>ZIP Code / Place</strong><br>
+        {{ jobSubmissionEntry.zipCode }} {{ jobSubmissionEntry.place }}
+      </p>
+      <p>
+        <strong>Salary Type</strong><br>
+        {{ jobSubmissionEntry.salaryType }}
+      </p>
+      <p>
+        <strong>Salary Amount</strong><br>
+        CHF {{ jobSubmissionEntry.salaryAmount }}
+      </p>
+    </td>
 
-  <span class="pull-right">
-    <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span></button>
-    <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-  </span>
+    <td class="pull-right">
+      <button type="button" class="btn btn-success" (click)="onApprovedJobSubmission()">
+        <span class="glyphicon glyphicon-ok"></span>
+      </button>
+      <br>
+      <button type="button" class="btn btn-danger" (click)="onDeniedJobSubmission()">
+        <span class="glyphicon glyphicon-remove"></span>
+      </button>
+    </td>
 
-</p>
+  </tr>
+</table>

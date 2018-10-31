@@ -1,0 +1,20 @@
+.employer-box {
+  background-color: #EEEEEE;
+  border: 2px solid #000;
+}
+
+small {
+  font-size: 12px;
+}
+
+table {
+  width: 100%;
+}
+
+p {
+  text-align: justify;
+}
+
+hr {
+  border-color: #444444;
+}
