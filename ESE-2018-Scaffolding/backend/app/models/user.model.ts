@@ -14,18 +14,26 @@ export class User extends Model<User> {
   @Column
   token!: string;
 
+  @Column
+  tokenDate!: number; // in miliseconds since 1970
+
+  @Column
+  tokenExpirationDate!: number; // in miliseconds since 1970
+
   toSimplification(): any {
     return {
       'id': this.id,
       'email': this.email,
       'password': this.password,
-      'token' : this.token
+      'token' : this.token,
+      'tokenDate' : this.tokenDate,
+      'tokenExpirationDate' : this.tokenExpirationDate
     };
   }
 
   fromSimplification(simplification: any): void {
     this.email = simplification['email'];
     this.password = simplification['password'];
-    this.token = simplification['token'];
+    // this.token = simplification['token'];
   }
 }

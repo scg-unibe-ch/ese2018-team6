@@ -20,9 +20,9 @@ export class Admin extends Model<Admin> {
       'name': this.name,
     };
   }
-
+  /*
   fromSimplification(simplification: any): void {
     this.name = simplification['name'];
     this.userId = simplification['userId'];
-  }
+  }*/
 }

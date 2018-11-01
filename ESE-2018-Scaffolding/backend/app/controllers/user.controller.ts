@@ -8,16 +8,18 @@ const router: Router = Router();
 router.post('/token', async (req: Request, res: Response) => {
   const email = req.body.email;
   const password = req.body.password;
-  const instance = await User.findOne({ where: {email: email }});
-  if (foundUser(instance, res) && instance !== null) {
-    if (instance.password === password) {
+  const user = await User.findOne({ where: {email: email }});
+  if (foundUser(user, res) && user !== null) {
+    if (user.password === password) {
       const crypto = require('crypto');
       const token = crypto.randomBytes(64).toString('hex');
-      instance.token = token;
-      await instance.save();
+      user.token = token;
+      user.tokenDate = Date.now();
+      user.tokenExpirationDate = Date.now() + 1080000000; // valid for 5 hours = 1080000000 milliseconds
+      await user.save();
       res.statusCode = 200;
       res.json({
-        id: instance.id,
+        id: user.id,
         token: token
       });
     } else {
@@ -29,8 +31,20 @@ router.post('/token', async (req: Request, res: Response) => {
   }
 });
 
-export function foundUser(instance: any, res: any) {
-  if (instance == null) {
+router.put('/:id/:token', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const token = req.params.token;
+  const instance = await User.findById(id);
+  if (foundUser(instance, res) && checkToken(instance, res, token) && instance !== null) {
+    instance.fromSimplification(req.body);
+    await instance.save();
+    res.statusCode = 200;
+    res.send();
+  }
+});
+
+export function foundUser(user: any, res: any) {
+  if (user == null) {
     res.statusCode = 404; // not found
     res.json({
       'message': 'user not found'
@@ -40,11 +54,17 @@ export function foundUser(instance: any, res: any) {
     return true;
   }
 }
-export function checkToken(instance: any, res: any, token: string) {
-  if (token !== instance.token) {
+export function checkToken(user: any, res: any, token: string) {
+  if (token !== user.token) {
     res.statusCode = 401; // unauthorized
     res.json({
       'message': 'wrong token'
+    });
+    return false;
+  } else if (user.tokenExpirationDate < Date.now()) {
+    res.statusCode = 401; // unauthorized
+    res.json({
+      'message': 'token expired'
     });
     return false;
   } else {

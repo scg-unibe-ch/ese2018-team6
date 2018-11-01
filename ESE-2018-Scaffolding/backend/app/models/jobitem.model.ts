@@ -47,6 +47,9 @@ export class JobItem extends Model<JobItem> {
   @Column
   messageFromAdmin!: string;
 
+  @Column
+  companyId!: number; // corresponding company
+
   toSimplification(): any {
     return {
       'id': this.id,
@@ -64,6 +67,7 @@ export class JobItem extends Model<JobItem> {
       'salaryAmount': this.salaryAmount,
       'accepted': this.accepted,
       'messageFromAdmin': this.messageFromAdmin,
+      'companyId': this.companyId
     };
   }
 

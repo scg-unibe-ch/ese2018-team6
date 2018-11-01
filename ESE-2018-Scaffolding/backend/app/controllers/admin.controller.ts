@@ -12,16 +12,9 @@ router.get('/unverifiedCompanies/:id/:token', async (req: Request, res: Response
   const token = req.params.token;
   const user = await User.findById(id);
   if (adminAuthentification(user, res, id, token) && user !== null) {
-    const crypto = require('crypto');
-    const newToken = crypto.randomBytes(64).toString('hex');
-    user.token = newToken;
-    await user.save();
     const instances = await Company.findAll({where: {verified: false}});
     res.statusCode = 200;
-    res.json({
-      token: newToken,
-      companies: instances.map(e => e.toSimplification())
-    });
+    res.send(instances.map(e => e.toSimplification()));
   }
 });
 
@@ -32,21 +25,14 @@ router.put('/verifyCompany/:companyId/:id/:token', async (req: Request, res: Res
   if (adminAuthentification(user, res, id, token) && user !== null) {
     const companyId = parseInt(req.params.companyId);
     const instance = await Company.findById(companyId);
-    const crypto = require('crypto');
-    const newToken = crypto.randomBytes(64).toString('hex');
-    user.token = newToken;
-    await user.save();
     if (instance !== null) {
       instance.verified = true;
       res.statusCode = 200;
       await instance.save();
-      res.json({
-        token: newToken
-      });
+      res.send();
     } else {
       res.statusCode = 404;
       res.json({
-        token: newToken,
         'message': 'company not found'
       });
     }
@@ -58,14 +44,9 @@ router.get('/unacceptedJobItems/:id/:token', async (req: Request, res: Response)
   const token = req.params.token;
   const user = await User.findById(id);
   if (adminAuthentification(user, res, id, token) && user !== null) {
-    const crypto = require('crypto');
-    const newToken = crypto.randomBytes(64).toString('hex');
-    user.token = newToken;
-    await user.save();
     const instances = await JobItem.findAll({where: {accepted: false}});
     res.statusCode = 200;
     res.json({
-      token: newToken,
       jobItems: instances.map(e => e.toSimplification())
     });
   }
@@ -78,21 +59,14 @@ router.put('/acceptJobItem/:jobitemId/:id/:token', async (req: Request, res: Res
   if (adminAuthentification(user, res, id, token) && user !== null) {
     const jobitemId = parseInt(req.params.jobitemId);
     const instance = await JobItem.findById(jobitemId);
-    const crypto = require('crypto');
-    const newToken = crypto.randomBytes(64).toString('hex');
-    user.token = newToken;
-    await user.save();
     if (instance !== null) {
       instance.accepted = true;
       await instance.save();
       res.statusCode = 200;
-      res.json({
-        token: newToken
-      });
+      res.send()
     } else {
       res.statusCode = 404;
       res.json({
-        token: newToken,
         'message': 'jobitem not found'
       });
     }
@@ -112,13 +86,7 @@ router.put('/declineJobItem/:jobitemId/:id/:token', async (req: Request, res: Re
       instance.messageFromAdmin = message;
       await instance.save();
       res.statusCode = 200;
-      const crypto = require('crypto');
-      const newToken = crypto.randomBytes(64).toString('hex');
-      user.token = newToken;
-      await user.save();
-      res.json({
-        token: newToken
-      });
+      res.send();
     }
   }
 });
@@ -134,13 +102,7 @@ router.put('/changeName/:id/:token', async (req: Request, res: Response) => {
       instance.name = newName;
       await instance.save();
       res.statusCode = 200;
-      const crypto = require('crypto');
-      const newToken = crypto.randomBytes(64).toString('hex');
-      user.token = newToken;
-      await user.save();
-      res.json({
-        token: newToken
-      });
+      res.send();
     }
   }
 });

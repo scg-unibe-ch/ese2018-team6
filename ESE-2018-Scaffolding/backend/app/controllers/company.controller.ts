@@ -41,8 +41,8 @@ router.get('/:id', async (req: Request, res: Response) => {
   res.send(instance.toSimplification());
 });
 
-router.get('/allCompanies', async (req: Request, res: Response) => {
-  const instances = await Company.findAll();
+router.get('/allVerified', async (req: Request, res: Response) => {
+  const instances = await Company.findAll({ where: {verified: true }});
   res.statusCode = 200;
   res.send(instances.map(e => e.toSimplification()));
 });
@@ -53,14 +53,9 @@ router.put('/:id/:token', async (req: Request, res: Response) => {
   const instance = await User.findById(id);
   if (foundUser(instance, res) && checkToken(instance, res, token) && instance !== null) {
     const companyInstance = await Company.findById(id);
-    const crypto = require('crypto');
-    const newToken = crypto.randomBytes(64).toString('hex');
-    instance.token = newToken;
-    await instance.save();
     if (companyInstance == null) {
       res.statusCode = 404; // not found
       res.json({
-        token: newToken,
         'message': 'company not found'
       });
       return;
@@ -68,9 +63,7 @@ router.put('/:id/:token', async (req: Request, res: Response) => {
     companyInstance.fromSimplification(req.body);
     await companyInstance.save();
     res.statusCode = 200;
-    res.json({
-      token: newToken
-    });
+    res.send();
   }
 });
 
@@ -80,7 +73,6 @@ router.delete('/:id/:token', async (req: Request, res: Response) => {
   const instance = await User.findById(id);
   if (foundUser(instance, res) && checkToken(instance, res, token) && instance !== null) {
     const companyInstance = await Company.findOne({ where: {userId: id }})
-    console.log(companyInstance);
     if (companyInstance !== null) {
       await instance.destroy();
       await companyInstance.destroy();

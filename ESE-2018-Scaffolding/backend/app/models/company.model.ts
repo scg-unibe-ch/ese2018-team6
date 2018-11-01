@@ -47,7 +47,7 @@ export class Company extends Model<Company> {
     this.contactName = simplification['contactName'];
     this.contactPhone = simplification['contactPhone'];
     this.companyDescription = simplification['companyDescription'];
-    this.userId = simplification['userId'];
+    // this.userId = simplification['userId'];
     // this.verified = simplification['verified'];
   }
 }
