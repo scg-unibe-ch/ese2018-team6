@@ -15,9 +15,6 @@ export class User extends Model<User> {
   token!: string;
 
   @Column
-  tokenDate!: number; // in miliseconds since 1970
-
-  @Column
   tokenExpirationDate!: number; // in miliseconds since 1970
 
   toSimplification(): any {
@@ -26,7 +23,6 @@ export class User extends Model<User> {
       'email': this.email,
       'password': this.password,
       'token' : this.token,
-      'tokenDate' : this.tokenDate,
       'tokenExpirationDate' : this.tokenExpirationDate
     };
   }

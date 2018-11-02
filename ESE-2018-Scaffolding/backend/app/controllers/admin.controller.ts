@@ -11,7 +11,8 @@ router.get('/unverifiedCompanies/:id/:token', async (req: Request, res: Response
   const id = parseInt(req.params.id);
   const token = req.params.token;
   const user = await User.findById(id);
-  if (adminAuthentification(user, res, id, token) && user !== null) {
+  const admin = await Admin.findOne({ where: {userId: id }});
+  if (adminAuthentification(user, res, id, token, admin) && user !== null) {
     const instances = await Company.findAll({where: {verified: false}});
     res.statusCode = 200;
     res.send(instances.map(e => e.toSimplification()));
@@ -22,11 +23,35 @@ router.put('/verifyCompany/:companyId/:id/:token', async (req: Request, res: Res
   const id = parseInt(req.params.id);
   const token = req.params.token;
   const user = await User.findById(id);
-  if (adminAuthentification(user, res, id, token) && user !== null) {
+  const admin = await Admin.findOne({ where: {userId: id }});
+  if (adminAuthentification(user, res, id, token, admin) && user !== null) {
     const companyId = parseInt(req.params.companyId);
-    const instance = await Company.findById(companyId);
+    const instance = await Company.findOne({where: {userId: companyId}});
     if (instance !== null) {
       instance.verified = true;
+      res.statusCode = 200;
+      await instance.save();
+      res.send();
+    } else {
+      res.statusCode = 404;
+      res.json({
+        'message': 'company not found'
+      });
+    }
+  }
+});
+
+router.put('/refuseCompany/:companyId/:id/:token', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const token = req.params.token;
+  const user = await User.findById(id);
+  const admin = await Admin.findOne({ where: {userId: id }});
+  if (adminAuthentification(user, res, id, token, admin) && user !== null) {
+    const companyId = parseInt(req.params.companyId);
+    const instance = await Company.findOne({where: {userId: companyId}});
+    if (instance !== null) {
+      instance.verified = false;
+      instance.messageFromAdmin = req.body.message;
       res.statusCode = 200;
       await instance.save();
       res.send();
@@ -43,7 +68,8 @@ router.get('/unacceptedJobItems/:id/:token', async (req: Request, res: Response)
   const id = parseInt(req.params.id);
   const token = req.params.token;
   const user = await User.findById(id);
-  if (adminAuthentification(user, res, id, token) && user !== null) {
+  const admin = await Admin.findOne({ where: {userId: id }});
+  if (adminAuthentification(user, res, id, token, admin) && user !== null) {
     const instances = await JobItem.findAll({where: {accepted: false}});
     res.statusCode = 200;
     res.json({
@@ -56,7 +82,8 @@ router.put('/acceptJobItem/:jobitemId/:id/:token', async (req: Request, res: Res
   const id = parseInt(req.params.id);
   const token = req.params.token;
   const user = await User.findById(id);
-  if (adminAuthentification(user, res, id, token) && user !== null) {
+  const admin = await Admin.findOne({ where: {userId: id }});
+  if (adminAuthentification(user, res, id, token, admin) && user !== null) {
     const jobitemId = parseInt(req.params.jobitemId);
     const instance = await JobItem.findById(jobitemId);
     if (instance !== null) {
@@ -77,7 +104,8 @@ router.put('/declineJobItem/:jobitemId/:id/:token', async (req: Request, res: Re
   const id = parseInt(req.params.id);
   const token = req.params.token;
   const user = await User.findById(id);
-  if (adminAuthentification(user, res, id, token) && user !== null) {
+  const admin = await Admin.findOne({ where: {userId: id }});
+  if (adminAuthentification(user, res, id, token, admin) && user !== null) {
     const jobitemId = parseInt(req.params.jobitemId);
     const message = req.body.message;
     const instance = await JobItem.findById(jobitemId);
@@ -95,7 +123,8 @@ router.put('/changeName/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
   const user = await User.findById(id);
-  if (adminAuthentification(user, res, id, token) && user !== null) {
+  const admin = await Admin.findOne({ where: {userId: id }});
+  if (adminAuthentification(user, res, id, token, admin) && user !== null) {
     const instance = await Admin.findOne({ where: {userId: id }});
     const newName = req.body.name;
     if (instance !== null) {
@@ -107,8 +136,8 @@ router.put('/changeName/:id/:token', async (req: Request, res: Response) => {
   }
 });
 
-function adminAuthentification(user: any, res: any, id: number, token: string) {
-  if (foundUser(user, res) && checkToken(user, res, token) && (Admin.findOne({ where: {userId: id }}) !== null)) {
+function adminAuthentification(user: any, res: any, id: number, token: string, admin: any) {
+  if (foundUser(user, res) && checkToken(user, res, token) && admin) {
       return true;
   } else {
     res.statusCode = 401; // unauthorized

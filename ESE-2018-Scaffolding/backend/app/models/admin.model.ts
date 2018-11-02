@@ -11,7 +11,7 @@ export class Admin extends Model<Admin> {
   @Column
   userId!: number;
 
-  @BelongsTo(() => User)
+  @BelongsTo(() => User,  { onDelete: 'cascade' })
   user!: User;
 
   toSimplification(): any {

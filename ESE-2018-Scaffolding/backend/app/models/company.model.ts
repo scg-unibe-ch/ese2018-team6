@@ -22,6 +22,9 @@ export class Company extends Model<Company> {
   @Column
   verified!: boolean;
 
+  @Column
+  messageFromAdmin!: string;
+
   @ForeignKey(() => User)
   @Column
   userId!: number;
@@ -37,7 +40,8 @@ export class Company extends Model<Company> {
       'contactName': this.contactName,
       'contactPhone': this.contactPhone,
       'companyDescription': this.companyDescription,
-      'verified': this.verified
+      'verified': this.verified,
+      'messageFromAdmin' : this.messageFromAdmin
     };
   }
 

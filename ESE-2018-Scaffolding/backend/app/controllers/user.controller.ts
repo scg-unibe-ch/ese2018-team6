@@ -14,7 +14,6 @@ router.post('/token', async (req: Request, res: Response) => {
       const crypto = require('crypto');
       const token = crypto.randomBytes(64).toString('hex');
       user.token = token;
-      user.tokenDate = Date.now();
       user.tokenExpirationDate = Date.now() + 1080000000; // valid for 5 hours = 1080000000 milliseconds
       await user.save();
       res.statusCode = 200;

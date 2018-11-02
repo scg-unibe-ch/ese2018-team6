@@ -7,7 +7,8 @@ import {foundUser, checkToken} from './user.controller';
 const router: Router = Router();
 router.post('/', async (req: Request, res: Response) => {
   const testInstance = await User.findOne({ where: {email: req.body.email }});
-  if (testInstance == null) {
+  console.log(req.body.email);
+  if (req.body.email && testInstance == null) {
     const instance = new User();
     instance.fromSimplification(req.body);
 
@@ -25,7 +26,7 @@ router.post('/', async (req: Request, res: Response) => {
     });
   } else { res.statusCode = 403;
   res.json({
-    'message': 'email already used'
+    'message': 'email already used or empty'
   });
   }
 });

@@ -30,7 +30,8 @@ router.post('/:id/:token', async (req: Request, res: Response) => {
   if (foundUser(user, res) && checkToken(user, res, token) && user !== null) {
     const instance = new JobItem();
     instance.fromSimplification(req.body);
-    instance.accepted = false; // should not be decided by client
+    // @ts-ignore
+    instance.accepted = null; // should not be decided by client
     instance.messageFromAdmin = ''; // should not be decided by client
     instance.companyId = id; // should not be decided by client
     await instance.save();
