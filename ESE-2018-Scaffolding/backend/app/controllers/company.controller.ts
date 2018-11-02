@@ -18,6 +18,7 @@ router.post('/', async (req: Request, res: Response) => {
     company.fromSimplification(req.body);
     company.verified = false;
     company.userId = instance.id;
+    company.messageFromAdmin = '';
 
     await company.save();
     res.statusCode = 201;
