@@ -26,7 +26,7 @@ export class Company extends Model<Company> {
   @Column
   userId!: number;
 
-  @BelongsTo(() => User)
+  @BelongsTo(() => User,  { onDelete: 'cascade' })
   user!: User;
 
   toSimplification(): any {

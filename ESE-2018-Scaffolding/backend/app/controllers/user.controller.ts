@@ -43,6 +43,22 @@ router.put('/:id/:token', async (req: Request, res: Response) => {
   }
 });
 
+router.delete('/:id/:token', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const token = req.params.token;
+  const instance = await User.findById(id);
+  if (foundUser(instance, res) && checkToken(instance, res, token) && instance !== null) {
+      await instance.destroy();
+      res.statusCode = 204;
+      res.send();
+  } else {
+      res.statusCode = 404;
+      res.json({
+        'message': 'user not found'
+      });
+    }
+});
+
 export function foundUser(user: any, res: any) {
   if (user == null) {
     res.statusCode = 404; // not found
@@ -71,4 +87,7 @@ export function checkToken(user: any, res: any, token: string) {
     return true;
   }
 }
+
+
+
 export const UserController: Router = router;

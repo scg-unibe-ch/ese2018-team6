@@ -6,15 +6,18 @@ import {foundUser, checkToken} from './user.controller';
 
 const router: Router = Router();
 router.post('/', async (req: Request, res: Response) => {
-  const instance = new User();
-  const company = new Company();
-  instance.fromSimplification(req.body);
-  company.fromSimplification(req.body);
-  company.userId = instance.id;
-  const testInstance = await User.findOne({ where: {email: instance.email }});
+  const testInstance = await User.findOne({ where: {email: req.body.email }});
   if (testInstance == null) {
-    company.verified = false;
+    const instance = new User();
+    instance.fromSimplification(req.body);
+
     await instance.save();
+
+    const company = new Company();
+    company.fromSimplification(req.body);
+    company.verified = false;
+    company.userId = instance.id;
+
     await company.save();
     res.statusCode = 201;
     res.json({
