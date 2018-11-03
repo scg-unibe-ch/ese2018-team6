@@ -170,6 +170,182 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Create Company: create company with all params",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "8fff4080-9e45-4d60-972d-a191ba47faf8",
+								"exec": [
+									"pm.globals.set(\"currentemail\", Math.random(50));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "92b033ad-e42a-4a96-ad13-b1176cfb36e1",
+								"exec": [
+									"pm.test(\"Status code is  201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.globals.set(\"currentuserid\",  pm.response.json().id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": {{currentemail}},\n\t\"password\": \"\",\n    \"companyName\": \"companyName\",\n    \"companyStreet\": \"companyStreet\",\n    \"companyHouseNumber\": \"companyHouseNumber\",\n    \"companyPostcode\": \"companyPostcode\",\n    \"companyCity\": \"companyCity\",\n    \"contactName\": \"contactName\",\n    \"contactPhone\": \"contactPhone\",\n    \"companyDescription\": \"companyDescription\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/company",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"company"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get (Post) Token",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "59a9c5ea-a602-4291-b88d-2c514941c92d",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "8fbb42a7-ec1e-4a19-b142-69f25349d2af",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.globals.set(\"currenttoken\", pm.response.json().token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\":\"0.780818734983823\",\n\t\"password\":\"\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get (Post) Token Wrong Password",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "59a9c5ea-a602-4291-b88d-2c514941c92d",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "8fbb42a7-ec1e-4a19-b142-69f25349d2af",
+								"exec": [
+									"pm.test(\"Status code is not 200\", function () {",
+									"    pm.response.to.not.have.status(200);",
+									"});",
+									"pm.test(\"Token is null/undefined\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.token).to.eql(undefined);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\":\"0.780818734983823\",\n\t\"password\":\"bliblablu\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"token"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
