@@ -34,16 +34,44 @@ router.post('/', async (req: Request, res: Response) => {
 
 router.get('/:id', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
-  const instance = await Company.findById(id);
+  const instance = await Company.findOne({ where: {userId: id }});
   if (instance == null) {
     res.statusCode = 404;
     res.json({
       'message': 'company not found'
     });
     return;
+  } else if (instance.verified == false) {
+    res.statusCode = 404;
+    res.json({
+      'message': 'company not verified'
+    });
+    return;
   }
   res.statusCode = 200;
   res.send(instance.toSimplification());
+});
+
+router.get('/:id/:token', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const token = req.params.token;
+  const instance = await User.findById(id);
+  if (foundUser(instance, res) && checkToken(instance, res, token) && instance !== null) {
+    const companyInstance = await Company.findOne({ where: {userId: id }});
+    if (companyInstance == null) {
+      res.statusCode = 404;
+      res.json({
+        'message': 'company not found'
+      });
+      return;
+    }
+    res.statusCode = 200;
+
+    const returnObject = companyInstance.toSimplification();
+    returnObject.message = companyInstance.messageFromAdmin;
+    returnObject.verified = companyInstance.verified;
+    res.send(returnObject);
+  }
 });
 
 router.get('/allVerified', async (req: Request, res: Response) => {
@@ -57,7 +85,7 @@ router.put('/:id/:token', async (req: Request, res: Response) => {
   const token = req.params.token;
   const instance = await User.findById(id);
   if (foundUser(instance, res) && checkToken(instance, res, token) && instance !== null) {
-    const companyInstance = await Company.findById(id);
+    const companyInstance = await Company.findOne({ where: {userId: id }});
     if (companyInstance == null) {
       res.statusCode = 404; // not found
       res.json({
@@ -77,7 +105,7 @@ router.delete('/:id/:token', async (req: Request, res: Response) => {
   const token = req.params.token;
   const instance = await User.findById(id);
   if (foundUser(instance, res) && checkToken(instance, res, token) && instance !== null) {
-    const companyInstance = await Company.findOne({ where: {userId: id }})
+    const companyInstance = await Company.findOne({ where: {userId: id }});
     if (companyInstance !== null) {
       await instance.destroy();
       await companyInstance.destroy();

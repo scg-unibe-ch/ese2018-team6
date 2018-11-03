@@ -32,7 +32,16 @@ export class JobItem extends Model<JobItem> {
   languages!: string;
 
   @Column
-  location!: string;
+  street!: string;
+
+  @Column
+  houseNumber!: number;
+
+  @Column
+  postcode!: string;
+
+  @Column
+  city!: string;
 
   @Column
   salaryType!: number;
@@ -68,7 +77,10 @@ export class JobItem extends Model<JobItem> {
       'workloadMin': this.workloadMin,
       'workloadMax': this.workloadMax,
       'languages': this.languages,
-      'location': this.location,
+      'street': this.street,
+      'houseNumber': this.houseNumber,
+      'postcode': this.postcode,
+      'city': this.city,
       'salaryType': this.salaryType,
       'salaryAmount': this.salaryAmount,
       'accepted': this.accepted,
@@ -87,7 +99,10 @@ export class JobItem extends Model<JobItem> {
     this.workloadMin = simplification['workloadMin'];
     this.workloadMax = simplification['workloadMax'];
     this.languages = simplification['languages'];
-    this.location = simplification['location'];
+    this.street = simplification['street'];
+    this.houseNumber = simplification['houseNumber'];
+    this.postcode = simplification['postcode'];
+    this.city = simplification['city'];
     this.salaryType = simplification['salaryType'];
     this.salaryAmount = simplification['salaryAmount'];
     this.accepted = simplification['accepted'];

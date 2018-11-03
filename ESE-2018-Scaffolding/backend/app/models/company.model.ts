@@ -8,7 +8,16 @@ export class Company extends Model<Company> {
   companyName!: string;
 
   @Column
-  companyAddress!: string;
+  companyStreet!: string;
+
+  @Column
+  companyHouseNumber!: number;
+
+  @Column
+  companyPostcode!: string;
+
+  @Column
+  companyCity!: string;
 
   @Column
   contactName!: string;
@@ -36,18 +45,22 @@ export class Company extends Model<Company> {
     return {
       'userId': this.userId,
       'companyName': this.companyName,
-      'companyAddress': this.companyAddress,
+      'companyStreet': this.companyStreet,
+      'companyHouseNumber': this.companyHouseNumber,
+      'companyPostcode': this.companyPostcode,
+      'companyCity': this.companyCity,
       'contactName': this.contactName,
       'contactPhone': this.contactPhone,
       'companyDescription': this.companyDescription,
-      'verified': this.verified,
-      'messageFromAdmin' : this.messageFromAdmin
     };
   }
 
   fromSimplification(simplification: any): void {
     this.companyName = simplification['companyName'];
-    this.companyAddress = simplification['companyAddress'];
+    this.companyStreet = simplification['companyStreet'];
+    this.companyHouseNumber = simplification['companyHouseNumber'];
+    this.companyPostcode = simplification['companyPostcode'];
+    this.companyCity = simplification['companyCity'];
     this.contactName = simplification['contactName'];
     this.contactPhone = simplification['contactPhone'];
     this.companyDescription = simplification['companyDescription'];
