@@ -5,6 +5,9 @@ import {User} from './user.model';
 export class Company extends Model<Company> {
 
   @Column
+  companyLogoURL!: string;
+
+  @Column
   companyName!: string;
 
   @Column
@@ -24,6 +27,12 @@ export class Company extends Model<Company> {
 
   @Column
   contactPhone!: string;
+
+  @Column
+  contactEmail!: string;
+
+  @Column
+  companyWebsite!: string;
 
   @Column
   companyDescription!: string;
@@ -51,7 +60,10 @@ export class Company extends Model<Company> {
       'companyCity': this.companyCity,
       'contactName': this.contactName,
       'contactPhone': this.contactPhone,
+      'contactEmail' : this.contactEmail,
+      'companyWebsite' : this.companyWebsite,
       'companyDescription': this.companyDescription,
+      'companyLogoURL' : this.companyLogoURL,
     };
   }
 
@@ -64,6 +76,9 @@ export class Company extends Model<Company> {
     this.contactName = simplification['contactName'];
     this.contactPhone = simplification['contactPhone'];
     this.companyDescription = simplification['companyDescription'];
+    this.companyLogoURL = simplification['companyLogoURL'];
+    this.contactEmail = simplification['contactEmail'];
+    this.companyWebsite = simplification['companyWebsite'];
     // this.userId = simplification['userId'];
     // this.verified = simplification['verified'];
   }

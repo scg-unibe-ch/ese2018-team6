@@ -30,6 +30,19 @@ router.post('/:id/:token', async (req: Request, res: Response) => {
   if (foundUser(user, res) && checkToken(user, res, token) && user !== null) {
     const instance = new JobItem();
     instance.fromSimplification(req.body);
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth()+1; //January is 0!
+    let year = today.getFullYear();
+    let day;
+    let month;
+    if(dd<10)
+      day = '0' + dd;
+    else day = dd;
+    if(mm<10)
+      month = '0' + mm;
+    else month = mm;
+    instance.datePosted = day + '.' + month + '.' + year;
     // @ts-ignore
     instance.accepted = null; // should not be decided by client
     instance.messageFromAdmin = ''; // should not be decided by client
