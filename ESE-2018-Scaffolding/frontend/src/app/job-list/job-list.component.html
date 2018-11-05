@@ -1,6 +1,6 @@
   <h3>
     Latest Job Postings
-    <span class="pull-right"><button type="button" class="btn btn-primary" routerLink="/jobs/create">Create New</button></span>
+    <span class="pull-right"><button type="button" class="btn btn-primary" routerLink="/jobs/create" *ngIf="isLoggedIn()">Create New</button></span>
   </h3>
   <hr>
 
@@ -8,4 +8,3 @@
     *ngFor="let jobItem of jobPostings"
     [jobItemEntry]="jobItem">
   </app-job-item>
-

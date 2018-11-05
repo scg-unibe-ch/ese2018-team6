@@ -2,9 +2,8 @@
   <p>
     ESE 2018 - Team 6
 
-    <!-- TODO Only show if current user is admin -->
     <span class="pull-right">
-      <a routerLink="/admin">Admin</a>
+      <a routerLink="/admin" *ngIf="checkIfAdmin()">Admin</a>
     </span>
   </p>
 </footer>

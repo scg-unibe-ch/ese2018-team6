@@ -2,7 +2,7 @@
   <tr>
 
     <td>
-      <p>
+      <p> <!-- TODO Adjust form for new data -->
         <strong>Title</strong><br>
         {{ jobSubmissionEntry.title }}
       </p>
@@ -15,16 +15,20 @@
         {{ jobSubmissionEntry.skills }}
       </p>
       <p>
+        <strong>Date Posted</strong><br>
+        <!--TODO-->
+      </p>
+      <p>
         <strong>Start Date</strong><br>
-        {{ jobSubmissionEntry.startDate.toLocaleDateString() }}
+        {{ jobSubmissionEntry.startDate }}
       </p>
       <p>
         <strong>End Date</strong><br>
-        {{ jobSubmissionEntry.endDate.toLocaleDateString() }}
+        {{ jobSubmissionEntry.endDate }}
       </p>
       <p>
         <strong>Posting Valid Until</strong><br>
-        {{ jobSubmissionEntry.validUntil.toLocaleDateString() }}
+        {{ jobSubmissionEntry.validUntil }}
       </p>
       <p>
         <strong>Workload</strong><br>
@@ -33,6 +37,10 @@
       <p>
         <strong>Languages</strong><br>
         {{ jobSubmissionEntry.languages }}
+      </p>
+      <p>
+        <strong>Street</strong><br>
+        <!--TODO-->
       </p>
       <p>
         <strong>ZIP Code / Place</strong><br>

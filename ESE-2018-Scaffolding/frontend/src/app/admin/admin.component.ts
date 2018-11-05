@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { User } from '../user.model';
-import { Job } from '../job.model';
+import {Component, OnInit} from '@angular/core';
+import {Company} from '../company.model';
+import {Job} from '../job.model';
+import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-admin',
@@ -9,120 +11,116 @@ import { Job } from '../job.model';
 })
 export class AdminComponent implements OnInit {
 
-  // userApplications: User[] = [];
-  // jobSubmissions: Job[] = [];
+  userId: number;
+  userToken: string;
+  userApplications: Company[] = [];
+  jobSubmissions: Job[] = [];
 
-  // Dummy Data: User Applications TODO: DELETE DUMMY DATA
-  userApplications: User[] = [
-    new User(
-      1,
-      'google@gmail.com',
-      'password',
-      'Google',
-      'Company',
-      'Hauptstrasse 1',
-      8000,
-      'Zürich',
-      'google.com',
-      'Nam lobortis egestas sem, vitae efficitur lectus tincidunt eu. Sed est orci, luctus ac pulvinar et, aliquet eget urna. Cras pharetra turpis a metus semper, non maximus ante malesuada. Fusce varius diam vitae volutpat tincidunt. Donec ac bibendum ligula, non scelerisque purus. Suspendisse scelerisque dolor urna, et fringilla augue scelerisque vitae. Mauris sodales viverra nibh at tincidunt.',
-    ),
-    new User(
-      2,
-      'info@max-muster.com',
-      'pw',
-      'Max Muster AG',
-      'Company',
-      'Bernstrasse 1',
-      3000,
-      'Bern',
-      'max-muster.com',
-      'Description text...'
-    )
-  ];
-
-  // Dummy Data: Job Submissions TODO: DELETE DUMMY DATA
-  jobSubmissions: Job[] = [
-    new Job(
-      1,
-      'Java Developer',
-      'We\'re looking for a Java developer',
-      'Java',
-      new Date(2019, 0, 0),
-      new Date(2019, 11, 31),
-      new Date(2018, 11, 31),
-      50,
-      100,
-      'German, English',
-      3000,
-      'Bern',
-      'Monthly',
-      7800
-    ),
-    new Job(
-      2,
-      'Web Developer',
-      'We want to hire a Web Developer',
-      'HTML, CSS, Javascript',
-      new Date(2020, 0, 0),
-      new Date(2020, 11, 31),
-      new Date(2019, 11, 31),
-      80,
-      100,
-      'German, English',
-      8000,
-      'Zürich',
-      'Hourly',
-      50
-    ),
-    new Job(
-      3,
-      'C++ Developer',
-      'We need a graphics programmer',
-      'C++',
-      new Date(2021, 0, 0),
-      new Date(2021, 11, 31),
-      new Date(2020, 11, 31),
-      100,
-      100,
-      'German, English',
-      4000,
-      'Basel',
-      'One Time',
-      100
-    )
-  ];
-  constructor() { }
+  constructor(private httpClient: HttpClient, private router: Router) { }
 
   ngOnInit() {
+    this.checkIfAdmin();
+
+    this.userId = parseInt(localStorage.getItem('user-id'));
+    this.userToken = localStorage.getItem('user-token');
+
     this.onLoadingUserApplications();
     this.onLoadingJobSubmissions();
   }
 
+  checkIfAdmin() {
+    let userType: number = parseInt(localStorage.getItem('isAdmin'));
+    if(userType != 1){
+      this.router.navigate(['']);
+    }
+  }
+
   onLoadingUserApplications() {
-    // TODO: Create request for backend to fetch all user applications from database with status 'open' and store in 'userApplications'
+    this.httpClient.get('http://localhost:3000/admin/unverifiedCompanies/' + this.userId + '/' + this.userToken)
+      .subscribe(
+        (instances: any) => {
+          this.userApplications = instances.map((instance) => new Company(
+            instance.userId,
+            instance.companyName,
+            '', // TODO Add logo link (BACKEND)
+            instance.companyStreet,
+            instance.companyHouseNumber,
+            instance.companyPostcode,
+            instance.companyCity,
+            instance.contactName,
+            '', // TODO Add contact email (BACKEND)
+            instance.contactPhone,
+            '', // TODO Add website link (BACKEND)
+            instance.companyDescription
+          ))
+        }
+      )
   }
 
   onLoadingJobSubmissions() {
-    // TODO: Create request for backend to fetch all job submissions from database with status 'open' and store in 'jobSubmissions'
+    this.httpClient.get('http://localhost:3000/admin/unacceptedJobItems/' + this.userId + '/' + this.userToken)
+      .subscribe(
+        (instances: any) => {
+          this.jobSubmissions = instances.map((instance) => new Job( // TODO Adjust mapping (BACKEND)
+            instance.id,
+            instance.title,
+            instance.description,
+            instance.skills,
+            new Date(instance.startDate),
+            new Date(instance.endDate),
+            new Date(instance.validUntil),
+            instance.workloadMin,
+            instance.workloadMax,
+            instance.languages,
+            instance.street,
+            instance.houseNumber,
+            instance.postcode,
+            instance.city,
+            instance.salaryType,
+            instance.salaryAmount,
+            instance.companyId
+          ))
+        }
+      )
   }
 
-  approveUserApplication($event) {
-    this.userApplications = this.userApplications.filter(obj => obj !== $event);
-    // TODO: Send changes to backend (UPDATE STATE 'OPEN' TO 'APPROVED')
+  approveUserApplication(userId: number) {
+    if(confirm('Are you sure you want to approve this user?')){
+      console.log(userId);
+      this.httpClient.put('http://localhost:3000/admin/verify/' + userId + '/' + this.userId + '/' + this.userToken, {
+        'verify': true
+      }).subscribe();
+    }
   }
 
-  denyUserApplication($event) {
-    this.userApplications = this.userApplications.filter(obj => obj !== $event);
-    // TODO: Send changes to backend (DELETE USER FROM DATABASE)
+  denyUserApplication(userId: number) {
+    let adminMessage = prompt('Reasons why the user application is denied:', '');
+    if (adminMessage == null || adminMessage == '') {
+    } else {
+      this.httpClient.put('http://localhost:3000/admin/verify/' + userId + '/' + this.userId + '/' + this.userToken, {
+        'verify': false,
+        'message': adminMessage
+      }).subscribe();
+    }
   }
 
-  approveJobSubmission($event) {
-    this.jobSubmissions = this.jobSubmissions.filter(obj => obj !== $event);
-    // TODO: Send changes to backend (UPDATE STATE 'OPEN' TO 'APPROVED')
+  approveJobSubmission(jobId: number) {
+    if(confirm('Are you sure you want to approve this job posting?')){
+      console.log(jobId);
+      this.httpClient.put('http://localhost:3000/admin/accept/' + jobId + '/' + this.userId + '/' + this.userToken, {
+        'accept': true
+      }).subscribe();
+    }
   }
 
-  denyJobSubmission($event) {
-    this.jobSubmissions = this.jobSubmissions.filter(obj => obj !== $event);
-    // TODO: Send changes to backend (DELETE JOB POSTING FROM DATABASE)
+  denyJobSubmission(jobId: number) {
+    let adminMessage = prompt('Reasons why the job submission is denied:', '');
+    if(adminMessage == null || adminMessage == ''){
+    } else {
+      this.httpClient.put('http://localhost:3000/admin/accept/' + jobId + '/' + this.userId + '/' + this.userToken, {
+        'accept': false,
+        'message': 'reason of denial'
+      }).subscribe();
+    }
   }
 }

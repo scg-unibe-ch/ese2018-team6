@@ -3,24 +3,26 @@
 
     <td>
       <p>
-        <strong>E-Mail</strong><br>
-        {{ userApplicationEntry.email }}
+        <strong>Logo</strong><br>
+        <img src="{{ userApplicationEntry.logo }}">
       </p>
       <p>
         <strong>Name</strong><br>
         {{ userApplicationEntry.name }}
       </p>
       <p>
-        <strong>User Type</strong><br>
-        {{ userApplicationEntry.userType }}
-      </p>
-      <p>
         <strong>Street</strong><br>
-        {{ userApplicationEntry.street }}
+        {{ userApplicationEntry.street }} {{ userApplicationEntry.houseNumber }}
       </p>
       <p>
         <strong>ZIP Code / Place</strong><br>
         {{ userApplicationEntry.zipCode }} {{ userApplicationEntry.place }}
+      </p>
+      <p>
+        <strong>Contact Details</strong><br>
+        {{ userApplicationEntry.contactName }}<br>
+        {{ userApplicationEntry.contactEmail }}<br>
+        {{ userApplicationEntry.contactPhone }}
       </p>
       <p>
         <strong>Website</strong><br>

@@ -11,14 +11,14 @@
     <div class="form-group">
       <label class="col-sm-3 control-label">E-Mail</label>
       <div class="col-sm-9">
-        <input type="email" class="form-control" placeholder="E-Mail" name="email" [(ngModel)]="userEntry.email">
+        <input type="email" class="form-control" placeholder="E-Mail" name="email" [(ngModel)]="userData.email">
       </div>
     </div>
 
     <div class="form-group">
       <label class="col-sm-3 control-label">Password</label>
       <div class="col-sm-9">
-        <input type="password" class="form-control" placeholder="Re-enter Password" name="password" [(ngModel)]="password">
+        <input type="password" class="form-control" placeholder="Re-enter Password" name="password" [(ngModel)]="userData.password">
       </div>
     </div>
 
@@ -29,12 +29,21 @@
       </div>
     </div>
 
-    <hr>
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <button type="submit" class="btn btn-primary" (click)="updateAccount()">Save Changes</button>
+      </div>
+    </div>
+  </form>
 
+  <hr>
+
+  <p><em>Your current company settings:</em></p>
+  <form class="form-horizontal">
     <div class="form-group">
       <label class="col-sm-3 control-label">Name</label>
       <div class="col-sm-9">
-        <input class="form-control" placeholder="Name" name="name" [(ngModel)]="userEntry.name">
+        <input class="form-control" placeholder="Name" name="name" [(ngModel)]="companyData.name">
       </div>
     </div>
 
@@ -50,17 +59,17 @@
     <div class="form-group">
       <label class="col-sm-3 control-label">Street</label>
       <div class="col-sm-9">
-        <input class="form-control" placeholder="Street" name="street" [(ngModel)]="userEntry.street">
+        <input class="form-control" placeholder="Street" name="street" [(ngModel)]="companyData.street">
       </div>
     </div>
 
     <div class="form-group">
       <label class="col-sm-3 control-label">ZIP Code / Place</label>
       <div class="col-sm-2">
-        <input class="form-control" placeholder="ZIP Code" name="zipCode" [(ngModel)]="userEntry.zipCode">
+        <input class="form-control" placeholder="ZIP Code" name="zipCode" [(ngModel)]="companyData.zipCode">
       </div>
       <div class="col-sm-7">
-        <input class="form-control" placeholder="Place" name="place" [(ngModel)]="userEntry.place">
+        <input class="form-control" placeholder="Place" name="place" [(ngModel)]="companyData.place">
       </div>
     </div>
 
@@ -69,7 +78,7 @@
       <div class="col-sm-9">
         <div class="input-group">
           <div class="input-group-addon">www.</div>
-          <input type="text" class="form-control" placeholder="Website" name="website" [(ngModel)]="userEntry.website">
+          <input type="text" class="form-control" placeholder="Website" name="website" [(ngModel)]="companyData.website">
         </div>
       </div>
     </div>
@@ -77,13 +86,13 @@
     <div class="form-group">
       <label for="desc" class="col-sm-3 control-label">Description</label>
       <div class="col-sm-9">
-        <textarea id="desc" rows="5" class="form-control" placeholder="Description" name="description" [(ngModel)]="userEntry.description"></textarea>
+        <textarea id="desc" rows="5" class="form-control" placeholder="Description" name="description" [(ngModel)]="companyData.description"></textarea>
       </div>
     </div>
 
     <div class="form-group">
       <div class="col-sm-offset-3 col-sm-9">
-        <button type="submit" class="btn btn-primary" (click)="updateAccount()">Save Changes</button>
+        <button type="submit" class="btn btn-primary" (click)="updateCompany()">Save Changes</button>
       </div>
     </div>
   </form>
@@ -101,7 +110,7 @@
 
   <app-my-job-item
     *ngFor="let myJobItem of myJobPostings"
-    [myJobPostingEntry]="myJobItem"
+    [myJobData]="myJobItem"
     (jobSubmissionEdit)="editJobSubmission($event)"
     (jobSubmissionDelete)="deleteJobSubmission($event)">
   </app-my-job-item>

@@ -1,33 +1,35 @@
-<h3>{{ jobPostingEntry.title }}</h3>
+<h3>{{ jobData.title }}</h3>
 <hr>
 
+<!-- TODO: Adjust for new data -->
 <div class="col-md-8">
-  <small>{{ jobPostingEntry.startDate.toLocaleDateString() }} | <strong>{{ jobPostingEntry.place }}</strong> |
-    {{ jobPostingEntry.workloadMin }}-{{ jobPostingEntry.workloadMax }}%</small>
+  <small>{{ jobData.startDate.toLocaleDateString('en-GB').toString().replace("/", ".").replace("/", ".") }}
+    | <strong>{{ jobData.place }}</strong>
+    | {{ jobData.workloadMin }}-{{ jobData.workloadMax }}%</small>
   <br>
 
   <h4>Description</h4>
-  <p>{{ jobPostingEntry.description }}</p>
+  <p>{{ jobData.description }}</p>
   <br>
 
   <h4>Details</h4>
   <table class="table">
     <tbody>
     <tr>
-      <th scope="row" style="width: 30%;">Start Date</th>
-      <td style="width: 70%;">{{ jobPostingEntry.startDate.toLocaleDateString() }}</td>
+      <th scope="row" style="width: 40%;">Start Date</th>
+      <td style="width: 60%;">{{ jobData.startDate.toLocaleDateString('en-GB').toString().replace("/", ".").replace("/", ".") }}</td>
     </tr>
     <tr>
       <th scope="row">End Date</th>
-      <td>{{ jobPostingEntry.endDate.toLocaleDateString() }}</td>
+      <td>{{ jobData.endDate.toLocaleDateString('en-GB').toString().replace("/", ".").replace("/", ".") }}</td>
     </tr>
     <tr>
       <th scope="row">Required Skills</th>
-      <td>{{ jobPostingEntry.skills }}</td>
+      <td>{{ jobData.skills }}</td>
     </tr>
     <tr>
       <th scope="row">Languages</th>
-      <td>{{ jobPostingEntry.languages }}</td>
+      <td>{{ jobData.languages }}</td>
     </tr>
     </tbody>
   </table>
@@ -36,12 +38,12 @@
   <h4>Salary</h4>
   <table class="table">
     <tr>
-      <th scope="row" style="width: 30%;">Type</th>
-      <td style="width: 70%;">{{ jobPostingEntry.salaryType }}</td>
+      <th scope="row" style="width: 40%;">Type</th>
+      <td style="width: 60%;">{{ jobData.salaryType }}</td>
     </tr>
     <tr>
-      <th scope="row">Salary Amount</th>
-      <td>CHF {{ jobPostingEntry.salaryAmount }}</td>
+      <th scope="row">Amount</th>
+      <td>CHF {{ jobData.salaryAmount }}</td>
     </tr>
   </table>
 </div>
@@ -52,21 +54,21 @@
 
   <p>
     <strong>Company</strong><br>
-    {{ userEntry.name }}
+    {{ userData.name }}
   </p>
   <p>
     <strong>Description</strong><br>
-    {{ userEntry.description }}
+    {{ userData.description }}
   </p>
   <p>
     <strong>Address</strong><br>
-    {{ userEntry.name }}<br>
-    {{ userEntry.street }}<br>
-    {{ userEntry.zipCode }} {{ userEntry.place }}
+    {{ userData.name }}<br>
+    {{ userData.street }}<br>
+    {{ userData.zipCode }} {{ userData.place }}
   </p>
   <p>
     <strong>Contact</strong><br>
-    <em>Website: </em><a href="{{ userEntry.website }}">{{ userEntry.website }}</a><br>
-    <em>E-Mail: </em><a>{{ userEntry.email }}</a>
+    <em>Website: </em><a href="{{ userData.website }}">{{ userData.website }}</a><br>
+    <em>E-Mail: </em><a>{{ userData.contactEmail }}</a>
   </p>
 </div>

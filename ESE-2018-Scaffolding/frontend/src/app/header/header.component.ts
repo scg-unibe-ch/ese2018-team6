@@ -1,4 +1,5 @@
 import { Component, OnInit, } from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -7,7 +8,7 @@ import { Component, OnInit, } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() { }
 
@@ -16,6 +17,13 @@ export class HeaderComponent implements OnInit {
     element.classList.toggle("navbar-hidden");
   }
 
-  // TODO Sign out the current user
-  onSignOut() { }
+  isLoggedIn() {
+    return localStorage.getItem('user-token');
+  }
+
+  onSignOut() {
+    localStorage.removeItem('user-id');
+    localStorage.removeItem('user-token');
+    this.router.navigate(['']);
+  }
 }

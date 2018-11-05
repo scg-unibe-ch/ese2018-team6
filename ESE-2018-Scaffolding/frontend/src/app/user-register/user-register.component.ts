@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { User } from '../user.model';
+import {Component, OnInit} from '@angular/core';
+import {User} from '../user.model';
+import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-user-register',
@@ -20,32 +22,30 @@ export class UserRegisterComponent implements OnInit {
     null,
     null
   );
-  confirmedPassword: String;
-  errorTitle: String;
-  errorMessage: String;
-  hasErrors: Boolean = false;
 
-  constructor() { }
+  constructor(private httpClient: HttpClient, private router: Router) { }
 
   ngOnInit() { }
 
-  // TODO Send request to backend to create new entry in user database with the provided data.
   onRegister() {
-    this.checkForValidInput();
+    this.httpClient.post('http://localhost:3000/company', {
+      'email': this.userRegisterData.email,
+      'password': this.userRegisterData.password,
+      'companyName': this.userRegisterData.name,
+      // TODO - Add Logo link (BACKEND)
+      'companyStreet': this.userRegisterData.street,
+      'companyHouseNumber': 0, // TODO - Add form field
+      'companyPostcode': this.userRegisterData.zipCode,
+      'companyCity': this.userRegisterData.place,
+      'contactName': '', // TODO - Add form field
+      // TODO - Add contact email (BACKEND)
+      'contactPhone': '', // TODO - Add form field
+      // TODO - Add website link (BACKEND)
+      'companyDescription': this.userRegisterData.description
+    }).subscribe();
+
+    this.router.navigate(['']);
   }
 
-  checkForValidInput() {
-    // Check for matching passwords
-    if(this.confirmedPassword !== this.userRegisterData.password) {
-      this.hasErrors = true;
-      this.errorTitle = 'Password Failed!';
-      this.errorMessage = 'The two passwords do not match.';
-    }
-    // TODO Check user registration for valid inputs
-
-    if(this.hasErrors){
-      const element = document.getElementById('errorMessageBox');
-      element.classList.toggle('errorMessageBox');
-    }
-  }
+  // TODO - Check for valid input (email & password required etc.)
 }

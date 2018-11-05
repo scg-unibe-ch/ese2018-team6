@@ -3,6 +3,7 @@
 
 <form class="form-horizontal">
 
+  <!-- TODO Update form to accept new data -->
   <div class="form-group">
     <label class="col-sm-3 control-label">E-Mail</label>
     <div class="col-sm-9">
@@ -20,7 +21,7 @@
   <div class="form-group">
     <label class="col-sm-3 control-label">Confirm Password</label>
     <div class="col-sm-9">
-      <input type="password" class="form-control" placeholder="Confirm Password" name="confirmPassword" [(ngModel)]="confirmedPassword">
+      <input type="password" class="form-control" placeholder="Confirm Password" name="confirmPassword">
     </div>
   </div>
 
@@ -81,16 +82,5 @@
       <button type="submit" class="btn btn-success" (click)="onRegister()">Register</button>
     </div>
   </div>
-
-  <div class="form-group">
-    <div class="col-sm-offset-3 col-sm-9">
-      <div id="errorMessageBox" class="alert alert-danger errorMessageBox" role="alert">
-        <strong>{{ errorTitle }} </strong><br>
-        {{ errorMessage }}
-      </div>
-    </div>
-  </div>
-
-
 
 </form>

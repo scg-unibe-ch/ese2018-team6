@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Job} from '../job.model';
+import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-job-create',
@@ -8,7 +10,9 @@ import {Job} from '../job.model';
 })
 export class JobCreateComponent implements OnInit {
 
-  jobPostingEntry: Job = new Job(
+  userId: string;
+  userToken: string;
+  jobData: Job = new Job(
     null,
     null,
     null,
@@ -22,14 +26,47 @@ export class JobCreateComponent implements OnInit {
     null,
     null,
     null,
+    null,
+    null,
+  null,
     null
   );
 
+  constructor(private httpClient: HttpClient, private router: Router) { }
 
-  constructor() { }
+  ngOnInit() {
+    if(!this.checkIfLoggedIn()){
+      this.router.navigate(['']);
+    }
 
-  ngOnInit() { }
+    this.userId = localStorage.getItem('user-id');
+    this.userToken = localStorage.getItem('user-token');
+  }
 
-  // TODO Creates new request for backend to create a new job posting with the data from from fields.
-  onCreate() {}
+  checkIfLoggedIn() {
+    return localStorage.getItem('user-token');
+  }
+
+  onCreate() {
+    // TODO Check if required fields are ok
+    this.httpClient.post('http://localhost:3000/jobitem/' + this.userId + '/' + this.userToken, {
+      'title': this.jobData.title,
+      'description': this.jobData.description,
+      'startDate': this.jobData.startDate,
+      'endDate': this.jobData.endDate,
+      'validUntil': this.jobData.validUntil,
+      'workloadMin': this.jobData.workloadMin,
+      'workloadMax': this.jobData.workloadMax,
+      'languages': this.jobData.languages,
+      'street': this.jobData.street,
+      'houseNumber': this.jobData.houseHumber,
+      'postcode': this.jobData.zipCode,
+      'city': this.jobData.place,
+      'salaryType': this.jobData.salaryType,
+      'salaryAmount': this.jobData.salaryAmount,
+      'skills': this.jobData.skills
+    }).subscribe();
+
+    this.router.navigate(['/my-account']);
+  }
 }

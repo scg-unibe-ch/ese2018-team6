@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Job} from '../job.model';
+import {HttpClient} from '@angular/common/http';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-job-edit',
@@ -8,8 +10,13 @@ import {Job} from '../job.model';
 })
 export class JobEditComponent implements OnInit {
 
-  /*
-  jobPostingEntry: Job = new Job(
+  jobId: number;
+  userId: string;
+  userToken: string;
+  jobData: Job = new Job(
+    null,
+    null,
+    null,
     null,
     null,
     null,
@@ -25,35 +32,66 @@ export class JobEditComponent implements OnInit {
     null,
     null
   );
-  */
 
-  // Dummy Data for Job TODO DELETE Dummy Data
-  jobPostingEntry: Job = new Job(
-    1,
-    'Java Developer',
-    'We\'re looking for a Java developer. Nam lobortis egestas sem, vitae efficitur lectus tincidunt eu. Sed est orci, luctus ac pulvinar et, aliquet eget urna. Cras pharetra turpis a metus semper, non maximus ante malesuada. Fusce varius diam vitae volutpat tincidunt. Donec ac bibendum ligula, non scelerisque purus. Suspendisse scelerisque dolor urna, et fringilla augue scelerisque vitae. Mauris sodales viverra nibh at tincidunt.',
-    'Java',
-    new Date(2019, 0, 0),
-    new Date(2019, 11, 31),
-    new Date(2018, 11, 31),
-    50,
-    100,
-    'German, English',
-    3000,
-    'Bern',
-    'Monthly',
-    7800
-  );
-
-  constructor() { }
+  constructor(private httpClient: HttpClient, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
-    this.onLoadingData();
+    if(!this.checkIfLoggedIn()){
+      this.router.navigate(['']);
+    }
+    this.jobId = parseInt(this.activatedRoute.snapshot.paramMap.get('id'));
+    this.onLoadingJob();
+
+    this.userId = localStorage.getItem('user-id');
+    this.userToken = localStorage.getItem('user-token');
   }
 
-  // TODO Function to load the data from an existing job posting into form fields to edit them.
-  onLoadingData() {}
+  checkIfLoggedIn() {
+    return localStorage.getItem('user-token');
+  }
 
-  // TODO Creates new request for backend to update an existing job posting with the data from from fields.
-  onUpdate() {}
+  onLoadingJob() {
+    this.httpClient.get('http://localhost:3000/jobitem/' + this.jobId).subscribe(
+      (instance: any) => this.jobData = new Job(
+        this.jobId,
+        instance.title,
+        instance.description,
+        instance.skills,
+        new Date(instance.startDate),
+        new Date(instance.endDate),
+        new Date(instance.validUntil),
+        instance.workloadMin,
+        instance.workloadMax,
+        instance.languages,
+        instance.street,
+        instance.houseNumber,
+        instance.postcode,
+        instance.city,
+        instance.salaryType,
+        instance.salaryAmount,
+        instance.companyId
+      ))
+  }
+
+  onUpdate() {
+    this.httpClient.put('http://localhost:3000/jobitem/' + this.jobId + '/' + this.userId + '/' + this.userToken, {
+      'title': this.jobData.title,
+      'description': this.jobData.description,
+      'startDate': this.jobData.startDate,
+      'endDate': this.jobData.endDate,
+      'validUntil': this.jobData.validUntil,
+      'workloadMin': this.jobData.workloadMin,
+      'workloadMax': this.jobData.workloadMax,
+      'languages': this.jobData.languages,
+      'street': this.jobData.street,
+      'houseNumber': this.jobData.houseHumber,
+      'postcode': this.jobData.zipCode,
+      'city': this.jobData.place,
+      'salaryType': this.jobData.salaryType,
+      'salaryAmount': this.jobData.salaryAmount,
+      'skills': this.jobData.skills
+    }).subscribe();
+
+    this.router.navigate(['/my-account']);
+  }
 }

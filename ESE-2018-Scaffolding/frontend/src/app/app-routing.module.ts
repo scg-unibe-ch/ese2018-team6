@@ -12,10 +12,10 @@ import {JobDetailComponent} from './job-detail/job-detail.component';
 import {JobCreateComponent} from './job-create/job-create.component';
 
 const routes: Routes = [
-  { path: '', component: JobListComponent },
+  { path: '', redirectTo: '/jobs', pathMatch: 'full' },
   { path: 'jobs', component: JobListComponent },
   { path: 'jobs/create', component: JobCreateComponent },
-  { path: 'jobs/edit', component: JobEditComponent },
+  { path: 'jobs/edit/:id', component: JobEditComponent },
   { path: 'jobs/details/:id', component: JobDetailComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'about', component: AboutComponent },
@@ -23,6 +23,7 @@ const routes: Routes = [
   { path: 'register', component: UserRegisterComponent },
   { path: 'admin', component: AdminComponent },
   { path: 'my-account', component: MyAccountComponent },
+  { path: '**', redirectTo: '/jobs', pathMatch: 'full' },
 ];
 
 @NgModule({

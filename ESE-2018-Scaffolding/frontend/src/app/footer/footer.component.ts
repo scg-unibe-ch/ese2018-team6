@@ -11,4 +11,8 @@ export class FooterComponent implements OnInit {
 
   ngOnInit() { }
 
+  checkIfAdmin() {
+    let userType: number = parseInt(localStorage.getItem('isAdmin'));
+    return (userType == 1);
+  }
 }

@@ -3,20 +3,20 @@
     <tr>
 
       <td class="pull-left">
-        <h4 class="list-group-item-heading">{{ myJobPostingEntry.title }}</h4>
+        <h4 class="list-group-item-heading">{{ myJobData.title }}</h4>
         <small class="list-group-item-info">
-          {{ myJobPostingEntry.startDate.toLocaleDateString() }}
+          {{ myJobData.startDate.toLocaleDateString() }}
           &nbsp;|&nbsp;&nbsp;
-          <strong>{{ myJobPostingEntry.place }}</strong>
+          <strong>{{ myJobData.place }}</strong>
           &nbsp;|&nbsp;&nbsp;
-          {{ myJobPostingEntry.workloadMin }} - {{ myJobPostingEntry.workloadMax }}%
+          {{ myJobData.workloadMin }} - {{ myJobData.workloadMax }}%
         </small>
-        <p class="list-group-item-text">{{ myJobPostingEntry.description }}</p>
+        <p class="list-group-item-text">{{ myJobData.description }}</p>
       </td>
 
       <td class="pull-right">
         <!-- TODO: Send job item with routerLink to job-edit -->
-        <button type="button" class="btn btn-primary" routerLink="/jobs/edit">
+        <button type="button" class="btn btn-primary" routerLink="/jobs/edit/ + {{ myJobData.id }}">
           <span class="glyphicon glyphicon-edit"></span>
         </button>
         <br>

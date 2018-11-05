@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Job} from '../job.model';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-job-list',
@@ -8,142 +9,40 @@ import {Job} from '../job.model';
 })
 export class JobListComponent implements OnInit {
 
-  //jobPostings: Job[] = [];
+  jobPostings: Job[] = [];
 
-  // Some dummy data to test the layout
-  jobPostings: Job[] = [
-    new Job(
-      1,
-      'Java Developer',
-      'We\'re looking for a Java developer',
-      'Java',
-      new Date(2019, 0, 0),
-      new Date(2019, 11, 31),
-      new Date(2018, 11, 31),
-      50,
-      100,
-      'German, English',
-      3000,
-      'Bern',
-      'Monthly',
-      7800
-    ),
-    new Job(
-      2,
-      'Web Developer',
-      'We want to hire a Web Developer',
-      'HTML, CSS, Javascript',
-      new Date(2020, 0, 0),
-      new Date(2020, 11, 31),
-      new Date(2019, 11, 31),
-      80,
-      100,
-      'German, English',
-      8000,
-      'Zürich',
-      'Hourly',
-      50
-    ),
-    new Job(
-      3,
-      'C++ Developer',
-      'We need a graphics programmer',
-      'C++',
-      new Date(2021, 0, 0),
-      new Date(2021, 11, 31),
-      new Date(2020, 11, 31),
-      100,
-      100,
-      'German, English',
-      4000,
-      'Basel',
-      'One Time',
-      100
-    ),
-    new Job(
-      4,
-      'Web Developer',
-      'We want to hire a Web Developer',
-      'HTML, CSS, Javascript',
-      new Date(2020, 0, 0),
-      new Date(2020, 11, 31),
-      new Date(2019, 11, 31),
-      80,
-      100,
-      'German, English',
-      8000,
-      'Zürich',
-      'Hourly',
-      50
-    ),
-    new Job(
-      5,
-      'C++ Developer',
-      'We need a graphics programmer',
-      'C++',
-      new Date(2021, 0, 0),
-      new Date(2021, 11, 31),
-      new Date(2020, 11, 31),
-      100,
-      100,
-      'German, English',
-      4000,
-      'Basel',
-      'One Time',
-      100
-    ),
-    new Job(
-      6,
-      'Web Developer',
-      'We want to hire a Web Developer',
-      'HTML, CSS, Javascript',
-      new Date(2020, 0, 0),
-      new Date(2020, 11, 31),
-      new Date(2019, 11, 31),
-      80,
-      100,
-      'German, English',
-      8000,
-      'Zürich',
-      'Hourly',
-      50
-    ),
-    new Job(
-      7,
-      'C++ Developer',
-      'We need a graphics programmer',
-      'C++',
-      new Date(2021, 0, 0),
-      new Date(2021, 11, 31),
-      new Date(2020, 11, 31),
-      100,
-      100,
-      'German, English',
-      4000,
-      'Basel',
-      'One Time',
-      100
-    ),
-    new Job(
-      8,
-      'Web Developer',
-      'We want to hire a Web Developer',
-      'HTML, CSS, Javascript',
-      new Date(2020, 0, 0),
-      new Date(2020, 11, 31),
-      new Date(2019, 11, 31),
-      80,
-      100,
-      'German, English',
-      8000,
-      'Zürich',
-      'Hourly',
-      50
-    )
-  ];
+  constructor(private httpClient: HttpClient) { }
 
-  constructor() { }
+  ngOnInit() {
+    this.httpClient.get('http://localhost:3000/jobitem').subscribe(
+      (instances: any) => {
+        this.jobPostings = instances.map((instance) => new Job(
+          instance.id,
+          instance.title,
+          instance.description,
+          instance.skills,
+          new Date(instance.startDate),
+          new Date(instance.endDate),
+          new Date(instance.validUntil),
+          instance.workloadMin,
+          instance.workloadMax,
+          instance.languages,
+          instance.street,
+          instance.houseNumber,
+          instance.postcode,
+          instance.city,
+          instance.salaryType,
+          instance.salaryAmount,
+          instance.companyId
+      ))
+      }
+    );
 
-  ngOnInit() { }
+    // TODO Await response due to empty array
+    this.jobPostings.reverse();
+  }
 
+  isLoggedIn() {
+    return localStorage.getItem('user-token');
+  }
 }

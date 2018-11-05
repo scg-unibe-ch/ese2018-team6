@@ -11,9 +11,12 @@ export class Job {
     public workloadMin: number,
     public workloadMax: number,
     public languages: string,
+    public street: string,
+    public houseHumber: string,
     public zipCode: number,
     public place: string,
     public salaryType: 'Monthly' | 'Hourly' | 'One Time',
-    public salaryAmount: number
+    public salaryAmount: number,
+    public companyId: number
   ) {}
 }

@@ -1,6 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Job} from '../job.model';
 import {User} from '../user.model';
+import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
+import {Company} from '../company.model';
+import {UserLogin} from '../user-login.model';
 
 @Component({
   selector: 'app-my-account',
@@ -9,91 +13,120 @@ import {User} from '../user.model';
 })
 export class MyAccountComponent implements OnInit {
 
-  //@Input()
-  //userEntry: User;
+  userId: string;
+  userToken: string;
 
-  password: string;
   confirmPassword: string;
-  //myJobPostings: Job[] = [];
 
-  // Dummy Data: User TODO: DELETE DUMMY DATA
-  userEntry: User = new User (
-    1,
-    'google@gmail.com',
-    'password',
-    'Google',
-    'Company',
-    'Hauptstrasse 1',
-    8000,
-    'Zürich',
-    'google.com',
-    'Nam lobortis egestas sem, vitae efficitur lectus tincidunt eu. Sed est orci, luctus ac pulvinar et, aliquet eget urna. Cras pharetra turpis a metus semper, non maximus ante malesuada. Fusce varius diam vitae volutpat tincidunt. Donec ac bibendum ligula, non scelerisque purus. Suspendisse scelerisque dolor urna, et fringilla augue scelerisque vitae. Mauris sodales viverra nibh at tincidunt.',
+  userData: UserLogin = new UserLogin(
+    null,
+    null,
   );
+  companyData: Company = new Company(
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+  );
+  myJobPostings: Job[] = [];
 
-  // Dummy Data: My Job Postings TODO: DELETE DUMMY DATA
-  myJobPostings: Job[] = [
-    new Job(
-      1,
-      'Java Developer',
-      'We\'re looking for a Java developer',
-      'Java',
-      new Date(2019, 0, 0),
-      new Date(2019, 11, 31),
-      new Date(2018, 11, 31),
-      50,
-      100,
-      'German, English',
-      3000,
-      'Bern',
-      'Monthly',
-      7800
-    ),
-    new Job(
-      2,
-      'Web Developer',
-      'We want to hire a Web Developer',
-      'HTML, CSS, Javascript',
-      new Date(2020, 0, 0),
-      new Date(2020, 11, 31),
-      new Date(2019, 11, 31),
-      80,
-      100,
-      'German, English',
-      8000,
-      'Zürich',
-      'Hourly',
-      50
-    )
-  ];
-
-  constructor() { }
+  constructor(private httpClient: HttpClient, private router: Router) {}
 
   ngOnInit() {
-    this.getMyJobPostings();
+    if(!this.checkIfLoggedIn()){
+      this.router.navigate(['']);
+    }
+
+    this.userId = localStorage.getItem('user-id');
+    this.userToken = localStorage.getItem('user-token');
+
+    this.loadUserData();
+    this.loadCompanyData();
+    this.loadMyJobs();
   }
 
-  // TODO Fetches all job postings that were submitted by the corresponding user from this 'My Account' page.
-  getMyJobPostings() {
-
+  checkIfLoggedIn(){
+    return localStorage.getItem('user-token');
   }
 
-  // TODO Put Request to backend
+  loadUserData() {
+    this.userData = new UserLogin(
+      '',
+      ''
+    )
+    // TODO with currently missing GET-request
+  }
+
+  loadCompanyData() {
+    this.httpClient.get('http://localhost:3000/company/' + this.userId + '/' + this.userToken).subscribe(
+      (instance: any) => this.companyData = new Company(
+        parseInt(this.userId),
+        instance.companyName,
+        '',
+        instance.companyStreet,
+        instance.companyHouseNumber,
+        instance.companyPostcode,
+        instance.companyCity,
+        instance.contactName,
+        '',
+        instance.contactPhone,
+        '',
+        instance.companyDescription
+      ))
+  }
+
+  loadMyJobs() {
+    // TODO with currently missing GET-request
+  }
+
   updateAccount() {
-
+    this.httpClient.put('http://localhost:3000/user/' + this.userId + '/' + this.userToken, {
+      'email': this.userData.email,
+      'password': this.userData.password
+    }).subscribe();
   }
 
-  // TODO Delete Request to backend
   deleteAccount() {
-
+    if(confirm('You are about to delete your account. Are you sure?')){
+      this.httpClient.delete('http://localhost:3000/user/' + this.userId + '/' + this.userToken).subscribe();
+      localStorage.removeItem('user-id');
+      localStorage.removeItem('user-token');
+      this.router.navigate(['/jobs/edit']);
+    }
   }
 
-  // TODO Edit a job submission
+  updateCompany() {
+    this.httpClient.put('http://localhost:3000/company/' + this.userId + '/' + this.userToken, {
+      'companyName': this.companyData.name,
+      // TODO - Add Logo link (BACKEND)
+      'companyStreet': this.companyData.street,
+      'companyHouseNumber': 0, // TODO - Add form field
+      'companyPostcode': this.companyData.zipCode,
+      'companyCity': this.companyData.place,
+      'contactName': '', // TODO - Add form field
+      // TODO - Add contact email (BACKEND)
+      'contactPhone': '', // TODO - Add form field
+      // TODO - Add website link (BACKEND)
+      'companyDescription': this.companyData.description
+    }).subscribe();
+  }
+
   editJobSubmission($event) {
-
+    this.router.navigate(['/jobs/edit']);
   }
 
-  deleteJobSubmission($event) {
-    this.myJobPostings = this.myJobPostings.filter(obj => obj !== $event);
-    // TODO: Send changes to backend (DELETE JOB POSTING FROM DATABASE)
+  deleteJobSubmission(jobId: number) {
+    if(confirm('You are about to delete your job posting. Are you sure?')){
+      this.httpClient.delete('http://localhost:3000/jobitem/' + jobId + '/' + this.userId + '/' + this.userToken).subscribe();
+      this.loadMyJobs();
+    }
   }
 }

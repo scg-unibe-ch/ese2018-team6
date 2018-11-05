@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import {User} from '../user.model';
+import {Component, OnInit} from '@angular/core';
 import {Job} from '../job.model';
+import {HttpClient} from '@angular/common/http';
+import {ActivatedRoute} from '@angular/router';
+import {Company} from '../company.model';
 
 @Component({
   selector: 'app-job-detail',
@@ -9,8 +11,16 @@ import {Job} from '../job.model';
 })
 export class JobDetailComponent implements OnInit {
 
-  /*
-  jobPostingEntry: Job = new Job(
+  jobId: number;
+  jobCompanyId: number;
+  jobData: Job = new Job(
+    null,
+    null,
+    null,
+    null,
+    new Date(),
+    new Date(),
+    new Date(),
     null,
     null,
     null,
@@ -20,13 +30,9 @@ export class JobDetailComponent implements OnInit {
     null,
     null,
     null,
-    null,
-    null,
-    null,
-    null,
-    null,
+    null
   );
-  userEntry: User = new User(
+  userData: Company = new Company(
     null,
     null,
     null,
@@ -37,48 +43,59 @@ export class JobDetailComponent implements OnInit {
     null,
     null,
     null,
-  );
-  */
-
-  // Dummy Data for User and Job to test display layout. TODO DELETE Dummy Data
-  jobPostingEntry: Job = new Job(
-    1,
-    'Java Developer',
-    'We\'re looking for a Java developer. Nam lobortis egestas sem, vitae efficitur lectus tincidunt eu. Sed est orci, luctus ac pulvinar et, aliquet eget urna. Cras pharetra turpis a metus semper, non maximus ante malesuada. Fusce varius diam vitae volutpat tincidunt. Donec ac bibendum ligula, non scelerisque purus. Suspendisse scelerisque dolor urna, et fringilla augue scelerisque vitae. Mauris sodales viverra nibh at tincidunt.',
-    'Java',
-    new Date(2019, 0, 0),
-    new Date(2019, 11, 31),
-    new Date(2018, 11, 31),
-    50,
-    100,
-    'German, English',
-    3000,
-    'Bern',
-    'Monthly',
-    7800
+    null,
+    null,
   );
 
-  userEntry: User = new User(
-    1,
-    'google@gmail.com',
-    'password',
-    'Google',
-    'Company',
-    'Hauptstrasse 1',
-    8000,
-    'Zürich',
-    'google.com',
-    'Nam lobortis egestas sem, vitae efficitur lectus tincidunt eu. Sed est orci, luctus ac pulvinar et, aliquet eget urna. Cras pharetra turpis a metus semper, non maximus ante malesuada. Fusce varius diam vitae volutpat tincidunt. Donec ac bibendum ligula, non scelerisque purus. Suspendisse scelerisque dolor urna, et fringilla augue scelerisque vitae. Mauris sodales viverra nibh at tincidunt.',
-  );
-
-  constructor() { }
+  constructor(private activatedRoute: ActivatedRoute, private httpClient: HttpClient) { }
 
   ngOnInit() {
-    this.onLoadingData();
+    this.jobId = parseInt(this.activatedRoute.snapshot.paramMap.get('id'));
+
+    this.onLoadingJob();
+    this.onLoadingUser();
   }
 
-  // TODO Fetch the job posting and user data from the backend to display it all on one page.
-  onLoadingData() {
+  onLoadingJob() {
+    this.httpClient.get('http://localhost:3000/jobitem/' + this.jobId).subscribe(
+      (instance: any) => this.jobData = new Job(
+        this.jobId,
+        instance.title,
+        instance.description,
+        instance.skills,
+        new Date(instance.startDate),
+        new Date(instance.endDate),
+        new Date(instance.validUntil),
+        instance.workloadMin,
+        instance.workloadMax,
+        instance.languages,
+        instance.street,
+        instance.houseNumber,
+        instance.postcode,
+        instance.city,
+        instance.salaryType,
+        instance.salaryAmount,
+        instance.companyId
+      )
+    )
+  }
 
+  // TODO Fix data loading - wait for onLoadingJob() to get its data. Fix hardcoded value.
+  onLoadingUser() {
+    this.httpClient.get('http://localhost:3000/company/' + this.jobId).subscribe(
+      (instance: any) => this.userData = new Company (
+        this.jobId,
+        instance.companyName,
+        '',
+        instance.companyStreet,
+        instance.companyHouseNumber,
+        instance.companyPostcode,
+        instance.companyCity,
+        instance.contactName,
+        '',
+        instance.contactPhone,
+        '',
+        instance.companyDescription
+      ))
   }
 }

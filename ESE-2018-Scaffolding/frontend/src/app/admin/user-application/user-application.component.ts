@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { User } from '../../user.model';
+import { Company } from '../../company.model';
 
 @Component({
   selector: 'app-user-application',
@@ -9,24 +9,23 @@ import { User } from '../../user.model';
 export class UserApplicationComponent implements OnInit {
 
   @Input()
-  userApplicationEntry: User;
+  userApplicationEntry: Company;
 
   @Output()
-  userApplicationApproved = new EventEmitter<User>();
+  userApplicationApproved = new EventEmitter<number>();
 
   @Output()
-  userApplicationDenied = new EventEmitter<User>();
+  userApplicationDenied = new EventEmitter<number>();
 
   constructor() { }
 
   ngOnInit() { }
 
   onApprovedUserApplication() {
-    this.userApplicationApproved.emit(this.userApplicationEntry);
+    this.userApplicationApproved.emit(this.userApplicationEntry.id);
   }
 
-  // TODO: Send message with reasoning behind denial to applicant.
   onDeniedUserApplication() {
-    this.userApplicationDenied.emit(this.userApplicationEntry);
+    this.userApplicationDenied.emit(this.userApplicationEntry.id);
   }
 }

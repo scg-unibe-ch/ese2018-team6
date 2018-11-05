@@ -9,10 +9,10 @@ import {Job} from '../../job.model';
 export class MyJobItemComponent implements OnInit {
 
   @Input()
-  myJobPostingEntry: Job;
+  myJobData: Job;
 
   @Output()
-  jobSubmissionDelete = new EventEmitter<Job>();
+  jobSubmissionDelete = new EventEmitter<number>();
 
   constructor() { }
 
@@ -20,6 +20,6 @@ export class MyJobItemComponent implements OnInit {
 
   // TODO Send changes to backend (DELETE JOB POSTING IN DATABASE)
   onDeleteJobItem() {
-    this.jobSubmissionDelete.emit(this.myJobPostingEntry);
+    this.jobSubmissionDelete.emit(this.myJobData.id);
   }
 }

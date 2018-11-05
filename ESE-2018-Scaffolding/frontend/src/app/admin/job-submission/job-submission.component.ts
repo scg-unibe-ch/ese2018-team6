@@ -12,20 +12,19 @@ export class JobSubmissionComponent implements OnInit {
   jobSubmissionEntry: Job;
 
   @Output()
-  jobSubmissionApproved = new EventEmitter<Job>();
+  jobSubmissionApproved = new EventEmitter<number>();
   @Output()
-  jobSubmissionDenied = new EventEmitter<Job>();
+  jobSubmissionDenied = new EventEmitter<number>();
 
   constructor() { }
 
   ngOnInit() { }
 
   onApprovedJobSubmission() {
-    this.jobSubmissionApproved.emit(this.jobSubmissionEntry);
+    this.jobSubmissionApproved.emit(this.jobSubmissionEntry.id);
   }
 
-  // TODO: Send message with reasoning behind denial to applicant.
   onDeniedJobSubmission() {
-    this.jobSubmissionDenied.emit(this.jobSubmissionEntry);
+    this.jobSubmissionDenied.emit(this.jobSubmissionEntry.id);
   }
 }

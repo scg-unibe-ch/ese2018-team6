@@ -3,47 +3,48 @@
 
 <form class="form-horizontal">
 
+  <!--TODO Update form fields-->
   <div class="form-group">
     <label class="col-md-3 control-label">Title</label>
     <div class="col-md-9">
-      <input class="form-control" placeholder="Title" name="title" [(ngModel)]="jobPostingEntry.title">
+      <input class="form-control" placeholder="Title" name="title" [(ngModel)]="jobData.title">
     </div>
   </div>
 
   <div class="form-group">
     <label for="desc" class="col-md-3 control-label">Description</label>
     <div class="col-md-9">
-      <textarea id="desc" rows="5" class="form-control" placeholder="Description" name="description" [(ngModel)]="jobPostingEntry.description"></textarea>
+      <textarea id="desc" rows="5" class="form-control" placeholder="Description" name="description" [(ngModel)]="jobData.description"></textarea>
     </div>
   </div>
 
   <div class="form-group">
     <label class="col-md-3 control-label">Required Skills</label>
     <div class="col-md-9">
-      <input class="form-control" placeholder="Required Skills" name="skills" [(ngModel)]="jobPostingEntry.skills">
+      <input class="form-control" placeholder="Required Skills" name="skills" [(ngModel)]="jobData.skills">
     </div>
   </div>
 
-  <!-- Check for datepicker -->
+  <!-- TODO Check for datepicker -->
 
   <div class="form-group">
     <label class="col-md-3 control-label">Start Date</label>
     <div class="col-md-9">
-      <input  class="form-control" placeholder="Start Date" name="startDate" [(ngModel)]="jobPostingEntry.startDate">
+      <input  class="form-control" placeholder="Start Date" name="startDate" [(ngModel)]="jobData.startDate">
     </div>
   </div>
 
   <div class="form-group">
     <label class="col-md-3 control-label">End Date</label>
     <div class="col-md-9">
-      <input class="form-control" placeholder="End Date" name="endDate" [(ngModel)]="jobPostingEntry.endDate">
+      <input class="form-control" placeholder="End Date" name="endDate" [(ngModel)]="jobData.endDate">
     </div>
   </div>
 
   <div class="form-group">
     <label class="col-md-3 control-label">Posting Valid Until</label>
     <div class="col-md-9">
-      <input class="form-control" placeholder="Posting Valid Until" name="postingValidUntil" [(ngModel)]="jobPostingEntry.validUntil">
+      <input class="form-control" placeholder="Posting Valid Until" name="postingValidUntil" [(ngModel)]="jobData.validUntil">
     </div>
   </div>
 
@@ -51,13 +52,13 @@
     <label class="col-md-3 control-label">Workload</label>
     <div class="col-md-4">
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Min" name="workloadMin" [(ngModel)]="jobPostingEntry.workloadMin">
+        <input type="text" class="form-control" placeholder="Min" name="workloadMin" [(ngModel)]="jobData.workloadMin">
         <div class="input-group-addon">%</div>
       </div>
     </div>
     <div class="col-md-offset-1 col-md-4">
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="Max" name="workloadMax" [(ngModel)]="jobPostingEntry.workloadMax">
+        <input type="text" class="form-control" placeholder="Max" name="workloadMax" [(ngModel)]="jobData.workloadMax">
         <div class="input-group-addon">%</div>
       </div>
     </div>
@@ -66,24 +67,24 @@
   <div class="form-group">
     <label class="col-md-3 control-label">Languages</label>
     <div class="col-md-9">
-      <input class="form-control" placeholder="Languages" name="languages" [(ngModel)]="jobPostingEntry.languages">
+      <input class="form-control" placeholder="Languages" name="languages" [(ngModel)]="jobData.languages">
     </div>
   </div>
 
   <div class="form-group">
     <label class="col-md-3 control-label">ZIP Code / Place</label>
     <div class="col-md-2">
-      <input class="form-control" placeholder="ZIP Code" name="zipCode" [(ngModel)]="jobPostingEntry.zipCode">
+      <input class="form-control" placeholder="ZIP Code" name="zipCode" [(ngModel)]="jobData.zipCode">
     </div>
     <div class="col-md-7">
-      <input class="form-control" placeholder="Place" name="place" [(ngModel)]="jobPostingEntry.place">
+      <input class="form-control" placeholder="Place" name="place" [(ngModel)]="jobData.place">
     </div>
   </div>
 
   <div class="form-group">
     <label class="col-md-3 control-label">Salary Type</label>
     <div class="col-md-9">
-      <select class="form-control" name="salaryType" [(ngModel)]="jobPostingEntry.salaryType">
+      <select class="form-control" name="salaryType" [(ngModel)]="jobData.salaryType">
         <option>Monthly</option>
         <option>Hourly</option>
         <option>One Time Payment</option>
@@ -96,7 +97,7 @@
     <div class="col-md-9">
       <div class="input-group">
         <div class="input-group-addon">CHF</div>
-        <input type="text" class="form-control" placeholder="Salary Amount" name="salaryAmount" [(ngModel)]="jobPostingEntry.salaryAmount">
+        <input type="text" class="form-control" placeholder="Salary Amount" name="salaryAmount" [(ngModel)]="jobData.salaryAmount">
       </div>
     </div>
   </div>
