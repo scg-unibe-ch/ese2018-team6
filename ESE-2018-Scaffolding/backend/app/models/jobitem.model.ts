@@ -14,13 +14,16 @@ export class JobItem extends Model<JobItem> {
   description!: string;
 
   @Column
-  startDate!: number;
+  datePosted!: string;
 
   @Column
-  endDate!: number;
+  startDate!: string;
 
   @Column
-  validUntil!: number;
+  endDate!: string;
+
+  @Column
+  validUntil!: string;
 
   @Column
   workloadMin!: number;
@@ -29,13 +32,16 @@ export class JobItem extends Model<JobItem> {
   workloadMax!: number;
 
   @Column
-  languages!: string;
+  firstLanguage!: string;
+
+  @Column
+  secondLanguage!: string;
 
   @Column
   street!: string;
 
   @Column
-  houseNumber!: number;
+  houseNumber!: string;
 
   @Column
   postcode!: string;
@@ -71,12 +77,14 @@ export class JobItem extends Model<JobItem> {
       'title': this.title,
       'description': this.description,
       'skills': this.skills,
+      'datePosted' : this.datePosted,
       'startDate': this.startDate,
       'endDate': this.endDate,
       'validUntil': this.validUntil,
       'workloadMin': this.workloadMin,
       'workloadMax': this.workloadMax,
-      'languages': this.languages,
+      'firstLanguage': this.firstLanguage,
+      'secondLanguage': this.secondLanguage,
       'street': this.street,
       'houseNumber': this.houseNumber,
       'postcode': this.postcode,
@@ -98,7 +106,8 @@ export class JobItem extends Model<JobItem> {
     this.validUntil = simplification['validUntil'];
     this.workloadMin = simplification['workloadMin'];
     this.workloadMax = simplification['workloadMax'];
-    this.languages = simplification['languages'];
+    this.firstLanguage = simplification['firstLanguage'];
+    this.secondLanguage = simplification['secondLanguage'];
     this.street = simplification['street'];
     this.houseNumber = simplification['houseNumber'];
     this.postcode = simplification['postcode'];

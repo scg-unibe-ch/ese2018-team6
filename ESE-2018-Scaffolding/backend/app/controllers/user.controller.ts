@@ -16,10 +16,15 @@ router.post('/token', async (req: Request, res: Response) => {
       user.token = token;
       user.tokenExpirationDate = Date.now() + 1080000000; // valid for 5 hours = 1080000000 milliseconds
       await user.save();
+      let isAdmin;
+      if (await Admin.findOne({ where: {userId: user.id}}) !== null)
+        isAdmin = true;
+      else isAdmin = false;
       res.statusCode = 200;
       res.json({
         id: user.id,
-        token: token
+        token: token,
+        isAdmin: isAdmin
       });
     } else {
       res.statusCode = 401;

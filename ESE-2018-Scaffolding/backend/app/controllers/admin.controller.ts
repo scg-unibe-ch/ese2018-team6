@@ -22,7 +22,7 @@ router.get('/unverifiedCompanies/:id/:token', async (req: Request, res: Response
 router.put('/verify/:companyId/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
-  const verify = req.params.verify;
+  const verify = req.body.verify;
   const user = await User.findById(id);
   const admin = await Admin.findOne({ where: {userId: id }});
   if (adminAuthentification(user, res, id, token, admin) && user !== null) {
@@ -51,11 +51,9 @@ router.get('/unacceptedJobItems/:id/:token', async (req: Request, res: Response)
   const user = await User.findById(id);
   const admin = await Admin.findOne({ where: {userId: id }});
   if (adminAuthentification(user, res, id, token, admin) && user !== null) {
-    const instances = await JobItem.findAll({where: {accepted: false}});
+    const instances = await JobItem.findAll({where: {accepted: null}});
     res.statusCode = 200;
-    res.json({
-      jobItems: instances.map(e => e.toSimplification())
-    });
+    res.send(instances.map(e => e.toSimplification()));
   }
 });
 
