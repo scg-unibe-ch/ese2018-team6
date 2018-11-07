@@ -1,12 +1,22 @@
-<a class="list-group-item list-group-item-action clearfix" [routerLink]="['/jobs/details/', jobItemEntry.id]">
-  <div class="pull-left">
-    <h4 class="list-group-item-heading">{{ jobItemEntry.title }}</h4>
-    <p class="list-group-item-text">{{ jobItemEntry.description }}</p>
-    <small class="text-muted"><em>Required Skills: </em>{{ jobItemEntry.skills }}</small>
-  </div>
-  <span class="pull-right text-right">
-        <small class="text-muted">{{ jobItemEntry.startDate }}</small><br>
-        <strong><small class="text-muted">{{ jobItemEntry.place }}</small></strong><br>
-        <small class="text-muted">{{ jobItemEntry.workloadMin}}-{{ jobItemEntry.workloadMax }}%</small>
-      </span>
+<a class="list-group-item list-group-item-action clearfix" [routerLink]="['/jobs/details/', jobData.id]">
+  <table>
+    <tbody>
+    <tr>
+
+      <td style="padding-right: 10px;">
+        <h4 class="list-group-item-heading">{{ jobData.title }}</h4>
+        <p class="list-group-item-text giveMeEllipsis">{{ jobData.description }}</p>
+        <small class="text-muted"><em>Required Skills: </em>{{ jobData.skills }}</small>
+      </td>
+
+      <td class="text-right" style="width: 1%; white-space: nowrap;">
+        <small class="text-muted">{{ jobData.datePosted }}<br>
+          <strong>{{ jobData.city }}</strong><br>
+          {{ jobData.workloadMin}}-{{ jobData.workloadMax }}%
+        </small>
+      </td>
+
+    </tr>
+    </tbody>
+  </table>
 </a>

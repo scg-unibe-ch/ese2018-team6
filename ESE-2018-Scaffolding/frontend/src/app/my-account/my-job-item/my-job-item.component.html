@@ -5,9 +5,9 @@
       <td class="pull-left">
         <h4 class="list-group-item-heading">{{ myJobData.title }}</h4>
         <small class="list-group-item-info">
-          {{ myJobData.startDate.toLocaleDateString() }}
+          {{ myJobData.startDate }}
           &nbsp;|&nbsp;&nbsp;
-          <strong>{{ myJobData.place }}</strong>
+          <strong>{{ myJobData.city }}</strong>
           &nbsp;|&nbsp;&nbsp;
           {{ myJobData.workloadMin }} - {{ myJobData.workloadMax }}%
         </small>
@@ -15,8 +15,7 @@
       </td>
 
       <td class="pull-right">
-        <!-- TODO: Send job item with routerLink to job-edit -->
-        <button type="button" class="btn btn-primary" routerLink="/jobs/edit/ + {{ myJobData.id }}">
+        <button type="button" class="btn btn-primary" (click)="onEditJobItem()">
           <span class="glyphicon glyphicon-edit"></span>
         </button>
         <br>

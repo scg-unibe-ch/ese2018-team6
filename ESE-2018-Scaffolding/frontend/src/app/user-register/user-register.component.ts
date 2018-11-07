@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {User} from '../user.model';
+import {Company} from '../company.model';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 
@@ -10,17 +11,27 @@ import {Router} from '@angular/router';
 })
 export class UserRegisterComponent implements OnInit {
 
-  userRegisterData: User = new User(
-    null,
-    null,
-    null,
-    null,
-    'Company',
-    null,
-    null,
-    null,
+  confirmedPassword: string;
+  userType: string = '';
+  userData: User = new User (
     null,
     null
+  );
+  companyData: Company = new Company (
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
   );
 
   constructor(private httpClient: HttpClient, private router: Router) { }
@@ -28,24 +39,35 @@ export class UserRegisterComponent implements OnInit {
   ngOnInit() { }
 
   onRegister() {
-    this.httpClient.post('http://localhost:3000/company', {
-      'email': this.userRegisterData.email,
-      'password': this.userRegisterData.password,
-      'companyName': this.userRegisterData.name,
-      // TODO - Add Logo link (BACKEND)
-      'companyStreet': this.userRegisterData.street,
-      'companyHouseNumber': 0, // TODO - Add form field
-      'companyPostcode': this.userRegisterData.zipCode,
-      'companyCity': this.userRegisterData.place,
-      'contactName': '', // TODO - Add form field
-      // TODO - Add contact email (BACKEND)
-      'contactPhone': '', // TODO - Add form field
-      // TODO - Add website link (BACKEND)
-      'companyDescription': this.userRegisterData.description
-    }).subscribe();
-
-    this.router.navigate(['']);
+    if (this.isDataValid()) {
+      this.httpClient.post('http://localhost:3000/company', {
+        'email': this.userData.email,
+        'password': this.userData.password,
+        'companyName': this.companyData.name,
+        'companyLogoURL': this.companyData.logo,
+        'companyStreet': this.companyData.street,
+        'companyHouseNumber': this.companyData.houseNumber,
+        'companyPostcode': this.companyData.postcode,
+        'companyCity': this.companyData.city,
+        'contactName': this.companyData.contactName,
+        'contactEmail': this.companyData.contactEmail,
+        'contactPhone': this.companyData.contactPhone,
+        'companyWebsite': this.companyData.website,
+        'companyDescription': this.companyData.description
+      }).subscribe(
+        res => {
+          this.router.navigate(['']);
+        },
+        err => {
+          // TODO - Give useful feedback on failed registration (user exists already)
+          console.log(err.error.message);
+        }
+      );
+    }
   }
 
-  // TODO - Check for valid input (email & password required etc.)
+  isDataValid(){
+    // TODO - Check user inputs (email, password, companyName required; password match; date format etc.)
+    return true;
+  }
 }

@@ -3,83 +3,158 @@
 
 <form class="form-horizontal">
 
-  <!-- TODO Update form to accept new data -->
+  <!-- User Details -->
   <div class="form-group">
-    <label class="col-sm-3 control-label">E-Mail</label>
-    <div class="col-sm-9">
-      <input type="email" class="form-control" placeholder="E-Mail" name="email" [(ngModel)]="userRegisterData.email">
+    <div class="col-sm-offset-3 col-sm-9">
+      <h5>User Details</h5>
     </div>
   </div>
 
-  <div class="form-group">
-    <label class="col-sm-3 control-label">Password</label>
-    <div class="col-sm-9">
-      <input type="password" class="form-control" placeholder="Password" name="password" [(ngModel)]="userRegisterData.password">
+  <div>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">E-Mail</label>
+      <div class="col-sm-9">
+        <input type="email" class="form-control" placeholder="E-Mail" name="email" [(ngModel)]="userData.email">
+      </div>
     </div>
-  </div>
 
-  <div class="form-group">
-    <label class="col-sm-3 control-label">Confirm Password</label>
-    <div class="col-sm-9">
-      <input type="password" class="form-control" placeholder="Confirm Password" name="confirmPassword">
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Password</label>
+      <div class="col-sm-9">
+        <input type="password" class="form-control" placeholder="Password" name="password" [(ngModel)]="userData.password">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Confirm Password</label>
+      <div class="col-sm-9">
+        <input type="password" class="form-control" placeholder="Confirm Password" name="confirmPassword" [(ngModel)]="confirmedPassword">
+      </div>
     </div>
   </div>
 
   <hr>
 
   <div class="form-group">
-    <label class="col-sm-3 control-label">Name</label>
-    <div class="col-sm-9">
-      <input class="form-control" placeholder="Name" name="name" [(ngModel)]="userRegisterData.name">
-    </div>
-  </div>
-
-  <div class="form-group">
     <label class="col-sm-3 control-label">User Type</label>
     <div class="col-sm-9">
-      <select class="form-control" name="userType" [(ngModel)]="userRegisterData.userType">
+      <select class="form-control" name="userType" [(ngModel)]="userType">
         <option>Company</option>
+        <!--<option>Student</option>-->
       </select>
     </div>
   </div>
 
-  <div class="form-group">
-    <label class="col-sm-3 control-label">Street</label>
-    <div class="col-sm-9">
-      <input class="form-control" placeholder="Street" name="street" [(ngModel)]="userRegisterData.street">
-    </div>
-  </div>
 
-  <div class="form-group">
-    <label class="col-sm-3 control-label">ZIP Code / Place</label>
-    <div class="col-sm-2">
-      <input class="form-control" placeholder="ZIP Code" name="zipCode" [(ngModel)]="userRegisterData.zipCode">
-    </div>
-    <div class="col-sm-7">
-      <input class="form-control" placeholder="Place" name="place" [(ngModel)]="userRegisterData.place">
-    </div>
-  </div>
+  <!-- User Type - Company -->
+  <div *ngIf="userType === 'Company'">
 
-  <div class="form-group">
-    <label class="col-sm-3 control-label">Website</label>
-    <div class="col-sm-9">
-      <div class="input-group">
-        <div class="input-group-addon">www.</div>
-        <input type="text" class="form-control" placeholder="Website" name="website" [(ngModel)]="userRegisterData.website">
+    <!-- Company - Company Details-->
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <h5>Company Details</h5>
       </div>
     </div>
-  </div>
 
-  <div class="form-group">
-    <label for="desc" class="col-sm-3 control-label">Description</label>
-    <div class="col-sm-9">
-      <textarea id="desc" rows="5" class="form-control" placeholder="Description" name="description" [(ngModel)]="userRegisterData.description"></textarea>
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Name</label>
+      <div class="col-sm-9">
+        <input class="form-control" placeholder="Name" name="name" [(ngModel)]="companyData.name">
+      </div>
     </div>
+
+    <div class="form-group">
+      <label for="desc" class="col-sm-3 control-label">Description</label>
+      <div class="col-sm-9">
+        <textarea id="desc" rows="2" class="form-control" placeholder="Description" name="description" [(ngModel)]="companyData.description"></textarea>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Website</label>
+      <div class="col-sm-9">
+        <div class="input-group">
+          <div class="input-group-addon">www.</div>
+          <input type="text" class="form-control" placeholder="Website" name="website" [(ngModel)]="companyData.website">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Logo</label>
+      <div class="col-sm-9">
+        <input class="form-control" placeholder="URL to image of company logo (preferably .png)" name="logo" [(ngModel)]="companyData.logo">
+      </div>
+    </div>
+
+    <!-- Company - Address -->
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <h5>Address</h5>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Street / House No.</label>
+      <div class="col-sm-7">
+        <input class="form-control" placeholder="Street" name="street" [(ngModel)]="companyData.street">
+      </div>
+      <div class="col-sm-2">
+        <input class="form-control" placeholder="House No." name="houseNumber" [(ngModel)]="companyData.houseNumber">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">ZIP Code / Place</label>
+      <div class="col-sm-2">
+        <input class="form-control" placeholder="ZIP Code" name="zipCode" [(ngModel)]="companyData.postcode">
+      </div>
+      <div class="col-sm-7">
+        <input class="form-control" placeholder="Place" name="place" [(ngModel)]="companyData.city">
+      </div>
+    </div>
+
+    <!-- Company - Contact Person -->
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <h5>Contact Person</h5>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Name</label>
+      <div class="col-sm-9">
+        <input class="form-control" placeholder="Name" name="contactName" [(ngModel)]="companyData.contactName">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">E-Mail</label>
+      <div class="col-sm-9">
+        <input class="form-control" placeholder="E-Mail" name="contactEmail" [(ngModel)]="companyData.contactEmail">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Phone</label>
+      <div class="col-sm-9">
+        <input class="form-control" placeholder="Phone" name="contactPhone" [(ngModel)]="companyData.contactPhone">
+      </div>
+    </div>
+
+    <!-- Company - Register Button -->
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <button type="submit" class="btn btn-success" (click)="onRegister()">Register</button>
+      </div>
+    </div>
+
   </div>
 
-  <div class="form-group">
+  <!-- User Type - Student -->
+  <div *ngIf="userType === 'Student'">
     <div class="col-sm-offset-3 col-sm-9">
-      <button type="submit" class="btn btn-success" (click)="onRegister()">Register</button>
+      This option is currently not available.
     </div>
   </div>
 

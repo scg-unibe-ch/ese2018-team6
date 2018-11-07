@@ -61,5 +61,5 @@ import { JobCreateComponent } from './job-create/job-create.component';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+
+export class AppModule { }

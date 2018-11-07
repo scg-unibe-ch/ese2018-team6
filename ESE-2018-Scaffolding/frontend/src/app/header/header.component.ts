@@ -1,4 +1,4 @@
-import { Component, OnInit, } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 
 @Component({
@@ -24,6 +24,7 @@ export class HeaderComponent implements OnInit {
   onSignOut() {
     localStorage.removeItem('user-id');
     localStorage.removeItem('user-token');
+    localStorage.removeItem('isAdmin');
     this.router.navigate(['']);
   }
 }

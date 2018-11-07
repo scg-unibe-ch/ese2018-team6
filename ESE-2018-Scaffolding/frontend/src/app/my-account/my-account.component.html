@@ -34,12 +34,21 @@
         <button type="submit" class="btn btn-primary" (click)="updateAccount()">Save Changes</button>
       </div>
     </div>
+
   </form>
 
   <hr>
 
   <p><em>Your current company settings:</em></p>
+
   <form class="form-horizontal">
+    <!-- Company - Company Details-->
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <h5>Company Details</h5>
+      </div>
+    </div>
+
     <div class="form-group">
       <label class="col-sm-3 control-label">Name</label>
       <div class="col-sm-9">
@@ -48,28 +57,9 @@
     </div>
 
     <div class="form-group">
-      <label class="col-sm-3 control-label">User Type</label>
+      <label for="desc" class="col-sm-3 control-label">Description</label>
       <div class="col-sm-9">
-        <select class="form-control">
-          <option>Company</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Street</label>
-      <div class="col-sm-9">
-        <input class="form-control" placeholder="Street" name="street" [(ngModel)]="companyData.street">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="col-sm-3 control-label">ZIP Code / Place</label>
-      <div class="col-sm-2">
-        <input class="form-control" placeholder="ZIP Code" name="zipCode" [(ngModel)]="companyData.zipCode">
-      </div>
-      <div class="col-sm-7">
-        <input class="form-control" placeholder="Place" name="place" [(ngModel)]="companyData.place">
+        <textarea id="desc" rows="2" class="form-control" placeholder="Description" name="description" [(ngModel)]="companyData.description"></textarea>
       </div>
     </div>
 
@@ -84,9 +74,64 @@
     </div>
 
     <div class="form-group">
-      <label for="desc" class="col-sm-3 control-label">Description</label>
+      <label class="col-sm-3 control-label">Logo</label>
       <div class="col-sm-9">
-        <textarea id="desc" rows="5" class="form-control" placeholder="Description" name="description" [(ngModel)]="companyData.description"></textarea>
+        <input class="form-control" placeholder="URL to image of company logo (preferably .png)" name="logo" [(ngModel)]="companyData.logo">
+      </div>
+    </div>
+
+    <!-- Company - Address -->
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <h5>Address</h5>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Street / House No.</label>
+      <div class="col-sm-7">
+        <input class="form-control" placeholder="Street" name="street" [(ngModel)]="companyData.street">
+      </div>
+      <div class="col-sm-2">
+        <input class="form-control" placeholder="House No." name="houseNumber" [(ngModel)]="companyData.houseNumber">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">ZIP Code / Place</label>
+      <div class="col-sm-2">
+        <input class="form-control" placeholder="ZIP Code" name="zipCode" [(ngModel)]="companyData.postcode">
+      </div>
+      <div class="col-sm-7">
+        <input class="form-control" placeholder="Place" name="place" [(ngModel)]="companyData.city">
+      </div>
+    </div>
+
+    <!-- Company - Contact Person -->
+    <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-9">
+        <h5>Contact Person</h5>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Name</label>
+      <div class="col-sm-9">
+        <input class="form-control" placeholder="Name" name="contactName" [(ngModel)]="companyData.contactName">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">E-Mail</label>
+      <div class="col-sm-9">
+        <input class="form-control" placeholder="E-Mail" name="contactEmail" [(ngModel)]="companyData.contactEmail">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">Phone</label>
+      <div class="col-sm-9">
+        <input class="form-control" placeholder="Phone" name="contactPhone" [(ngModel)]="companyData.contactPhone">
       </div>
     </div>
 

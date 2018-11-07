@@ -2,7 +2,7 @@
   <tr>
 
     <td>
-      <p> <!-- TODO Adjust form for new data -->
+      <p>
         <strong>Title</strong><br>
         {{ jobSubmissionEntry.title }}
       </p>
@@ -16,7 +16,7 @@
       </p>
       <p>
         <strong>Date Posted</strong><br>
-        <!--TODO-->
+        {{ jobSubmissionEntry.datePosted }}
       </p>
       <p>
         <strong>Start Date</strong><br>
@@ -27,7 +27,7 @@
         {{ jobSubmissionEntry.endDate }}
       </p>
       <p>
-        <strong>Posting Valid Until</strong><br>
+        <strong>Offer Valid Until</strong><br>
         {{ jobSubmissionEntry.validUntil }}
       </p>
       <p>
@@ -36,15 +36,15 @@
       </p>
       <p>
         <strong>Languages</strong><br>
-        {{ jobSubmissionEntry.languages }}
+        {{ jobSubmissionEntry.firstLanguage }}, {{ jobSubmissionEntry.secondLanguage }}
       </p>
       <p>
         <strong>Street</strong><br>
-        <!--TODO-->
+        {{ jobSubmissionEntry.street }} {{ jobSubmissionEntry.houseNumber }}
       </p>
       <p>
         <strong>ZIP Code / Place</strong><br>
-        {{ jobSubmissionEntry.zipCode }} {{ jobSubmissionEntry.place }}
+        {{ jobSubmissionEntry.postcode }} {{ jobSubmissionEntry.city }}
       </p>
       <p>
         <strong>Salary Type</strong><br>

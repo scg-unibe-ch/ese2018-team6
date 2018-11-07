@@ -11,7 +11,7 @@ import {Router} from '@angular/router';
 })
 export class AdminComponent implements OnInit {
 
-  userId: number;
+  userId: string;
   userToken: string;
   userApplications: Company[] = [];
   jobSubmissions: Job[] = [];
@@ -20,65 +20,61 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
     this.checkIfAdmin();
-
-    this.userId = parseInt(localStorage.getItem('user-id'));
-    this.userToken = localStorage.getItem('user-token');
-
     this.onLoadingUserApplications();
     this.onLoadingJobSubmissions();
   }
 
-  checkIfAdmin() {
-    let userType: number = parseInt(localStorage.getItem('isAdmin'));
-    if(userType != 1){
-      this.router.navigate(['']);
-    }
-  }
-
   onLoadingUserApplications() {
+    this.getLocalStorage();
     this.httpClient.get('http://localhost:3000/admin/unverifiedCompanies/' + this.userId + '/' + this.userToken)
       .subscribe(
         (instances: any) => {
           this.userApplications = instances.map((instance) => new Company(
             instance.userId,
             instance.companyName,
-            '', // TODO Add logo link (BACKEND)
+            instance.companyLogoURL,
             instance.companyStreet,
             instance.companyHouseNumber,
             instance.companyPostcode,
             instance.companyCity,
             instance.contactName,
-            '', // TODO Add contact email (BACKEND)
+            instance.contactEmail,
             instance.contactPhone,
-            '', // TODO Add website link (BACKEND)
-            instance.companyDescription
+            instance.companyWebsite,
+            instance.companyDescription,
+            instance.userId,
+            ''
           ))
         }
       )
   }
 
   onLoadingJobSubmissions() {
+    this.getLocalStorage();
     this.httpClient.get('http://localhost:3000/admin/unacceptedJobItems/' + this.userId + '/' + this.userToken)
       .subscribe(
         (instances: any) => {
-          this.jobSubmissions = instances.map((instance) => new Job( // TODO Adjust mapping (BACKEND)
+          this.jobSubmissions = instances.map((instance) => new Job(
             instance.id,
             instance.title,
             instance.description,
             instance.skills,
-            new Date(instance.startDate),
-            new Date(instance.endDate),
-            new Date(instance.validUntil),
+            instance.datePosted,
+            instance.startDate,
+            instance.endDate,
+            instance.validUntil,
             instance.workloadMin,
             instance.workloadMax,
-            instance.languages,
+            instance.firstLanguage,
+            instance.secondLanguage,
             instance.street,
             instance.houseNumber,
             instance.postcode,
             instance.city,
             instance.salaryType,
             instance.salaryAmount,
-            instance.companyId
+            instance.companyId,
+            ''
           ))
         }
       )
@@ -86,10 +82,11 @@ export class AdminComponent implements OnInit {
 
   approveUserApplication(userId: number) {
     if(confirm('Are you sure you want to approve this user?')){
-      console.log(userId);
+      this.getLocalStorage();
       this.httpClient.put('http://localhost:3000/admin/verify/' + userId + '/' + this.userId + '/' + this.userToken, {
         'verify': true
       }).subscribe();
+      this.updateListings(this.userApplications, userId);
     }
   }
 
@@ -97,19 +94,22 @@ export class AdminComponent implements OnInit {
     let adminMessage = prompt('Reasons why the user application is denied:', '');
     if (adminMessage == null || adminMessage == '') {
     } else {
+      this.getLocalStorage();
       this.httpClient.put('http://localhost:3000/admin/verify/' + userId + '/' + this.userId + '/' + this.userToken, {
         'verify': false,
         'message': adminMessage
       }).subscribe();
+      this.updateListings(this.userApplications, userId);
     }
   }
 
   approveJobSubmission(jobId: number) {
     if(confirm('Are you sure you want to approve this job posting?')){
-      console.log(jobId);
+      this.getLocalStorage();
       this.httpClient.put('http://localhost:3000/admin/accept/' + jobId + '/' + this.userId + '/' + this.userToken, {
         'accept': true
       }).subscribe();
+      this.updateListings(this.jobSubmissions, jobId);
     }
   }
 
@@ -117,10 +117,33 @@ export class AdminComponent implements OnInit {
     let adminMessage = prompt('Reasons why the job submission is denied:', '');
     if(adminMessage == null || adminMessage == ''){
     } else {
+      this.getLocalStorage();
       this.httpClient.put('http://localhost:3000/admin/accept/' + jobId + '/' + this.userId + '/' + this.userToken, {
         'accept': false,
-        'message': 'reason of denial'
+        'message': adminMessage
       }).subscribe();
+      this.updateListings(this.jobSubmissions, jobId);
+    }
+  }
+
+  updateListings(array, idToDelete){
+    for(let i = 0; i < array.length; i++){
+      if (array[i].id == idToDelete) {
+        array = array.splice(i, 1);
+        break;
+      }
+    }
+  }
+
+  getLocalStorage() {
+    this.userId = localStorage.getItem('user-id');
+    this.userToken = localStorage.getItem('user-token');
+  }
+
+  checkIfAdmin() {
+    let userType: string = localStorage.getItem('isAdmin');
+    if(userType != 'true'){
+      this.router.navigate(['']);
     }
   }
 }

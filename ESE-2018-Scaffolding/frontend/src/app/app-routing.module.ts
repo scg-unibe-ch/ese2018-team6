@@ -8,8 +8,8 @@ import { UserRegisterComponent } from './user-register/user-register.component';
 import { AdminComponent } from './admin/admin.component';
 import { MyAccountComponent } from './my-account/my-account.component';
 import { JobEditComponent } from './job-edit/job-edit.component';
-import {JobDetailComponent} from './job-detail/job-detail.component';
-import {JobCreateComponent} from './job-create/job-create.component';
+import { JobDetailComponent } from './job-detail/job-detail.component';
+import { JobCreateComponent } from './job-create/job-create.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/jobs', pathMatch: 'full' },

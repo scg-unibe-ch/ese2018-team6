@@ -2,6 +2,11 @@ textarea {
   resize: vertical;
 }
 
+h5 {
+  font-size: 18px;
+  margin: 10px 0 0 0;
+}
+
 .errorMessageBox {
   display: none;
 }

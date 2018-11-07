@@ -1,39 +1,57 @@
 <h3>{{ jobData.title }}</h3>
 <hr>
 
-<!-- TODO: Adjust for new data -->
-<div class="col-md-8">
-  <small>{{ jobData.startDate.toLocaleDateString('en-GB').toString().replace("/", ".").replace("/", ".") }}
-    | <strong>{{ jobData.place }}</strong>
-    | {{ jobData.workloadMin }}-{{ jobData.workloadMax }}%</small>
-  <br>
+<!-- TODO - Add conditional formatting of cells depending on its content -->
+
+<!-- Job Details -->
+<div class="col-sm-8">
+  <small>{{ jobData.datePosted }}&nbsp;&nbsp;|&nbsp;&nbsp;<strong>{{ jobData.city }}</strong>&nbsp;&nbsp;|&nbsp;&nbsp;{{ jobData.workloadMin }}-{{ jobData.workloadMax }}%</small>
 
   <h4>Description</h4>
   <p>{{ jobData.description }}</p>
-  <br>
 
-  <h4>Details</h4>
+  <h4>Requirements</h4>
+  <table class="table">
+    <tbody>
+    <tr>
+      <th scope="row" style="width: 40%;">Required Skills</th>
+      <td style="width: 60%;">{{ jobData.skills }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Languages</th>
+      <td>{{ jobData.firstLanguage }}, {{ jobData.secondLanguage }}</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <h4>Dates</h4>
   <table class="table">
     <tbody>
     <tr>
       <th scope="row" style="width: 40%;">Start Date</th>
-      <td style="width: 60%;">{{ jobData.startDate.toLocaleDateString('en-GB').toString().replace("/", ".").replace("/", ".") }}</td>
+      <td style="width: 60%;">{{ jobData.startDate }}</td>
     </tr>
     <tr>
       <th scope="row">End Date</th>
-      <td>{{ jobData.endDate.toLocaleDateString('en-GB').toString().replace("/", ".").replace("/", ".") }}</td>
-    </tr>
-    <tr>
-      <th scope="row">Required Skills</th>
-      <td>{{ jobData.skills }}</td>
-    </tr>
-    <tr>
-      <th scope="row">Languages</th>
-      <td>{{ jobData.languages }}</td>
+      <td>{{ jobData.endDate }}</td>
     </tr>
     </tbody>
   </table>
-  <br>
+
+  <h4>Work Location</h4>
+  <table class="table">
+    <tbody>
+    <tr>
+      <th scope="row" style="width: 40%;">Street</th>
+      <td style="width: 60%;">{{ jobData.street }} {{ jobData.houseNumber }}</td>
+    </tr>
+    <tr>
+      <th scope="row">ZIP Code / Place</th>
+      <td>{{ jobData.postcode }} {{ jobData.city }}</td>
+    </tr>
+    </tbody>
+  </table>
+
 
   <h4>Salary</h4>
   <table class="table">
@@ -48,27 +66,49 @@
   </table>
 </div>
 
-<div class="col-md-4 employer-box">
+
+<!-- Employer Details -->
+<div class="col-sm-4 employer-box">
+
   <h4>About the Employer:</h4>
   <hr>
 
+  <img src="{{ companyData.logo }}">
+
   <p>
     <strong>Company</strong><br>
-    {{ userData.name }}
+    {{ companyData.name }}
   </p>
   <p>
     <strong>Description</strong><br>
-    {{ userData.description }}
+    {{ companyData.description }}
   </p>
   <p>
     <strong>Address</strong><br>
-    {{ userData.name }}<br>
-    {{ userData.street }}<br>
-    {{ userData.zipCode }} {{ userData.place }}
+    {{ companyData.name }}<br>
+    {{ companyData.street }} {{ companyData.houseNumber }}<br>
+    {{ companyData.postcode }} {{ companyData.city }}
   </p>
   <p>
-    <strong>Contact</strong><br>
-    <em>Website: </em><a href="{{ userData.website }}">{{ userData.website }}</a><br>
-    <em>E-Mail: </em><a>{{ userData.contactEmail }}</a>
+    <strong>Contact Person</strong><br>
+    {{ companyData.contactName }}<br>
   </p>
+
+  <table>
+    <tbody>
+    <tr>
+      <td style="width: 25%">Phone:</td>
+      <td>{{ companyData.contactPhone }}</td>
+    </tr>
+    <tr>
+      <td>E-Mail:</td>
+      <td><a href="mailto:{{ companyData.contactEmail }}">{{ companyData.contactEmail }}</a></td>
+    </tr>
+    <tr>
+      <td>Website:</td>
+      <td><a href="http://www.{{ companyData.website }}">{{ companyData.website }}</a></td>
+    </tr>
+    </tbody>
+  </table>
+
 </div>

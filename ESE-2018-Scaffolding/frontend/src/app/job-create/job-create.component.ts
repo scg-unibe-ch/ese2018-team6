@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Job} from '../job.model';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
@@ -28,45 +28,64 @@ export class JobCreateComponent implements OnInit {
     null,
     null,
     null,
-  null,
-    null
+    null,
+    null,
+    null,
+    null,
+    null,
   );
 
   constructor(private httpClient: HttpClient, private router: Router) { }
 
   ngOnInit() {
-    if(!this.checkIfLoggedIn()){
-      this.router.navigate(['']);
-    }
+    this.checkIfLoggedIn();
+  }
 
+  onCreate() {
+    if(this.isDataValid()){
+      this.getLocalStorage();
+      this.httpClient.post('http://localhost:3000/jobitem/' + this.userId + '/' + this.userToken, {
+        'title': this.jobData.title,
+        'description': this.jobData.description,
+        'startDate': this.jobData.startDate,
+        'endDate': this.jobData.endDate,
+        'validUntil': this.jobData.validUntil,
+        'workloadMin': this.jobData.workloadMin,
+        'workloadMax': this.jobData.workloadMax,
+        'firstLanguage': this.jobData.firstLanguage,
+        'secondLanguage': this.jobData.secondLanguage,
+        'street': this.jobData.street,
+        'houseNumber': this.jobData.houseNumber,
+        'postcode': this.jobData.postcode,
+        'city': this.jobData.city,
+        'salaryType': this.jobData.salaryType,
+        'salaryAmount': this.jobData.salaryAmount,
+        'skills': this.jobData.skills
+      }).subscribe(
+        res => {
+          this.router.navigate(['/my-account']);
+        },
+        err => {
+          // TODO - Give useful feedback on failed job creation
+          console.log(err.error.message);
+        }
+      );
+    }
+  }
+
+  isDataValid() {
+    // TODO - Check user inputs (title required; date format; workload & salary is number etc.)
+    return true;
+  }
+
+  getLocalStorage() {
     this.userId = localStorage.getItem('user-id');
     this.userToken = localStorage.getItem('user-token');
   }
 
   checkIfLoggedIn() {
-    return localStorage.getItem('user-token');
-  }
-
-  onCreate() {
-    // TODO Check if required fields are ok
-    this.httpClient.post('http://localhost:3000/jobitem/' + this.userId + '/' + this.userToken, {
-      'title': this.jobData.title,
-      'description': this.jobData.description,
-      'startDate': this.jobData.startDate,
-      'endDate': this.jobData.endDate,
-      'validUntil': this.jobData.validUntil,
-      'workloadMin': this.jobData.workloadMin,
-      'workloadMax': this.jobData.workloadMax,
-      'languages': this.jobData.languages,
-      'street': this.jobData.street,
-      'houseNumber': this.jobData.houseHumber,
-      'postcode': this.jobData.zipCode,
-      'city': this.jobData.place,
-      'salaryType': this.jobData.salaryType,
-      'salaryAmount': this.jobData.salaryAmount,
-      'skills': this.jobData.skills
-    }).subscribe();
-
-    this.router.navigate(['/my-account']);
+    if(!localStorage.getItem('user-token')){
+      this.router.navigate(['']);
+    }
   }
 }

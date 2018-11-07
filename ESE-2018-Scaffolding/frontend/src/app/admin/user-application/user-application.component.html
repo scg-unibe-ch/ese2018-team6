@@ -11,21 +11,15 @@
         {{ userApplicationEntry.name }}
       </p>
       <p>
-        <strong>Street</strong><br>
-        {{ userApplicationEntry.street }} {{ userApplicationEntry.houseNumber }}
-      </p>
-      <p>
-        <strong>ZIP Code / Place</strong><br>
-        {{ userApplicationEntry.zipCode }} {{ userApplicationEntry.place }}
+        <strong>Address</strong><br>
+        {{ userApplicationEntry.street }} {{ userApplicationEntry.houseNumber }}<br>
+        {{ userApplicationEntry.postcode }} {{ userApplicationEntry.city }}
       </p>
       <p>
         <strong>Contact Details</strong><br>
         {{ userApplicationEntry.contactName }}<br>
         {{ userApplicationEntry.contactEmail }}<br>
-        {{ userApplicationEntry.contactPhone }}
-      </p>
-      <p>
-        <strong>Website</strong><br>
+        {{ userApplicationEntry.contactPhone }}<br>
         www.{{ userApplicationEntry.website }}
       </p>
       <p>

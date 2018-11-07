@@ -3,6 +3,21 @@
   border: 2px solid #000;
 }
 
+.employer-box h4 {
+  margin: 10px 0 10px 0;
+}
+
+.employer-box table {
+  margin-bottom: 10px;
+}
+
+img {
+  max-width: 80%;
+  max-height: 60px;
+  display: block;
+  margin: 0 auto 15px auto;
+}
+
 small {
   font-size: 12px;
 }
@@ -17,4 +32,8 @@ p {
 
 hr {
   border-color: #444444;
+}
+
+h4 {
+  margin: 30px 0 10px 0;
 }

@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Job} from '../../job.model';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-my-job-item',
@@ -14,11 +15,14 @@ export class MyJobItemComponent implements OnInit {
   @Output()
   jobSubmissionDelete = new EventEmitter<number>();
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() { }
 
-  // TODO Send changes to backend (DELETE JOB POSTING IN DATABASE)
+  onEditJobItem() {
+    this.router.navigate(['/jobs/edit/' + this.myJobData.id])
+  }
+
   onDeleteJobItem() {
     this.jobSubmissionDelete.emit(this.myJobData.id);
   }

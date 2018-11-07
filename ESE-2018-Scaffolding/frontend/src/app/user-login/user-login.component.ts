@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {UserLogin} from '../user-login.model';
+import {User} from '../user.model';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 
@@ -10,7 +10,8 @@ import {Router} from '@angular/router';
 })
 export class UserLoginComponent implements OnInit {
 
-  userLoginData: UserLogin = new UserLogin(
+  isAdmin: boolean;
+  userData: User = new User(
     null,
     null
   );
@@ -20,19 +21,28 @@ export class UserLoginComponent implements OnInit {
   ngOnInit() { }
 
   onSignIn() {
-    this.httpClient.post<any>('http://localhost:3000/user/token', {
-      'email': this.userLoginData.email,
-      'password': this.userLoginData.password
-    }).subscribe(
-      res => {
-        localStorage.setItem('user-id', res.id);
-        localStorage.setItem('user-token', res.token);
-        this.router.navigate(['']);
-      },
-      err => {
-        // TODO - give feedback on failed login (wrong email & password)
-        console.log(err.error.message);
-      }
-    );
+    if(this.isDataValid()) {
+      this.httpClient.post<any>('http://localhost:3000/user/token', {
+        'email': this.userData.email,
+        'password': this.userData.password
+      }).subscribe(
+        res => {
+          localStorage.setItem('user-id', res.id);
+          localStorage.setItem('user-token', res.token);
+          // TODO - Improve admin verification with isVerified-request
+          localStorage.setItem('isAdmin', res.isAdmin);
+          this.router.navigate(['']);
+        },
+        err => {
+          // TODO - Give useful feedback on failed login (wrong email or password)
+          console.log(err.error.message);
+        }
+      );
+    }
+  }
+
+  isDataValid(){
+    // TODO - Check user inputs (email & password required)
+    return true;
   }
 }

@@ -9,7 +9,7 @@ import {Job} from '../../job.model';
 export class JobItemComponent implements OnInit {
 
   @Input()
-  jobItemEntry: Job;
+  jobData: Job;
 
   constructor() { }
 
