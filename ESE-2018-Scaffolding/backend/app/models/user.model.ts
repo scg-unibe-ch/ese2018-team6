@@ -21,9 +21,9 @@ export class User extends Model<User> {
     return {
       'id': this.id,
       'email': this.email,
-      'password': this.password,
-      'token' : this.token,
-      'tokenExpirationDate' : this.tokenExpirationDate
+      // 'password': this.password,
+      // 'token' : this.token,
+      // 'tokenExpirationDate' : this.tokenExpirationDate
     };
   }
 

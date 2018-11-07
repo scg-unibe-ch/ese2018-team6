@@ -5,24 +5,6 @@ import {User} from '../models/user.model';
 import {checkToken, foundUser} from './user.controller';
 
 const router: Router = Router();
-router.get('/', async (req: Request, res: Response) => {
-  /* const jobListId = parseInt(req.query.jobListId);
-  let options = {};
-  if (jobListId != null) {
-    options = {
-      include: [{
-        model: JobList,
-        where: {
-          id: jobListId
-        }
-      }]
-    };
-  }
-  */
-  const instances = await JobItem.findAll({where: {accepted: true}});
-  res.statusCode = 200;
-  res.send(instances.map(e => e.toSimplification()));
-});
 router.post('/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
@@ -52,6 +34,12 @@ router.post('/:id/:token', async (req: Request, res: Response) => {
     res.send(instance.toSimplification());
   }
 });
+router.get('/', async (req: Request, res: Response) => {
+  const instances = await JobItem.findAll({where: {accepted: true}});
+  res.statusCode = 200;
+  res.send(instances.map(e => e.toSimplification()));
+});
+
 router.get('/:id', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const instance = await JobItem.findById(id);
@@ -65,6 +53,32 @@ router.get('/:id', async (req: Request, res: Response) => {
   res.statusCode = 200;
   res.send(instance.toSimplification());
 });
+
+router.get('/:id/:token', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const token = req.params.token;
+  const user = await User.findById(id);
+  if (foundUser(user, res) && checkToken(user, res, token) && user !== null) {
+    const instance = await JobItem.findById(id);
+    if (instance == null) {
+      res.statusCode = 404;
+      res.json({
+        'message': 'jobitem not found'
+      });
+      return;
+    }
+    let instances = await JobItem.findAll({where: {companyId: id}});
+    for (let i = 0; i = instances.length - 1; i++) {
+      const returnObject = instances[i].toSimplification();
+      returnObject.message = instances[i].messageFromAdmin;
+      returnObject.accepted = instances[i].accepted;
+      instances[i] = returnObject;
+    }
+    res.statusCode = 200;
+    res.send(instances.map(e => e.toSimplification()));
+  }
+});
+
 router.put('/:jobItemId/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
@@ -81,6 +95,8 @@ router.put('/:jobItemId/:id/:token', async (req: Request, res: Response) => {
     }
     if (instance.companyId == user.id) { // check if user corresponds to this jobItem
       instance.fromSimplification(req.body);
+      // @ts-ignore
+      instance.accepted = null; // when edited, needs to be accepted again by admin
       await instance.save();
       res.statusCode = 200;
       res.send(instance.toSimplification());
@@ -92,6 +108,7 @@ router.put('/:jobItemId/:id/:token', async (req: Request, res: Response) => {
     }
   }
 });
+
 router.delete('/:jobItemId/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;

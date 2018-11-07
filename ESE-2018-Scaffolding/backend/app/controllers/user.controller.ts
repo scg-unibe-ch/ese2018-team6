@@ -35,6 +35,21 @@ router.post('/token', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/:id/:token', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const token = req.params.token;
+  const instance = await User.findById(id);
+  if (foundUser(instance, res) && checkToken(instance, res, token) && instance !== null) {
+    res.statusCode = 200;
+    res.send(instance.toSimplification());
+  } else {
+    res.statusCode = 404;
+    res.json({
+      'message': 'user not found'
+    });
+  }
+});
+
 router.put('/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
