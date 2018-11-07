@@ -3,35 +3,45 @@ import {Router, Request, Response} from 'express';
 import {JobItem} from '../models/jobitem.model';
 import {User} from '../models/user.model';
 import {checkToken, foundUser} from './user.controller';
+import {Company} from '../models/company.model';
 
 const router: Router = Router();
 router.post('/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
   const user = await User.findById(id);
-  if (foundUser(user, res) && checkToken(user, res, token) && user !== null) {
-    const instance = new JobItem();
-    instance.fromSimplification(req.body);
-    let today = new Date();
-    let dd = today.getDate();
-    let mm = today.getMonth()+1; //January is 0!
-    let year = today.getFullYear();
-    let day;
-    let month;
-    if(dd<10)
-      day = '0' + dd;
-    else day = dd;
-    if(mm<10)
-      month = '0' + mm;
-    else month = mm;
-    instance.datePosted = day + '.' + month + '.' + year;
-    // @ts-ignore
-    instance.accepted = null; // should not be decided by client
-    instance.messageFromAdmin = ''; // should not be decided by client
-    instance.companyId = id; // should not be decided by client
-    await instance.save();
-    res.statusCode = 201;
-    res.send(instance.toSimplification());
+  const company = await Company.findOne({where: {userId: id}});
+  // @ts-ignore
+  if (foundUser(user, res)  && company.verified == true) {
+    if (checkToken(user, res, token) && user !== null) {
+      const instance = new JobItem();
+      instance.fromSimplification(req.body);
+      let today = new Date();
+      let dd = today.getDate();
+      let mm = today.getMonth() + 1; //January is 0!
+      let year = today.getFullYear();
+      let day;
+      let month;
+      if (dd < 10)
+        day = '0' + dd;
+      else day = dd;
+      if (mm < 10)
+        month = '0' + mm;
+      else month = mm;
+      instance.datePosted = day + '.' + month + '.' + year;
+      // @ts-ignore
+      instance.accepted = null; // should not be decided by client
+      instance.messageFromAdmin = ''; // should not be decided by client
+      instance.companyId = id; // should not be decided by client
+      await instance.save();
+      res.statusCode = 201;
+      res.send(instance.toSimplification());
+    }
+  } else {
+    res.statusCode = 401;
+    res.json({
+      'message': 'user is not verified and therefore cannot create job postings'
+    });
   }
 });
 router.get('/', async (req: Request, res: Response) => {

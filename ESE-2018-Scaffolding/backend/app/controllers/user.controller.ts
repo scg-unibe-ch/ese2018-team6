@@ -20,7 +20,7 @@ router.post('/token', async (req: Request, res: Response) => {
       if (await Admin.findOne({ where: {userId: user.id}}) !== null)
         isAdmin = true;
       else isAdmin = false;
-      res.statusCode = 200;
+      res.statusCode = 201;
       res.json({
         id: user.id,
         token: token,
