@@ -78,15 +78,16 @@ router.get('/:id/:token', async (req: Request, res: Response) => {
       return;
     }
     let instances = await JobItem.findAll({where: {companyId: id}});
-    for (let i = 0; i < instances.length; i++) {
-      console.log(instances[i]);
-      let returnObject = instances[i].toSimplification();
-      returnObject.message = instances[i].messageFromAdmin;
-      returnObject.accepted = instances[i].accepted;
-      instances[i] = returnObject;
+    let returnArray = [];
+    while (instances.length !== 0) {
+      const jobItem = instances.pop();
+      let returnjobItem = jobItem.toSimplification();
+      returnjobItem.message = jobItem.messageFromAdmin;
+      returnjobItem.accepted = jobItem.accepted;
+      returnArray.push(returnjobItem);
     }
     res.statusCode = 200;
-    res.send(instances.map(e => e.toSimplification()));
+    res.send(returnArray.map(e => e.toSimplification()));
   }
 });
 
