@@ -77,7 +77,7 @@ router.get('/:id/:token', async (req: Request, res: Response) => {
       });
       return;
     }
-    let instances = await JobItem.findAll({where: {companyId: id}});
+    const instances = await JobItem.findAll({where: {companyId: id}});
     for (let i = 0; i = instances.length - 1; i++) {
       const returnObject = instances[i].toSimplification();
       returnObject.message = instances[i].messageFromAdmin;
