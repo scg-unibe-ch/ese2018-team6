@@ -64,6 +64,7 @@ export class Company extends Model<Company> {
       'companyWebsite' : this.companyWebsite,
       'companyDescription': this.companyDescription,
       'companyLogoURL' : this.companyLogoURL,
+      // 'verified' : this.verified,
     };
   }
 
