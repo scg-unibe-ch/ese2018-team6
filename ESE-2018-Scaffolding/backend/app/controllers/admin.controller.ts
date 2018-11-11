@@ -23,6 +23,14 @@ router.put('/verify/:companyId/:id/:token', async (req: Request, res: Response) 
   const id = parseInt(req.params.id);
   const token = req.params.token;
   const verify = req.body.verify;
+  if(!(verify == true || verify == false)){
+    res.statusCode = 400;
+    res.json({
+      'message': 'please set a valid boolean for verify'
+    });
+    return;
+  }
+
   const user = await User.findById(id);
   const admin = await Admin.findOne({ where: {userId: id }});
   if (adminAuthentification(user, res, id, token, admin) && user !== null) {
@@ -30,11 +38,13 @@ router.put('/verify/:companyId/:id/:token', async (req: Request, res: Response) 
     const instance = await Company.findOne({where: {userId: companyId}});
     if (instance !== null) {
       instance.verified = verify;
-      if (verify == false) {
+      if(req.body.message) {
         instance.messageFromAdmin = req.body.message;
-      } else instance.messageFromAdmin = '';
+      }
+
       res.statusCode = 200;
       await instance.save();
+
       res.send();
     } else {
       res.statusCode = 404;

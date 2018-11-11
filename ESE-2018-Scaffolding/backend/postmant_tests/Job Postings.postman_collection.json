@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "Company",
+			"name": "Company (create)",
 			"item": [
 				{
 					"name": "Create Company: Empty email",
@@ -137,7 +137,9 @@
 								"exec": [
 									"pm.test(\"Status code is  201\", function () {",
 									"    pm.response.to.have.status(201);",
-									"});"
+									"});",
+									"",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -250,8 +252,11 @@
 							"script": {
 								"id": "8fbb42a7-ec1e-4a19-b142-69f25349d2af",
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"Company is not admin\", function(){",
+									"   pm.expect(pm.response.json().isAdmin).to.eql(false); ",
 									"});",
 									"pm.globals.set(\"currenttoken\", pm.response.json().token);"
 								],
@@ -271,7 +276,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"email\":\"0.780818734983823\",\n\t\"password\":\"\"\n}"
+							"raw": "{\n\t\"email\":{{currentemail}},\n\t\"password\":\"\"\n}"
 						},
 						"url": {
 							"raw": "http://localhost:3000/user/token",
@@ -342,6 +347,569 @@
 							"path": [
 								"user",
 								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Company (unverified)",
+			"item": [
+				{
+					"name": "Get Company with nonexisting id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "502e7967-88c4-499f-91a1-583df225f963",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/company/1000000000000000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"company",
+								"1000000000000000"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Company with Id not verified",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "502e7967-88c4-499f-91a1-583df225f963",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/company/{{currentuserid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"company",
+								"{{currentuserid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Company with authorization (unverified)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "502e7967-88c4-499f-91a1-583df225f963",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"JSON response values\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.userId).to.eql(pm.globals.get(\"currentuserid\"));",
+									"    pm.expect(jsonData.message).to.be.not.eql(undefined);",
+									"    pm.expect(jsonData.verified).to.be.not.eql(undefined);",
+									"    pm.expect(jsonData.companyName).to.be.not.eql(undefined);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/company/{{currentuserid}}/{{currenttoken}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"company",
+								"{{currentuserid}}",
+								"{{currenttoken}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Check admin existance and get token",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "59a9c5ea-a602-4291-b88d-2c514941c92d",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "8fbb42a7-ec1e-4a19-b142-69f25349d2af",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"pm.test(\"Is admin\", function () {",
+									"    pm.expect(pm.response.json().isAdmin).to.eql(true);",
+									"});",
+									"pm.globals.set(\"admintoken\", pm.response.json().token);",
+									"pm.globals.set(\"adminid\", pm.response.json().id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\":\"admin@admin.com\",\n\t\"password\":\"123\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"token"
+							]
+						},
+						"description": "IMPORTANT: Make sure that there is an admin in the database!\nUse following entries: email: admin@admin.com, password: 123"
+					},
+					"response": []
+				},
+				{
+					"name": "Put Admin: verify non-existing Company",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bac4a27c-15fc-4904-a603-c4161574f38e",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"verify\":true\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/admin/verify/100000000000000/{{adminid}}/{{admintoken}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"verify",
+								"100000000000000",
+								"{{adminid}}",
+								"{{admintoken}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put Admin: verify company without admin credentials",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bac4a27c-15fc-4904-a603-c4161574f38e",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"verify\": true\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/admin/verify/{{currentuserid}}/{{currentuserid}}/{{currenttoken}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"verify",
+								"{{currentuserid}}",
+								"{{currentuserid}}",
+								"{{currenttoken}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put Admin: verify company without verify",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bac4a27c-15fc-4904-a603-c4161574f38e",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/admin/verify/{{currentuserid}}/{{adminid}}/{{admintoken}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"verify",
+								"{{currentuserid}}",
+								"{{adminid}}",
+								"{{admintoken}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put Admin: unverify company",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bac4a27c-15fc-4904-a603-c4161574f38e",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.sendRequest({",
+									"    url: \"http://localhost:3000/company/\" + pm.globals.get(\"currentuserid\") + \"/\" + pm.globals.get(\"currenttoken\"),",
+									"    method: 'GET',",
+									"    header: {",
+									"        'content-type': 'application/json',",
+									"        'x-site-code': pm.environment.get(\"x-site-code\")",
+									"    },",
+									"    body:''",
+									"}, function (err, res) {",
+									"    pm.test(\"Company is not verified\", function(){",
+									"        pm.expect(res.json().message).to.eql(\"uncool\");",
+									"        pm.expect(res.json().verified).to.eql(false);",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"verify\": false,\n\t\"message\": \"uncool\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/admin/verify/{{currentuserid}}/{{adminid}}/{{admintoken}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"verify",
+								"{{currentuserid}}",
+								"{{adminid}}",
+								"{{admintoken}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put Admin: verify company",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bac4a27c-15fc-4904-a603-c4161574f38e",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.sendRequest({",
+									"    url: \"http://localhost:3000/company/\" + pm.globals.get(\"currentuserid\") + \"/\" + pm.globals.get(\"currenttoken\"),",
+									"    method: 'GET',",
+									"    header: {",
+									"        'content-type': 'application/json',",
+									"        'x-site-code': pm.environment.get(\"x-site-code\")",
+									"    },",
+									"    body:''",
+									"}, function (err, res) {",
+									"    pm.test(\"Company is verified\", function(){",
+									"        pm.expect(res.json().verified).to.be.equal(true);",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"verify\": true\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/admin/verify/{{currentuserid}}/{{adminid}}/{{admintoken}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"verify",
+								"{{currentuserid}}",
+								"{{adminid}}",
+								"{{admintoken}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Company (verified)",
+			"item": [
+				{
+					"name": "Get Company",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "502e7967-88c4-499f-91a1-583df225f963",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"JSON response values\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.userId).to.eql(pm.globals.get(\"currentuserid\"));",
+									"    pm.expect(jsonData.message).to.be.eql(undefined); //for privacy, this should not be displayed!",
+									"    pm.expect(jsonData.verified).to.be.eql(undefined); ",
+									"    ",
+									"    pm.expect(jsonData.companyName).to.be.not.eql(undefined);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/company/{{currentuserid}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"company",
+								"{{currentuserid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Company with authorization",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "502e7967-88c4-499f-91a1-583df225f963",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"JSON response values\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.userId).to.eql(pm.globals.get(\"currentuserid\"));",
+									"    pm.expect(jsonData.message).to.be.not.eql(undefined); ",
+									"    pm.expect(jsonData.verified).to.be.not.eql(undefined); ",
+									"    pm.expect(jsonData.companyName).to.be.not.eql(undefined);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/company/{{currentuserid}}/{{currenttoken}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"company",
+								"{{currentuserid}}",
+								"{{currenttoken}}"
 							]
 						}
 					},

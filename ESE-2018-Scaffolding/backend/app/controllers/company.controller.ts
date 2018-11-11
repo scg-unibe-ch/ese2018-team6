@@ -42,7 +42,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     });
     return;
   } else if (instance.verified == false) {
-    res.statusCode = 404;
+    res.statusCode = 401;
     res.json({
       'message': 'company not verified'
     });

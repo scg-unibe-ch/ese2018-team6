@@ -69,25 +69,23 @@ router.get('/:id/:token', async (req: Request, res: Response) => {
   const token = req.params.token;
   const user = await User.findById(id);
   if (foundUser(user, res) && checkToken(user, res, token) && user !== null) {
-    const instance = await JobItem.findById(id);
-    if (instance == null) {
+    let instances = await JobItem.findAll({where: {companyId: id}});
+
+    if (instances == null) {
       res.statusCode = 404;
       res.json({
         'message': 'jobitem not found'
       });
       return;
     }
-    let instances = await JobItem.findAll({where: {companyId: id}});
-    let returnArray = [];
-    while (instances.length !== 0) {
-      const jobItem = instances.pop();
-      let returnjobItem = jobItem.toSimplification();
-      returnjobItem.message = jobItem.messageFromAdmin;
-      returnjobItem.accepted = jobItem.accepted;
-      returnArray.push(returnjobItem);
+
+    let returnArray = instances.map(e => e.toSimplification());
+    for(let i = 0; i < returnArray.length; i++){
+      returnArray[i].message = instances[i].messageFromAdmin;
+      returnArray[i].accepted = instances[i].accepted;
     }
     res.statusCode = 200;
-    res.send(returnArray.map(e => e.toSimplification()));
+    res.send(returnArray);
   }
 });
 
