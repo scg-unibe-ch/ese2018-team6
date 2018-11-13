@@ -7,7 +7,6 @@ import {foundUser, checkToken} from './user.controller';
 const router: Router = Router();
 router.post('/', async (req: Request, res: Response) => {
   const testInstance = await User.findOne({ where: {email: req.body.email }});
-  console.log(req.body.email);
   if (req.body.email && testInstance == null) {
     const instance = new User();
     instance.fromSimplification(req.body);
