@@ -41,12 +41,6 @@ router.get('/:id', async (req: Request, res: Response) => {
       'message': 'company not found'
     });
     return;
-  } else if (instance.verified == false) {
-    res.statusCode = 401;
-    res.json({
-      'message': 'company not verified'
-    });
-    return;
   }
   res.statusCode = 200;
   res.send(instance.toSimplification());
@@ -69,7 +63,6 @@ router.get('/:id/:token', async (req: Request, res: Response) => {
 
     const returnObject = companyInstance.toSimplification();
     returnObject.message = companyInstance.messageFromAdmin;
-    returnObject.verified = companyInstance.verified;
     res.send(returnObject);
   }
 });
