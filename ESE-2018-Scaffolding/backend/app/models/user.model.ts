@@ -29,7 +29,7 @@ export class User extends Model<User> {
 
   fromSimplification(simplification: any): void {
     this.email = simplification['email'];
-    this.password = simplification['password'];
+    //this.password = simplification['password'];
     // this.token = simplification['token'];
   }
 }
