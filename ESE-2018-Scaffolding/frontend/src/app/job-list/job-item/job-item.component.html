@@ -4,15 +4,15 @@
     <tr>
 
       <td style="padding-right: 10px;">
-        <h4 class="list-group-item-heading">{{ jobData.title }}</h4>
-        <p class="list-group-item-text giveMeEllipsis">{{ jobData.description }}</p>
-        <small class="text-muted"><em>Required Skills: </em>{{ jobData.skills }}</small>
+        <h4 class="list-group-item-heading">{{ format.simpletext(jobData.title) }}</h4>
+        <p class="list-group-item-text giveMeEllipsis">{{ format.simpletext(jobData.description) }}</p>
+        <small class="giveMeEllipsis"><em>Required Skills: </em>{{ format.simpletext(jobData.skills) }}</small>
       </td>
 
       <td class="text-right" style="width: 1%; white-space: nowrap;">
-        <small class="text-muted">{{ jobData.datePosted }}<br>
-          <strong>{{ jobData.city }}</strong><br>
-          {{ jobData.workloadMin}}-{{ jobData.workloadMax }}%
+        <small>{{ jobData.datePosted }}<br>  <!-- TODO -->
+          <strong>{{ jobData.city }}</strong><br> <!-- TODO -->
+          {{ format.workload(jobData.workloadMin, jobData.workloadMax) }}
         </small>
       </td>
 

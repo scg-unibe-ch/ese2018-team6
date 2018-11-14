@@ -1,21 +1,31 @@
 <h3>User Applications</h3>
 <hr>
-<p><em>The following user applications await approval:</em></p>
-<app-user-application
-  *ngFor="let userApplication of userApplications"
-  [userApplicationEntry]="userApplication"
-  (userApplicationApproved)="approveUserApplication($event)"
-  (userApplicationDenied)="denyUserApplication($event)">
-</app-user-application>
+<div>
+  <p *ngIf="userApplications.length == 0"><em>There are currently no open user applications to approve.</em></p>
+</div>
+<div>
+  <p *ngIf="userApplications.length > 0"><em>The following user applications await approval:</em></p>
+  <app-user-application
+    *ngFor="let userApplication of userApplications"
+    [userApplicationEntry]="userApplication"
+    (userApplicationApproved)="approveUserApplication($event)"
+    (userApplicationDenied)="denyUserApplication($event)">
+  </app-user-application>
+</div>
 
 <br><br>
 
 <h3>Job Submissions</h3>
 <hr>
-<p><em>The following job submissions await approval:</em></p>
-<app-job-submission
-  *ngFor="let jobSubmission of jobSubmissions"
-  [jobSubmissionEntry]="jobSubmission"
-  (jobSubmissionApproved)="approveJobSubmission($event)"
-  (jobSubmissionDenied)="denyJobSubmission($event)">
-</app-job-submission>
+<div>
+  <p *ngIf="jobSubmissions.length == 0"><em>There are currently no open job submissions to approve.</em></p>
+</div>
+<div>
+  <p *ngIf="jobSubmissions.length > 0"><em>The following job submissions await approval:</em></p>
+  <app-job-submission
+    *ngFor="let jobSubmission of jobSubmissions"
+    [jobSubmissionEntry]="jobSubmission"
+    (jobSubmissionApproved)="approveJobSubmission($event)"
+    (jobSubmissionDenied)="denyJobSubmission($event)">
+  </app-job-submission>
+</div>

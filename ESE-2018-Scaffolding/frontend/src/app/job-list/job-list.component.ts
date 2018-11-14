@@ -10,6 +10,13 @@ import {HttpClient} from '@angular/common/http';
 export class JobListComponent implements OnInit {
 
   jobData: Job[] = [];
+  searchData: Job[] = [];
+  filterData: Job[] = [];
+
+  showResults: string = 'allJobs';
+  showSearchFilter: string;
+
+  searchTerm: string;
 
   constructor(private httpClient: HttpClient) { }
 
@@ -36,13 +43,43 @@ export class JobListComponent implements OnInit {
           instance.salaryType,
           instance.salaryAmount,
           instance.companyId,
-          ''
+          '',
+          instance.accepted
         ))
       }
     );
+  }
 
-    // TODO - Await response due to empty array
-    this.jobData.reverse();
+  submitSearch() {
+    this.showResults = 'searchResults';
+    // TODO - GET-Request and place data in searchData.
+  }
+
+  cancelSearch() {
+    this.toggleSearch();
+    this.searchTerm = '';
+    this.searchData = [];
+    this.showResults = 'allJobs';
+  }
+
+  submitFilter() {
+    this.showResults = 'filterResults';
+    // TODO - GET-Request and place data in filterData.
+  }
+
+  cancelFilter() {
+    this.toggleFilter();
+    // TODO - Reset filter values
+    this.filterData = [];
+    this.showResults = 'allJobs';
+  }
+
+  toggleSearch() {
+    this.showSearchFilter = (this.showSearchFilter != 'search') ? (this.showSearchFilter = 'search') : (this.showSearchFilter = '');
+  }
+
+  toggleFilter() {
+    this.showSearchFilter = (this.showSearchFilter != 'filter') ? (this.showSearchFilter = 'filter') : (this.showSearchFilter = '');
   }
 
   isLoggedIn() {

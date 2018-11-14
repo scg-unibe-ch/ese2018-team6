@@ -73,40 +73,42 @@
   <h4>About the Employer:</h4>
   <hr>
 
-  <img src="{{ companyData.logo }}">
+  <img src="{{ format.logo(companyData.logo) }}">
 
   <p>
-    <strong>Company</strong><br>
-    {{ companyData.name }}
+    <strong>Company</strong>
+    <span class="label label-success pull-right" *ngIf="companyData.verified == true">Verified</span>
+    <span class="label label-danger pull-right" *ngIf="companyData.verified == false">Unverified</span><br>
+    {{ format.simpletext(companyData.name) }}
   </p>
   <p>
     <strong>Description</strong><br>
-    {{ companyData.description }}
+    {{ format.simpletext(companyData.description) }}
   </p>
   <p>
     <strong>Address</strong><br>
-    {{ companyData.name }}<br>
-    {{ companyData.street }} {{ companyData.houseNumber }}<br>
-    {{ companyData.postcode }} {{ companyData.city }}
+    {{ format.simpletext(companyData.name) }}<br>
+    {{ format.street(companyData.street, companyData.houseNumber) }}<br>
+    {{ format.city(companyData.postcode, companyData.city) }}
   </p>
   <p>
     <strong>Contact Person</strong><br>
-    {{ companyData.contactName }}<br>
+    {{ format.simpletext(companyData.contactName) }}<br>
   </p>
 
   <table>
     <tbody>
     <tr>
       <td style="width: 25%">Phone:</td>
-      <td>{{ companyData.contactPhone }}</td>
+      <td>{{ format.simpletext(companyData.contactPhone) }}</td>
     </tr>
     <tr>
       <td>E-Mail:</td>
-      <td><a href="mailto:{{ companyData.contactEmail }}">{{ companyData.contactEmail }}</a></td>
+      <td><a href="mailto:{{ companyData.contactEmail }}">{{ format.simpletext(companyData.contactEmail) }}</a></td>
     </tr>
     <tr>
       <td>Website:</td>
-      <td><a href="http://www.{{ companyData.website }}">{{ companyData.website }}</a></td>
+      <td><a href="http://www.{{ companyData.website }}">{{ format.website(companyData.website) }}</a></td>
     </tr>
     </tbody>
   </table>

@@ -1,3 +1,22 @@
 .btn {
-  margin: -5px 0 0 0;
+  margin: -5px 5px 0 5px;
+}
+
+.searchFilter {
+  margin: 15px 0 15px 0;
+  padding: 15px;
+  background-color: #EEEEEE;
+  border: 2px solid #000;
+}
+
+.searchFilter .form-group {
+  margin-bottom: 0;
+}
+
+.searchFilter .form-control {
+  margin: 0 0 10px 0;
+}
+
+.searchFilter button{
+  margin: 0 15px 5px 0;
 }

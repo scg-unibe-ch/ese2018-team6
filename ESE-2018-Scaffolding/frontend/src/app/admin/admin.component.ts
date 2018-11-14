@@ -43,7 +43,8 @@ export class AdminComponent implements OnInit {
             instance.companyWebsite,
             instance.companyDescription,
             instance.userId,
-            ''
+            '',
+            instance.verified
           ))
         }
       )
@@ -74,7 +75,8 @@ export class AdminComponent implements OnInit {
             instance.salaryType,
             instance.salaryAmount,
             instance.companyId,
-            ''
+            '',
+            instance.accepted
           ))
         }
       )

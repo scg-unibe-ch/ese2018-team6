@@ -1,5 +1,6 @@
 import {Component, Input, OnInit } from '@angular/core';
 import {Job} from '../../job.model';
+import {FormatService} from '../../format.service';
 
 @Component({
   selector: 'app-job-item',
@@ -11,7 +12,7 @@ export class JobItemComponent implements OnInit {
   @Input()
   jobData: Job;
 
-  constructor() { }
+  constructor(public format: FormatService) { }
 
   ngOnInit() { }
 }

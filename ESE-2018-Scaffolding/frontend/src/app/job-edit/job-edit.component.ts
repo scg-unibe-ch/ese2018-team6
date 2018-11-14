@@ -34,6 +34,7 @@ export class JobEditComponent implements OnInit {
     null,
     null,
     null,
+    null
   );
 
   constructor(private httpClient: HttpClient, private router: Router, private activatedRoute: ActivatedRoute) { }
@@ -66,7 +67,8 @@ export class JobEditComponent implements OnInit {
         instance.salaryType,
         instance.salaryAmount,
         instance.companyId,
-        ''
+        '',
+        instance.accepted
       ))
   }
 

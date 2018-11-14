@@ -15,5 +15,6 @@ export class Company {
     public description: string,
     public userId: number,
     public messageFromAdmin: string,
+    public verified: boolean,
   ) {}
 }

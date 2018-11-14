@@ -3,6 +3,7 @@ import {Job} from '../job.model';
 import {HttpClient} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
 import {Company} from '../company.model';
+import {FormatService} from '../format.service';
 
 @Component({
   selector: 'app-job-detail',
@@ -32,7 +33,8 @@ export class JobDetailComponent implements OnInit {
     null,
     null,
     null,
-    ''
+    '',
+    null
   );
   companyData: Company = new Company(
     null,
@@ -48,15 +50,18 @@ export class JobDetailComponent implements OnInit {
     null,
     null,
     null,
-    ''
+    '',
+    null
   );
 
-  constructor(private activatedRoute: ActivatedRoute, private httpClient: HttpClient) { }
+  constructor(private activatedRoute: ActivatedRoute, private httpClient: HttpClient, public format: FormatService) { }
 
   ngOnInit() {
     this.jobId = parseInt(this.activatedRoute.snapshot.paramMap.get('id'));
     this.onLoadingJob();
-    this.onLoadingUser();
+    setTimeout(() => {
+      this.onLoadingUser();
+    }, 15);
   }
 
   onLoadingJob() {
@@ -81,14 +86,14 @@ export class JobDetailComponent implements OnInit {
         instance.salaryType,
         instance.salaryAmount,
         instance.companyId,
-        ''
+        '',
+        instance.accepted
       )
     )
   }
 
-  // TODO - Fix data loading - wait for onLoadingJob() to get its data. Fix hardcoded value.
   onLoadingUser() {
-    this.httpClient.get('http://localhost:3000/company/' + this.jobId).subscribe(
+    this.httpClient.get('http://localhost:3000/company/' + this.jobData.companyId).subscribe(
       (instance: any) => this.companyData = new Company (
         this.jobData.companyId,
         instance.companyName,
@@ -103,36 +108,8 @@ export class JobDetailComponent implements OnInit {
         instance.companyWebsite,
         instance.companyDescription,
         instance.userId,
-        ''
+        '',
+        instance.verified
       ));
   }
-
-  /*
-  onLoadingUser() {
-    let received: boolean = false;
-    while(!received){
-      if(this.jobData.companyId = 0){
-        console.log(this.jobData.companyId);
-        this.httpClient.get('http://localhost:3000/company/' + this.jobData.companyId).subscribe(
-          (instance: any) => this.companyData = new Company (
-            this.jobData.companyId,
-            instance.companyName,
-            instance.companyLogoURL,
-            instance.companyStreet,
-            instance.companyHouseNumber,
-            instance.companyPostcode,
-            instance.companyCity,
-            instance.contactName,
-            instance.contactEmail,
-            instance.contactPhone,
-            instance.companyWebsite,
-            instance.companyDescription,
-            instance.userId,
-            ''
-          ));
-        received = true;
-      }
-    }
-  }
-  */
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Company } from '../../company.model';
+import {FormatService} from '../../format.service';
 
 @Component({
   selector: 'app-user-application',
@@ -17,7 +18,7 @@ export class UserApplicationComponent implements OnInit {
   @Output()
   userApplicationDenied = new EventEmitter<number>();
 
-  constructor() { }
+  constructor(public format: FormatService) { }
 
   ngOnInit() { }
 

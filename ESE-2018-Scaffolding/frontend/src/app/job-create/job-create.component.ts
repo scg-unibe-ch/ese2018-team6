@@ -33,6 +33,7 @@ export class JobCreateComponent implements OnInit {
     null,
     null,
     null,
+    null
   );
 
   constructor(private httpClient: HttpClient, private router: Router) { }

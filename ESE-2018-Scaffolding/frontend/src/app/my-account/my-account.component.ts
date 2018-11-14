@@ -34,8 +34,15 @@ export class MyAccountComponent implements OnInit {
     null,
     null,
     null,
+    null
   );
   myJobPostings: Job[] = [];
+
+  acceptedPostings: Job[] = [];
+  inReviewPostings: Job[] = [];
+  deniedPostings: Job[] = [];
+  sortingIncomplete: boolean = true;
+  myJobPostingsView: string = 'all';
 
   constructor(private httpClient: HttpClient, private router: Router) {}
 
@@ -72,13 +79,14 @@ export class MyAccountComponent implements OnInit {
           instance.companyWebsite,
           instance.companyDescription,
           instance.userId,
-          instance.messageFromAdmin
+          instance.message,
+          instance.verified
       ))
   }
 
   loadMyJobs() {
     this.getLocalStorage();
-    this.httpClient.get('http://localhost:3000/jobItem/') // TODO - Wait for backend implementation; add userId and userToken
+    this.httpClient.get('http://localhost:3000/jobItem/' + this.userId + '/' + this.userToken)
       .subscribe(
         (instances: any) => {
           this.myJobPostings = instances.map((instance) => new Job(
@@ -101,7 +109,8 @@ export class MyAccountComponent implements OnInit {
             instance.salaryType,
             instance.salaryAmount,
             instance.companyId,
-            instance.messageFromAdmin
+            instance.message,
+            instance.accepted
           ))
         }
     )
@@ -169,6 +178,9 @@ export class MyAccountComponent implements OnInit {
       this.getLocalStorage();
       this.httpClient.delete('http://localhost:3000/jobitem/' + jobId + '/' + this.userId + '/' + this.userToken).subscribe();
       this.updateListings(this.myJobPostings, jobId);
+      this.updateListings(this.acceptedPostings, jobId); /* TODO - Improve */
+      this.updateListings(this.inReviewPostings, jobId);
+      this.updateListings(this.deniedPostings, jobId);
     }
   }
 
@@ -177,6 +189,33 @@ export class MyAccountComponent implements OnInit {
       if (array[i].id == idToDelete) {
         array = array.splice(i, 1);
         break;
+      }
+    }
+  }
+
+  changeSort() {
+    if(this.sortingIncomplete){
+      this.sortPostings();
+      this.sortingIncomplete = false;
+    }
+    this.myJobPostingsView = (this.myJobPostingsView == 'all') ? (this.myJobPostingsView = 'grouped') : (this.myJobPostingsView = 'all');
+  }
+
+  sortPostings() {
+    for(let i in this.myJobPostings) {
+      switch (this.myJobPostings[i].accepted) {
+        case true: {
+          this.acceptedPostings.push(this.myJobPostings[i]);
+          break;
+        }
+        case null: {
+          this.inReviewPostings.push(this.myJobPostings[i]);
+          break;
+        }
+        case false: {
+          this.deniedPostings.push(this.myJobPostings[i]);
+          break;
+        }
       }
     }
   }

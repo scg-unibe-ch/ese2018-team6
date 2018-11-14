@@ -1,10 +1,79 @@
-  <h3>
-    Latest Job Postings
-    <span class="pull-right"><button type="button" class="btn btn-primary" routerLink="/jobs/create" *ngIf="isLoggedIn()">Create New</button></span>
-  </h3>
-  <hr>
+<h3>
+  <span *ngIf="showResults === 'allJobs'">Available Offers</span>
+  <span *ngIf="showResults === 'searchResults'">Search Results</span>
+  <span *ngIf="showResults === 'filterResults'">Filter Results</span>
+  <span class="pull-right">
+    <button type="button" class="btn" (click)="toggleSearch()"><span class="glyphicon glyphicon-search"></span></button>
+    <button type="button" class="btn" (click)="toggleFilter()"><span class="glyphicon glyphicon-filter"></span></button>
+    <button type="button" class="btn btn-primary" routerLink="/jobs/create" *ngIf="isLoggedIn()"><span class="glyphicon glyphicon-plus"></span></button>
+  </span>
+</h3>
+<hr>
 
-  <app-job-item
-    *ngFor="let jobItem of jobData"
-    [jobData]="jobItem">
-  </app-job-item>
+<div class="form-horizontal">
+
+  <div class="searchFilter" *ngIf="showSearchFilter === 'search'">
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Search Term</label>
+      <div class="col-sm-6">
+        <input class="form-control" placeholder="Search Title, Description, City and Skills" name="searchTerm" [(ngModel)]="searchTerm">
+      </div>
+      <div class="col-sm-4">
+        <button type="button" class="btn btn-success" (click)="submitSearch()">Search</button>
+        <button type="button" class="btn btn-danger" (click)="cancelSearch()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="searchFilter" *ngIf="showSearchFilter === 'filter'">
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Filter Term</label>
+      <div class="col-sm-6">
+        <input class="form-control" placeholder="Filter Term" name="filterTerm" [(ngModel)]="searchTerm">
+      </div>
+      <div class="col-sm-4">
+        <button type="button" class="btn btn-success" (click)="submitFilter()">Filter</button>
+        <button type="button" class="btn btn-danger" (click)="cancelFilter()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div *ngIf="showResults === 'allJobs'">
+  <div *ngIf="jobData.length == 0">
+    <p><em>There currently aren't any job postings available.</em></p>
+  </div>
+  <div *ngIf="jobData.length > 0">
+    <app-job-item
+      *ngFor="let jobItem of jobData"
+      [jobData]="jobItem">
+    </app-job-item>
+  </div>
+</div>
+
+<div *ngIf="showResults === 'searchResults'">
+  <div *ngIf="searchData.length == 0">
+    <p><em>No job posting matches your search term. Please try again.</em></p>
+  </div>
+  <div *ngIf="searchData.length > 0">
+    <app-job-item
+      *ngFor="let jobItem of searchData"
+      [jobData]="jobItem">
+    </app-job-item>
+  </div>
+</div>
+
+<div *ngIf="showResults === 'filterResults'">
+  <div *ngIf="filterData.length == 0">
+    <p><em>No job posting matches your filter criterias. Please try again.</em></p>
+  </div>
+  <div *ngIf="filterData.length > 0">
+    <app-job-item
+      *ngFor="let jobItem of filterData"
+      [jobData]="jobItem">
+    </app-job-item>
+  </div>
+</div>
+
+

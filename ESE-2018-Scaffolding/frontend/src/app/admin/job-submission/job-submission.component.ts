@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Job } from '../../job.model';
+import {FormatService} from '../../format.service';
 
 @Component({
   selector: 'app-job-submission',
@@ -16,7 +17,7 @@ export class JobSubmissionComponent implements OnInit {
   @Output()
   jobSubmissionDenied = new EventEmitter<number>();
 
-  constructor() { }
+  constructor(public format: FormatService) { }
 
   ngOnInit() { }
 

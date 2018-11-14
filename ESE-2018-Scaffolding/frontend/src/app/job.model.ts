@@ -21,5 +21,6 @@ export class Job {
     public salaryAmount: number,
     public companyId: number,
     public messageFromAdmin: string,
+    public accepted: boolean,
   ) {}
 }

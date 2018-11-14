@@ -2,25 +2,38 @@
   <table>
     <tr>
 
-      <td class="pull-left">
-        <h4 class="list-group-item-heading">{{ myJobData.title }}</h4>
-        <small class="list-group-item-info">
-          {{ myJobData.startDate }}
-          &nbsp;|&nbsp;&nbsp;
+      <td style="padding-right: 10px;">
+        <h4 class="list-group-item-heading">
+          <a [routerLink]="['/jobs/details/', myJobData.id]">{{ myJobData.title }}</a>
+        </h4>
+
+        <small>
+          <span class="label label-success" *ngIf="myJobData.accepted == true">Approved</span>
+          <span class="label label-warning" *ngIf="myJobData.accepted == null">In Review</span>
+          <span class="label label-danger" *ngIf="myJobData.accepted == false">Denied</span>
+          {{ myJobData.datePosted }}
+          &nbsp;|&nbsp;
           <strong>{{ myJobData.city }}</strong>
-          &nbsp;|&nbsp;&nbsp;
-          {{ myJobData.workloadMin }} - {{ myJobData.workloadMax }}%
+          &nbsp;|&nbsp;
+          {{ myJobData.workloadMin }}-{{ myJobData.workloadMax }}%
         </small>
-        <p class="list-group-item-text">{{ myJobData.description }}</p>
+
+        <p class="list-group-item-text giveMeEllipsis">{{ myJobData.description }}</p>
+        <small class="text-muted"><em>Required Skills: </em>{{ myJobData.skills }}</small>
+
+        <div class="alert alert-danger" *ngIf="myJobData.messageFromAdmin != '' && myJobData.accepted == false">
+          <strong>Please fix the following:</strong><br>
+          {{ myJobData.messageFromAdmin }}
+        </div>
       </td>
 
-      <td class="pull-right">
+      <td class="text-right" style="width: 1%; white-space: nowrap;">
         <button type="button" class="btn btn-primary" (click)="onEditJobItem()">
           <span class="glyphicon glyphicon-edit"></span>
         </button>
         <br>
         <button type="button" class="btn btn-danger" (click)="onDeleteJobItem()">
-          <span class="glyphicon glyphicon-remove"></span>
+          <span class="glyphicon glyphicon-trash"></span>
         </button>
       </td>
 

@@ -4,27 +4,39 @@
     <td>
       <p>
         <strong>Logo</strong><br>
-        <img src="{{ userApplicationEntry.logo }}">
+        <img src="{{ format.logo(userApplicationEntry.logo) }}">
       </p>
       <p>
         <strong>Name</strong><br>
-        {{ userApplicationEntry.name }}
+        {{ format.simpletext(userApplicationEntry.name) }}
       </p>
       <p>
-        <strong>Address</strong><br>
-        {{ userApplicationEntry.street }} {{ userApplicationEntry.houseNumber }}<br>
-        {{ userApplicationEntry.postcode }} {{ userApplicationEntry.city }}
+        <strong>Street</strong><br>
+        {{ format.street(userApplicationEntry.street, userApplicationEntry.houseNumber) }}
       </p>
       <p>
-        <strong>Contact Details</strong><br>
-        {{ userApplicationEntry.contactName }}<br>
-        {{ userApplicationEntry.contactEmail }}<br>
-        {{ userApplicationEntry.contactPhone }}<br>
-        www.{{ userApplicationEntry.website }}
+        <strong>ZIP Code / Place</strong><br>
+        {{ format.city(userApplicationEntry.postcode, userApplicationEntry.city) }}
+      </p>
+      <p>
+        <strong>Contact Name</strong><br>
+        {{ format.simpletext(userApplicationEntry.contactName) }}
+      </p>
+      <p>
+        <strong>Contact Phone</strong><br>
+        {{ format.simpletext(userApplicationEntry.contactPhone) }}
+      </p>
+      <p>
+        <strong>Contact E-Mail</strong><br>
+        {{ format.simpletext(userApplicationEntry.contactEmail) }}
+      </p>
+      <p>
+        <strong>Website</strong><br>
+        {{ format.website(userApplicationEntry.website) }}
       </p>
       <p>
         <strong>Description</strong><br>
-        {{ userApplicationEntry.description }}
+        {{ format.simpletext(userApplicationEntry.description) }}
       </p>
     </td>
 

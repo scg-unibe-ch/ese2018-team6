@@ -11,6 +11,11 @@
   margin-bottom: 10px;
 }
 
+.label {
+  font-weight: 500;
+  padding: 4px 4px 2px 3px;
+}
+
 img {
   max-width: 80%;
   max-height: 60px;
