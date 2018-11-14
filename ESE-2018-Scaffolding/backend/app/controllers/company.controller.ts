@@ -2,15 +2,17 @@ import {Router, Request, Response} from 'express';
 import {User} from '../models/user.model';
 import {Company} from '../models/company.model';
 import {JobItem} from '../models/jobitem.model';
-import {foundUser, checkToken} from './user.controller';
+import {foundUser, checkToken, saltRounds} from './user.controller';
 
 const router: Router = Router();
 router.post('/', async (req: Request, res: Response) => {
   const testInstance = await User.findOne({ where: {email: req.body.email }});
-  console.log(req.body.email);
-  if (req.body.email && testInstance == null) {
+  if (req.body.email && req.body.password && testInstance == null) {
     const instance = new User();
+    const bcrypt = require('bcrypt');
+
     instance.fromSimplification(req.body);
+    instance.password = bcrypt.hashSync(req.body.password, saltRounds);
 
     await instance.save();
 
@@ -27,7 +29,7 @@ router.post('/', async (req: Request, res: Response) => {
     });
   } else { res.statusCode = 403;
   res.json({
-    'message': 'email already used or empty'
+    'message': 'email already used or bad request (missing email or password)'
   });
   }
 });
@@ -39,12 +41,6 @@ router.get('/:id', async (req: Request, res: Response) => {
     res.statusCode = 404;
     res.json({
       'message': 'company not found'
-    });
-    return;
-  } else if (instance.verified == false) {
-    res.statusCode = 401;
-    res.json({
-      'message': 'company not verified'
     });
     return;
   }
@@ -69,7 +65,6 @@ router.get('/:id/:token', async (req: Request, res: Response) => {
 
     const returnObject = companyInstance.toSimplification();
     returnObject.message = companyInstance.messageFromAdmin;
-    returnObject.verified = companyInstance.verified;
     res.send(returnObject);
   }
 });

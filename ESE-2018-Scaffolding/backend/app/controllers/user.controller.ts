@@ -9,8 +9,11 @@ router.post('/token', async (req: Request, res: Response) => {
   const email = req.body.email;
   const password = req.body.password;
   const user = await User.findOne({ where: {email: email }});
-  if (foundUser(user, res) && user !== null) {
-    if (user.password === password) {
+  if (foundUser(user, res) && user !== null && password && email) {
+    const bcrypt = require('bcrypt');
+
+    const match = bcrypt.compareSync(password, user.password);
+    if (match) {
       const crypto = require('crypto');
       const token = crypto.randomBytes(64).toString('hex');
       user.token = token;
@@ -32,6 +35,11 @@ router.post('/token', async (req: Request, res: Response) => {
         'message': 'wrong password'
       });
     }
+  } else {
+    res.statusCode = 400;
+    res.json({
+      'message': 'user not found or bad request (email or password missing)'
+    });
   }
 });
 
@@ -55,7 +63,9 @@ router.put('/:id/:token', async (req: Request, res: Response) => {
   const token = req.params.token;
   const instance = await User.findById(id);
   if (foundUser(instance, res) && checkToken(instance, res, token) && instance !== null) {
+    const bcrypt = require('bcrypt');
     instance.fromSimplification(req.body);
+    instance.password = bcrypt.hashSync(req.body.password, saltRounds);
     await instance.save();
     res.statusCode = 200;
     res.send();
@@ -110,3 +120,4 @@ export function checkToken(user: any, res: any, token: string) {
 
 
 export const UserController: Router = router;
+export const saltRounds = 10;
