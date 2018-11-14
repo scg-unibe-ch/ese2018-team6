@@ -63,7 +63,9 @@ router.put('/:id/:token', async (req: Request, res: Response) => {
   const token = req.params.token;
   const instance = await User.findById(id);
   if (foundUser(instance, res) && checkToken(instance, res, token) && instance !== null) {
+    const bcrypt = require('bcrypt');
     instance.fromSimplification(req.body);
+    instance.password = bcrypt.hashSync(req.body.password, saltRounds);
     await instance.save();
     res.statusCode = 200;
     res.send();
