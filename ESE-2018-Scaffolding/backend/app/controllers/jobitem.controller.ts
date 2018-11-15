@@ -49,6 +49,7 @@ router.get('/search/:term', async (req: Request, res: Response) => {
   const term = req.params.term;
   const Op = Sequelize.Op;
   const instances = await JobItem.findAll({where: {
+    accepted: true,
       [Op.or]: [
         {title: {[Op.like]: '%'+term+'%'}},
         {description: {[Op.like]: '%'+term+'%'}},
@@ -57,6 +58,12 @@ router.get('/search/:term', async (req: Request, res: Response) => {
         {street: {[Op.like]: '%'+term+'%'}}
       ]
   }});
+  res.statusCode = 200;
+  res.send(instances.map(e => e.toSimplification()));
+});
+
+router.get('/', async (req: Request, res: Response) => {
+  const instances = await JobItem.findAll({where: {accepted: true}});
   res.statusCode = 200;
   res.send(instances.map(e => e.toSimplification()));
 });
