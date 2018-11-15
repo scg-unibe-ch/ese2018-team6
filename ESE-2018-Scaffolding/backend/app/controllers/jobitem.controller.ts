@@ -4,6 +4,7 @@ import {JobItem} from '../models/jobitem.model';
 import {User} from '../models/user.model';
 import {checkToken, foundUser} from './user.controller';
 import {Company} from '../models/company.model';
+import {Sequelize} from 'sequelize-typescript';
 
 const router: Router = Router();
 router.post('/:id/:token', async (req: Request, res: Response) => {
@@ -44,8 +45,18 @@ router.post('/:id/:token', async (req: Request, res: Response) => {
     });
   }
 });
-router.get('/', async (req: Request, res: Response) => {
-  const instances = await JobItem.findAll({where: {accepted: true}});
+router.get('/search/:term', async (req: Request, res: Response) => {
+  const term = req.params.term;
+  const Op = Sequelize.Op;
+  const instances = await JobItem.findAll({where: {
+      [Op.or]: [
+        {title: {[Op.like]: '%'+term+'%'}},
+        {description: {[Op.like]: '%'+term+'%'}},
+        {skills: {[Op.like]: '%'+term+'%'}},
+        {city: {[Op.like]: '%'+term+'%'}},
+        {street: {[Op.like]: '%'+term+'%'}}
+      ]
+  }});
   res.statusCode = 200;
   res.send(instances.map(e => e.toSimplification()));
 });

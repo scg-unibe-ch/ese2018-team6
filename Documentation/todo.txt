@@ -1,14 +1,13 @@
 backend:
 - migrate to date format
-- searching
 - filtering
-- pw hashing
+- code doc
 
-- (code doc)
 - (code refactoring -> helper methods)
 - (postman tests)
 
 frontend:
 - migrate to date format
 - when registering, email and pw should be mandatory
+- when creating a jobitem, the most important things like title, description... should be mandatory
 - display input error messages/user feedback
