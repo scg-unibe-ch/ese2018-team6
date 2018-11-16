@@ -18,18 +18,7 @@ router.post('/:id/:token', async (req: Request, res: Response) => {
       const instance = new JobItem();
       instance.fromSimplification(req.body);
       let today = new Date();
-      let dd = today.getDate();
-      let mm = today.getMonth() + 1; //January is 0!
-      let year = today.getFullYear();
-      let day;
-      let month;
-      if (dd < 10)
-        day = '0' + dd;
-      else day = dd;
-      if (mm < 10)
-        month = '0' + mm;
-      else month = mm;
-      instance.datePosted = day + '.' + month + '.' + year;
+      instance.datePosted = today.getTime();
       // @ts-ignore
       instance.accepted = null; // should not be decided by client
       instance.messageFromAdmin = ''; // should not be decided by client
@@ -62,6 +51,64 @@ router.get('/search/:term', async (req: Request, res: Response) => {
   res.send(instances.map(e => e.toSimplification()));
 });
 
+router.post('/filter', async (req: Request, res: Response) => {
+  const Op = Sequelize.Op;
+
+  if(req.body.filterList && req.body.filterList.constructor === Array && req.body.filterList.length > 0) {
+    let filterArray = []; //stores a list with conditions, which then are used as options for the SQL request
+    for(let i = 0; i < req.body.filterList.length; i++) { //loop through every filter object
+      let filterObject = req.body.filterList[i];
+      switch (filterObject.filter) {
+        case undefined:
+          res.statusCode = 400;
+          res.json({
+            'message': 'at least one filter object is invalid (missing filter property)'
+          });
+          break;
+        case "datePosted":
+          if(validateDateFilter(filterObject, res)){
+            filterArray.push({
+              datePosted: {[Op.between]: [filterObject.minDate, filterObject.maxDate]}
+            });
+          }
+          break;
+        default:
+          res.statusCode = 400;
+          res.json({
+            'message': 'at least one filter type is not accepted'
+          });
+      }
+    }
+
+    //now apply all these filter:
+    const instances = await JobItem.findAll({where: {
+        accepted: true,
+        [Op.and]: filterArray
+      }});
+    res.statusCode = 200;
+    res.send(instances.map(e => e.toSimplification()));
+
+  } else {
+    res.statusCode = 400;
+    res.json({
+      'message': 'please specify a filter list with at least filter object'
+    });
+  }
+});
+/*
+checks if the filterObject is a valid date filter. If not, aborts the request and returns Bad Request.
+ */
+function validateDateFilter(filterObject: any, res: any){
+  if(filterObject.minDate && filterObject.maxDate && !isNaN(filterObject.minDate) && !isNaN(filterObject.maxDate)){
+    return true;
+  } else {
+    res.statusCode = 400;
+    res.json({
+      'message': 'at least one filter is not valid (date filter)'
+    });
+    return false;
+  }
+}
 router.get('/', async (req: Request, res: Response) => {
   const instances = await JobItem.findAll({where: {accepted: true}});
   res.statusCode = 200;

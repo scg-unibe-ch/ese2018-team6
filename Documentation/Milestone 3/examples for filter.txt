@@ -1,0 +1,60 @@
+{
+	filterList:
+		[{
+			filter:"datePosted",
+			minDate: ms since 1970 (int),
+			maxDate: ms since 1970 (int)
+		},
+		{
+			filter:"startDate",
+			minDate: ms since 1970 (int),
+			maxDate: ms since 1970 (int)
+		},
+		{
+			filter:"endDate",
+			minDate: ms since 1970 (int),
+			maxDate: ms since 1970 (int)
+		},
+		{
+			filter:"validUntil",
+			minDate: ms since 1970 (int),
+			maxDate: ms since 1970 (int)
+		},
+		{
+			filter:"languages",
+			languages: ["lang1","lang2"]
+		},
+		{
+			filter:"postcode",
+			postcodes:["3018","3027"]
+		},
+		{
+			filter:"city",
+			cities:["City1","City2","City3"]
+		}
+		{
+			filter:"salaryType",
+			salaryType: int (see model/requests)
+		},
+		{
+			filter:"salaryAmount",
+			minSalary: int,
+			maxSalary: int
+		}]
+}
+
+
+//e.g:
+{
+	"filterList":[
+		{
+			"filter":"datePosted",
+			"minDate":10000,
+			"maxDate":21000
+		},
+		{
+			"filter":"validUntil",
+			"minDate":10000,
+			"maxDate":30000
+		}]
+}

@@ -157,7 +157,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"email\": {{uniqueemail}},\n\t\"password\": \" \"\n}"
+							"raw": "{\n\t\"email\": {{uniqueemail}},\n\t\"password\": \"123\"\n}"
 						},
 						"url": {
 							"raw": "http://localhost:3000/company",
@@ -501,7 +501,7 @@
 							"script": {
 								"id": "59a9c5ea-a602-4291-b88d-2c514941c92d",
 								"exec": [
-									"pm.globals.set(\"adminpassword\", \" \");"
+									"pm.globals.set(\"adminpassword\", \"123\");"
 								],
 								"type": "text/javascript"
 							}

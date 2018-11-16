@@ -14,16 +14,16 @@ export class JobItem extends Model<JobItem> {
   description!: string;
 
   @Column
-  datePosted!: string;
+  datePosted!: number;
 
   @Column
-  startDate!: string;
+  startDate!: number;
 
   @Column
-  endDate!: string;
+  endDate!: number;
 
   @Column
-  validUntil!: string;
+  validUntil!: number;
 
   @Column
   workloadMin!: number;
