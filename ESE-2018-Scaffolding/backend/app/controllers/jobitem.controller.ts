@@ -17,8 +17,6 @@ router.post('/:id/:token', async (req: Request, res: Response) => {
     if (checkToken(user, res, token) && user !== null) {
       const instance = new JobItem();
       instance.fromSimplification(req.body);
-      let today = new Date();
-      instance.datePosted = today.getTime();
       // @ts-ignore
       instance.accepted = null; // should not be decided by client
       instance.messageFromAdmin = ''; // should not be decided by client
@@ -46,14 +44,17 @@ router.get('/search/:term', async (req: Request, res: Response) => {
         {city: {[Op.like]: '%'+term+'%'}},
         {street: {[Op.like]: '%'+term+'%'}}
       ]
-  }});
+    },
+    order: [
+      ['datePosted', 'DESC'],
+    ]
+  });
   res.statusCode = 200;
   res.send(instances.map(e => e.toSimplification()));
 });
 
 router.post('/filter', async (req: Request, res: Response) => {
   const Op = Sequelize.Op;
-
   if(req.body.filterList && req.body.filterList.constructor === Array && req.body.filterList.length > 0) {
     let filterArray = []; //stores a list with conditions, which then are used as options for the SQL request
     for(let i = 0; i < req.body.filterList.length; i++) { //loop through every filter object
@@ -79,12 +80,15 @@ router.post('/filter', async (req: Request, res: Response) => {
           });
       }
     }
-
     //now apply all these filter:
     const instances = await JobItem.findAll({where: {
         accepted: true,
         [Op.and]: filterArray
-      }});
+      },
+      order: [
+        ['datePosted', 'DESC'],
+      ]
+    });
     res.statusCode = 200;
     res.send(instances.map(e => e.toSimplification()));
 
@@ -110,7 +114,13 @@ function validateDateFilter(filterObject: any, res: any){
   }
 }
 router.get('/', async (req: Request, res: Response) => {
-  const instances = await JobItem.findAll({where: {accepted: true}});
+  const instances = await JobItem.findAll(    {
+    where:
+      {accepted: true},
+    order: [
+      ['datePosted', 'DESC'],
+    ]
+  });
   res.statusCode = 200;
   res.send(instances.map(e => e.toSimplification()));
 });

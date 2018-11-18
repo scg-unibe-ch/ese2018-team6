@@ -11,3 +11,12 @@ frontend:
 - when registering, email and pw should be mandatory
 - when creating a jobitem, the most important things like title, description... should be mandatory
 - display input error messages/user feedback
+
+all:
+- Project README
+- Some sort of project documentation: SRS, backlog, sprint schedule
+- Biweekly report about biggest challenges and risks, and learning outcomes
+- Git tags for milestones
+- Deployment script/manual
+- Final presentation
+- Final software
