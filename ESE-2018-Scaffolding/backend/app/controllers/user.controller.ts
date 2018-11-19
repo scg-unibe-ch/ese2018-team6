@@ -17,7 +17,7 @@ router.post('/token', async (req: Request, res: Response) => {
       const crypto = require('crypto');
       const token = crypto.randomBytes(64).toString('hex');
       user.token = token;
-      user.tokenExpirationDate = Date.now() + 1080000000; // valid for 5 hours = 1080000000 milliseconds
+      user.tokenExpirationDate = Date.now() + 18000000; // valid for 5 hours = 18000000 milliseconds
       await user.save();
       let isAdmin;
       if (await Admin.findOne({ where: {userId: user.id}}) !== null)
