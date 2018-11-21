@@ -1,8 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {Company} from '../company.model';
 import {Job} from '../job.model';
-import {HttpClient} from '@angular/common/http';
+import {RequestService} from '../request.service';
+import {FormatService} from '../format.service';
 import {Router} from '@angular/router';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-admin',
@@ -11,141 +13,159 @@ import {Router} from '@angular/router';
 })
 export class AdminComponent implements OnInit {
 
-  userId: string;
-  userToken: string;
   userApplications: Company[] = [];
   jobSubmissions: Job[] = [];
 
-  constructor(private httpClient: HttpClient, private router: Router) { }
+  constructor(
+    private format: FormatService,
+    private request: RequestService,
+    private toastr: ToastrService,
+    private router: Router,
+  ) { }
 
+  /**
+   *
+   */
   ngOnInit() {
-    this.checkIfAdmin();
-    this.onLoadingUserApplications();
-    this.onLoadingJobSubmissions();
+    this.request.checkIfAdmin();
+    this.getUserApplications();
+    this.getJobSubmissions();
   }
 
-  onLoadingUserApplications() {
-    this.getLocalStorage();
-    this.httpClient.get('http://localhost:3000/admin/unverifiedCompanies/' + this.userId + '/' + this.userToken)
-      .subscribe(
-        (instances: any) => {
-          this.userApplications = instances.map((instance) => new Company(
-            instance.userId,
-            instance.companyName,
-            instance.companyLogoURL,
-            instance.companyStreet,
-            instance.companyHouseNumber,
-            instance.companyPostcode,
-            instance.companyCity,
-            instance.contactName,
-            instance.contactEmail,
-            instance.contactPhone,
-            instance.companyWebsite,
-            instance.companyDescription,
-            instance.userId,
-            '',
-            instance.verified
-          ))
+  /**
+   *
+   */
+  getUserApplications() {
+    this.request.userApplicationFetching().subscribe(
+      (response: any) => {
+        this.userApplications = response.map((instance) => new Company(
+          instance.userId,
+          instance.companyName,
+          instance.companyLogoURL,
+          instance.companyStreet,
+          instance.companyHouseNumber,
+          instance.companyPostcode,
+          instance.companyCity,
+          instance.contactName,
+          instance.contactEmail,
+          instance.contactPhone,
+          instance.companyWebsite,
+          instance.companyDescription,
+          instance.userId,
+          '',
+          instance.verified
+        ))
+      },
+      err => {
+        if(err.error.message == 'Not authorized') {
+          this.toastr.error('You are not an admin', 'Access denied');
+          this.router.navigate(['']).then();
         }
-      )
-  }
-
-  onLoadingJobSubmissions() {
-    this.getLocalStorage();
-    this.httpClient.get('http://localhost:3000/admin/unacceptedJobItems/' + this.userId + '/' + this.userToken)
-      .subscribe(
-        (instances: any) => {
-          this.jobSubmissions = instances.map((instance) => new Job(
-            instance.id,
-            instance.title,
-            instance.description,
-            instance.skills,
-            instance.datePosted,
-            instance.startDate,
-            instance.endDate,
-            instance.validUntil,
-            instance.workloadMin,
-            instance.workloadMax,
-            instance.firstLanguage,
-            instance.secondLanguage,
-            instance.street,
-            instance.houseNumber,
-            instance.postcode,
-            instance.city,
-            instance.salaryType,
-            instance.salaryAmount,
-            instance.companyId,
-            '',
-            instance.accepted
-          ))
+        if(err.error.message == 'Wrong Token') {
+          this.toastr.error('Wrong Token', 'Access denied');
+          this.router.navigate(['']).then();
         }
-      )
+      }
+    );
   }
 
+  /**
+   *
+   *
+   * @param {number} userId
+   */
   approveUserApplication(userId: number) {
     if(confirm('Are you sure you want to approve this user?')){
-      this.getLocalStorage();
-      this.httpClient.put('http://localhost:3000/admin/verify/' + userId + '/' + this.userId + '/' + this.userToken, {
-        'verify': true
-      }).subscribe();
-      this.updateListings(this.userApplications, userId);
+      this.request.userApplicationApproved(userId);
+      AdminComponent.updateListings(this.userApplications, userId);
     }
   }
 
+  /**
+   *
+   *
+   * @param {number} userId
+   */
   denyUserApplication(userId: number) {
     let adminMessage = prompt('Reasons why the user application is denied:', '');
-    if (adminMessage == null || adminMessage == '') {
+    if (this.format.isEmpty(adminMessage)) {
     } else {
-      this.getLocalStorage();
-      this.httpClient.put('http://localhost:3000/admin/verify/' + userId + '/' + this.userId + '/' + this.userToken, {
-        'verify': false,
-        'message': adminMessage
-      }).subscribe();
-      this.updateListings(this.userApplications, userId);
+      this.request.userApplicationDenied(userId, adminMessage);
+      AdminComponent.updateListings(this.userApplications, userId);
     }
   }
 
+  /**
+   *
+   */
+  getJobSubmissions() {
+    this.request.jobSubmissionFetching().subscribe(
+      (instances: any) => {
+        this.jobSubmissions = instances.map((instance) => new Job(
+          instance.id,
+          instance.title,
+          instance.description,
+          instance.skills,
+          instance.datePosted,
+          instance.startDate,
+          instance.endDate,
+          instance.validUntil,
+          instance.workloadMin,
+          instance.workloadMax,
+          instance.firstLanguage,
+          instance.secondLanguage,
+          instance.street,
+          instance.houseNumber,
+          instance.postcode,
+          instance.city,
+          instance.salaryType,
+          instance.salaryAmount,
+          instance.companyId,
+          '',
+          instance.accepted
+        ))
+      }
+    );
+  }
+
+  /**
+   *
+   *
+   * @param {number} jobId
+   */
   approveJobSubmission(jobId: number) {
     if(confirm('Are you sure you want to approve this job posting?')){
-      this.getLocalStorage();
-      this.httpClient.put('http://localhost:3000/admin/accept/' + jobId + '/' + this.userId + '/' + this.userToken, {
-        'accept': true
-      }).subscribe();
-      this.updateListings(this.jobSubmissions, jobId);
+      this.request.jobSubmissionApproved(jobId);
+      AdminComponent.updateListings(this.jobSubmissions, jobId);
     }
   }
 
+  /**
+   *
+   *
+   *  @param {number} jobId
+   */
   denyJobSubmission(jobId: number) {
     let adminMessage = prompt('Reasons why the job submission is denied:', '');
-    if(adminMessage == null || adminMessage == ''){
+    if(this.format.isEmpty(adminMessage)){
     } else {
-      this.getLocalStorage();
-      this.httpClient.put('http://localhost:3000/admin/accept/' + jobId + '/' + this.userId + '/' + this.userToken, {
-        'accept': false,
-        'message': adminMessage
-      }).subscribe();
-      this.updateListings(this.jobSubmissions, jobId);
+      this.request.jobSubmissionDenied(jobId, adminMessage);
+      AdminComponent.updateListings(this.jobSubmissions, jobId);
     }
   }
 
-  updateListings(array, idToDelete){
+  /**
+   *
+   *
+   * @param array
+   * @param idToDelete
+   */
+  static updateListings(array, idToDelete){
     for(let i = 0; i < array.length; i++){
       if (array[i].id == idToDelete) {
         array = array.splice(i, 1);
         break;
       }
-    }
-  }
-
-  getLocalStorage() {
-    this.userId = localStorage.getItem('user-id');
-    this.userToken = localStorage.getItem('user-token');
-  }
-
-  checkIfAdmin() {
-    let userType: string = localStorage.getItem('isAdmin');
-    if(userType != 'true'){
-      this.router.navigate(['']);
     }
   }
 }

@@ -3,130 +3,174 @@
 
 <form class="form-horizontal">
 
-  <!-- Job Details -->
+  <!-- JOB DETAILS -->
   <div class="form-group">
     <div class="col-sm-offset-3 col-sm-9">
       <h5>Job Details</h5>
     </div>
   </div>
 
-  <div class="form-group">
+  <!-- Title -->
+  <div class="form-group" id="title">
     <label class="col-sm-3 control-label">Title</label>
     <div class="col-sm-9">
       <input class="form-control" placeholder="Title" name="title" [(ngModel)]="jobData.title">
+      <div class="alert alert-danger" *ngIf="errorMessage.titleEmpty === true">
+        Please enter Title
+      </div>
     </div>
   </div>
 
-  <div class="form-group">
+  <!-- Description -->
+  <div class="form-group" id="description">
     <label for="desc" class="col-sm-3 control-label">Description</label>
     <div class="col-sm-9">
       <textarea id="desc" rows="3" class="form-control" placeholder="Description" name="description" [(ngModel)]="jobData.description"></textarea>
+      <div class="alert alert-danger" *ngIf="errorMessage.descriptionEmpty === true">
+        Please enter Description
+      </div>
     </div>
   </div>
 
-  <div class="form-group">
+  <!-- Workload (Min/Max) -->
+  <div class="form-group" id="workload">
     <label class="col-sm-3 control-label">Workload</label>
     <div class="col-sm-4">
-      <div class="input-group">
+      <div class="input-group" id="workloadMin">
         <input type="text" class="form-control" placeholder="Min" name="workloadMin" [(ngModel)]="jobData.workloadMin">
         <div class="input-group-addon">%</div>
       </div>
     </div>
     <div class="col-sm-offset-1 col-sm-4">
-      <div class="input-group">
+      <div class="input-group" id="workloadMax">
         <input type="text" class="form-control" placeholder="Max" name="workloadMax" [(ngModel)]="jobData.workloadMax">
         <div class="input-group-addon">%</div>
       </div>
     </div>
   </div>
 
-  <!-- Requirements -->
+  <!-- REQUIREMENTS -->
   <div class="form-group">
     <div class="col-sm-offset-3 col-sm-9">
       <h5>Requirements</h5>
     </div>
   </div>
 
-  <div class="form-group">
-    <label class="col-sm-3 control-label">Required Skills</label>
+  <!-- Skills -->
+  <div class="form-group" id="skills">
+    <label class="col-sm-3 control-label">Skills</label>
     <div class="col-sm-9">
       <input class="form-control" placeholder="Required Skills" name="skills" [(ngModel)]="jobData.skills">
+      <div class="alert alert-danger" *ngIf="errorMessage.skillsEmpty === true">
+        Please enter Skills
+      </div>
     </div>
   </div>
 
-  <div class="form-group">
+  <!-- Languages (First/Second) -->
+  <div class="form-group" id="language">
     <label class="col-sm-3 control-label">Languages</label>
-    <div class="col-sm-4">
+    <div class="col-sm-4" id="firstLanguage">
       <input class="form-control" placeholder="First Language" name="firstLanguage" [(ngModel)]="jobData.firstLanguage">
     </div>
-    <div class="col-sm-offset-1 col-sm-4">
+    <div class="col-sm-offset-1 col-sm-4" id="secondLanguage">
       <input class="form-control" placeholder="Second Language" name="secondLanguage" [(ngModel)]="jobData.secondLanguage">
     </div>
   </div>
 
-  <!-- Dates -->
+  <!-- DATES -->
   <div class="form-group">
     <div class="col-sm-offset-3 col-sm-9">
       <h5>Dates</h5>
     </div>
   </div>
 
-  <div class="form-group">
+  <!-- Start Date -->
+  <div class="form-group" id="startDate">
     <label class="col-sm-3 control-label">Start Date</label>
     <div class="col-sm-9">
       <input class="form-control" placeholder="dd.mm.yyyy" name="startDate" [(ngModel)]="jobData.startDate">
     </div>
   </div>
 
-  <div class="form-group">
+  <!-- End Date -->
+  <div class="form-group" id="endDate">
     <label class="col-sm-3 control-label">End Date</label>
     <div class="col-sm-9">
       <input class="form-control" placeholder="dd.mm.yyyy" name="endDate" [(ngModel)]="jobData.endDate">
     </div>
   </div>
 
-  <div class="form-group">
+  <!-- Offer Valid Until -->
+  <div class="form-group" id="validUntil">
     <label class="col-sm-3 control-label">Offer Valid Until</label>
     <div class="col-sm-9">
       <input class="form-control" placeholder="dd.mm.yyyy" name="offerValidUntil" [(ngModel)]="jobData.validUntil">
     </div>
   </div>
 
-  <!-- Work Location -->
+  <!-- WORK LOCATION -->
   <div class="form-group">
     <div class="col-sm-offset-3 col-sm-9">
       <h5>Work Location</h5>
     </div>
   </div>
 
+  <!-- Street and House No. -->
   <div class="form-group">
-    <label class="col-sm-3 control-label">Street / House No.</label>
-    <div class="col-sm-7">
-      <input class="form-control" placeholder="Street" name="street" [(ngModel)]="jobData.street">
+    <div id="streetHouse">
+      <label class="col-sm-3 control-label">Street / House No.</label>
     </div>
-    <div class="col-sm-2">
+    <div class="col-sm-7" id="street">
+      <input class="form-control" placeholder="Street" name="street" [(ngModel)]="jobData.street">
+      <div class="alert alert-danger" *ngIf="errorMessage.streetEmpty === true">
+        Please enter Street
+      </div>
+    </div>
+    <div class="col-sm-2" id="house">
       <input class="form-control" placeholder="House No." name="houseNumber" [(ngModel)]="jobData.houseNumber">
     </div>
   </div>
 
+  <!-- Postcode and Place -->
   <div class="form-group">
-    <label class="col-sm-3 control-label">ZIP Code / Place</label>
-    <div class="col-sm-2">
-      <input class="form-control" placeholder="ZIP Code" name="zipCode" [(ngModel)]="jobData.postcode">
+    <div  id="postcodeCity">
+      <label class="col-sm-3 control-label">ZIP Code / Place</label>
     </div>
-    <div class="col-sm-7">
+    <div class="col-sm-2" id="postcode">
+      <input class="form-control" placeholder="ZIP Code" name="zipCode" [(ngModel)]="jobData.postcode">
+      <div class="alert alert-danger" *ngIf="errorMessage.postcode === true">
+        <div *ngIf="errorMessage.postcodeEmpty === true">
+          Please enter ZIP Code
+        </div>
+        <div *ngIf="errorMessage.postcodeNumber === true && errorMessage.postcodeLow != true && errorMessage.postcodeHigh != true">
+          Must be number
+        </div>
+        <div *ngIf="errorMessage.postcodeLow === true && errorMessage.postcodeEmpty != true">
+          Must be >= 1000
+        </div>
+        <div *ngIf="errorMessage.postcodeHigh === true">
+          Must be <= 9999
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-7" id="city">
       <input class="form-control" placeholder="Place" name="place" [(ngModel)]="jobData.city">
+      <div class="alert alert-danger" *ngIf="errorMessage.cityEmpty === true">
+        Please enter City
+      </div>
     </div>
   </div>
 
-  <!-- Salary -->
+  <!-- SALARY -->
   <div class="form-group">
     <div class="col-sm-offset-3 col-sm-9">
       <h5>Salary</h5>
     </div>
   </div>
 
-  <div class="form-group">
+  <!-- Type -->
+  <div class="form-group" id="salaryType">
     <label class="col-sm-3 control-label">Type</label>
     <div class="col-sm-9">
       <select class="form-control" name="salaryType" [(ngModel)]="jobData.salaryType">
@@ -137,7 +181,8 @@
     </div>
   </div>
 
-  <div class="form-group">
+  <!-- Amount -->
+  <div class="form-group" id="salaryAmount">
     <label class="col-sm-3 control-label">Amount</label>
     <div class="col-sm-9">
       <div class="input-group">
@@ -147,7 +192,7 @@
     </div>
   </div>
 
-  <!-- Job Create - Submit Button -->
+  <!-- 'Submit' Button -->
   <div class="form-group">
     <div class="col-sm-offset-3 col-sm-9">
       <button type="submit" class="btn btn-success" (click)="onCreate()">Submit</button>

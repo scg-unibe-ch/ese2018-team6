@@ -1,8 +1,9 @@
 <nav class="navbar navbar-default navbar-inverse">
   <div class="container-fluid">
 
+    <!-- Header Brand - MIB Logo and Mobile Menu Hamburger -->
     <div class="navbar-header">
-      <a routerLink="/jobs" class="navbar-brand">Job Postings</a>
+      <a routerLink="/jobs" class="navbar-brand"><img src="../../assets/mib_banner.png" alt="Job Postings"></a>
       <span class="pull-right">
         <button type="button" class="btn btn-dark navbar-toggle-btn" (click)="toggleMenu()">
           <span class="glyphicon glyphicon-menu-hamburger"></span>
@@ -10,20 +11,37 @@
       </span>
     </div>
 
+    <!-- Toggable header section for mobile devices -->
     <div id="navbar-toggable" class="navbar-default navbar-inverse navbar-hidden">
+
+      <!-- Header Navigation - Jobs, Contact and About Us -->
       <ul class="nav navbar-nav">
         <li><a routerLink="/jobs" routerLinkActive="navbar-active">Jobs</a></li>
         <li><a routerLink="/contact" routerLinkActive="navbar-active">Contact</a></li>
         <li><a routerLink="/about" routerLinkActive="navbar-active">About Us</a></li>
       </ul>
 
-      <div class="nav navbar-nav navbar-right">
-        <div *ngIf="!isLoggedIn()">
-          <button type="button" class="btn btn-primary" routerLink="/login">Sign in</button>
+      <!-- Header Buttons -->
+      <div class="nav navbar-right">
+
+        <!-- Logged Out Users: Sign In and Register-->
+        <div *ngIf="!this.request.checkIfUser()">
+          <button type="button" class="btn btn-primary" routerLink="/login">Sign In</button>
           <button type="button" class="btn btn-success" routerLink="/register">Register</button>
         </div>
-        <div *ngIf="isLoggedIn()">
-          <button type="button" class="btn btn-default" routerLink="/my-account">My Account</button>
+
+        <!-- Logged In Users: Admin (if Admin), My Account Dropdown and Sign Out -->
+        <div *ngIf="this.request.checkIfUser()">
+          <button *ngIf="this.request.checkIfAdmin()" type="button" class="btn btn-default" routerLink="/admin">Admin</button>
+          <div *ngIf="!this.request.checkIfAdmin()" class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              My Account <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" data-toggle="dropdown" aria-labelledby="dropdownMenu">
+              <li><a routerLink="/my-account/settings">Account Settings</a></li>
+              <li><a routerLink="/my-account/job-postings">My Job Postings</a></li>
+            </ul>
+          </div>
           <button type="button" class="btn btn-danger" (click)="onSignOut()">Sign Out</button>
         </div>
       </div>

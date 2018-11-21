@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Job} from '../job.model';
-import {HttpClient} from '@angular/common/http';
-import {Router} from '@angular/router';
+import {RequestService} from '../request.service';
+import {FormatService} from '../format.service';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-job-create',
@@ -10,8 +11,6 @@ import {Router} from '@angular/router';
 })
 export class JobCreateComponent implements OnInit {
 
-  userId: string;
-  userToken: string;
   jobData: Job = new Job(
     null,
     null,
@@ -35,58 +34,126 @@ export class JobCreateComponent implements OnInit {
     null,
     null
   );
+  errorMessage: {[k: string]: any} = {};
 
-  constructor(private httpClient: HttpClient, private router: Router) { }
+  constructor(
+    private request: RequestService,
+    private toastr: ToastrService,
+    private format: FormatService
+  ) { }
 
+  /**
+   *  Upon loading, checks if current user is logged in.
+   *  If not he will be redirected to home page.
+   */
   ngOnInit() {
-    this.checkIfLoggedIn();
+    this.request.checkIfUser();
   }
 
+  /**
+   *  Creates a new job posting (to be reviewed by admin) from data entered in form fields.
+   *  Requires userId and userToken as only verified users can submit job postings.
+   *  Entered data must be valid or the job submission won't be sent.
+   */
   onCreate() {
+    this.errorMessage = {};
     if(this.isDataValid()){
-      this.getLocalStorage();
-      this.httpClient.post('http://localhost:3000/jobitem/' + this.userId + '/' + this.userToken, {
-        'title': this.jobData.title,
-        'description': this.jobData.description,
-        'startDate': this.jobData.startDate,
-        'endDate': this.jobData.endDate,
-        'validUntil': this.jobData.validUntil,
-        'workloadMin': this.jobData.workloadMin,
-        'workloadMax': this.jobData.workloadMax,
-        'firstLanguage': this.jobData.firstLanguage,
-        'secondLanguage': this.jobData.secondLanguage,
-        'street': this.jobData.street,
-        'houseNumber': this.jobData.houseNumber,
-        'postcode': this.jobData.postcode,
-        'city': this.jobData.city,
-        'salaryType': this.jobData.salaryType,
-        'salaryAmount': this.jobData.salaryAmount,
-        'skills': this.jobData.skills
-      }).subscribe(
-        res => {
-          this.router.navigate(['/my-account']);
-        },
-        err => {
-          // TODO - Give useful feedback on failed job creation
-          console.log(err.error.message);
-        }
-      );
+      this.request.jobCreate(this.jobData);
+    } else {
+      this.toastr.error('Invalid Input', 'Job creation failed');
     }
   }
 
+  /**
+   *  Checks the entered job data before sending to backend.
+   *  Validation requires title, description, skill, full address.
+   *  If a value fails, user receives accurate feedback.
+   *  Returns true if valid; false otherwise.
+   *
+   *  @returns {boolean}              True if valid; false otherwise
+   */
   isDataValid() {
-    // TODO - Check user inputs (title required; date format; workload & salary is number etc.)
-    return true;
-  }
-
-  getLocalStorage() {
-    this.userId = localStorage.getItem('user-id');
-    this.userToken = localStorage.getItem('user-token');
-  }
-
-  checkIfLoggedIn() {
-    if(!localStorage.getItem('user-token')){
-      this.router.navigate(['']);
+    // Resets styling of all form fields
+    let elements = ['title', 'description', 'skills', 'streetHouse', 'street', 'postcodeCity', 'postcode', 'city'];
+    for(let i=0; i < elements.length; i++){
+      this.format.removeError(elements[i]);
     }
+    let errorFree = true;
+
+    // Title cannot be empty
+    if(this.format.isEmpty(this.jobData.title)){
+      this.format.addError("title");
+      this.errorMessage.titleEmpty = true;
+      errorFree = false;
+    }
+
+    // Description cannot be empty
+    if(this.format.isEmpty(this.jobData.description)){
+      this.format.addError("description");
+      this.errorMessage.descriptionEmpty = true;
+      errorFree = false;
+    }
+
+    // Skills cannot be empty
+    if(this.format.isEmpty(this.jobData.skills)){
+      this.format.addError("skills");
+      this.errorMessage.skillsEmpty = true;
+      errorFree = false;
+    }
+
+    // Street cannot be empty
+    if(this.format.isEmpty(this.jobData.street)){
+      this.format.addError("streetHouse");
+      this.format.addError("street");
+      this.errorMessage.streetEmpty = true;
+      errorFree = false;
+    }
+
+    // Postcode cannot be empty
+    if(this.jobData.postcode === null || this.format.isEmpty(this.jobData.postcode.toString())){
+      this.format.addError("postcodeCity");
+      this.format.addError("postcode");
+      this.errorMessage.postcode = true;
+      this.errorMessage.postcodeEmpty = true;
+      errorFree = false;
+    }
+
+    // Postcode must be number between 1000 and 9999
+    if(!(this.jobData.postcode>=1000 && this.jobData.postcode <= 9999)){
+      this.format.addError("postcodeCity");
+      this.format.addError("postcode");
+      this.errorMessage.postcode = true;
+      this.errorMessage.postcodeNumber = true;
+      errorFree = false;
+    }
+
+    // Postcode must be >= 1000
+    if(this.jobData.postcode < 1000){
+      this.format.addError("postcodeCity");
+      this.format.addError("postcode");
+      this.errorMessage.postcode = true;
+      this.errorMessage.postcodeLow = true;
+      errorFree = false;
+    }
+
+    // Postcode must be <= 10'000
+    if(this.jobData.postcode > 9999){
+      this.format.addError("postcodeCity");
+      this.format.addError("postcode");
+      this.errorMessage.postcode = true;
+      this.errorMessage.postcodeHigh = true;
+      errorFree = false;
+    }
+
+    // City cannot be empty
+    if(this.format.isEmpty(this.jobData.city)){
+      this.format.addError("postcodeCity");
+      this.format.addError("city");
+      this.errorMessage.cityEmpty = true;
+      errorFree = false;
+    }
+
+    // Return validation result
+    return errorFree;
   }
 }

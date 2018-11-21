@@ -1,58 +1,69 @@
-<h3>{{ jobData.title }}</h3>
+<!-- Title -->
+<h3>{{ format.simpleText(jobData.title) }}</h3>
 <hr>
-
-<!-- TODO - Add conditional formatting of cells depending on its content -->
 
 <!-- Job Details -->
 <div class="col-sm-8">
-  <small>{{ jobData.datePosted }}&nbsp;&nbsp;|&nbsp;&nbsp;<strong>{{ jobData.city }}</strong>&nbsp;&nbsp;|&nbsp;&nbsp;{{ jobData.workloadMin }}-{{ jobData.workloadMax }}%</small>
 
+  <!-- General / Date Posted, City and Workload -->
+  <small>
+    {{ format.simpleDate(jobData.datePosted) }}
+     |
+    <strong>{{ format.simpleText(jobData.city) }}</strong>
+     |
+    {{ format.workload(jobData.workloadMin, jobData.workloadMax) }}
+  </small>
+
+  <!-- Description -->
   <h4>Description</h4>
-  <p>{{ jobData.description }}</p>
+  <p>{{ format.simpleText(jobData.description) }}</p>
 
+  <!-- Requirements / Skills and Languages -->
   <h4>Requirements</h4>
   <table class="table">
     <tbody>
     <tr>
-      <th scope="row" style="width: 40%;">Required Skills</th>
-      <td style="width: 60%;">{{ jobData.skills }}</td>
+      <th scope="row" style="width: 40%;">Skills</th>
+      <td style="width: 60%;">{{ format.simpleText(jobData.skills) }}</td>
     </tr>
     <tr>
       <th scope="row">Languages</th>
-      <td>{{ jobData.firstLanguage }}, {{ jobData.secondLanguage }}</td>
+      <td>{{ format.languages(jobData.firstLanguage, jobData.secondLanguage) }}</td>
     </tr>
     </tbody>
   </table>
 
+  <!-- Dates / Start Date and End Date -->
   <h4>Dates</h4>
   <table class="table">
     <tbody>
     <tr>
       <th scope="row" style="width: 40%;">Start Date</th>
-      <td style="width: 60%;">{{ jobData.startDate }}</td>
+      <td style="width: 60%;">{{ format.startDate(jobData.startDate) }}</td>
     </tr>
     <tr>
       <th scope="row">End Date</th>
-      <td>{{ jobData.endDate }}</td>
+      <td>{{ format.endDate(jobData.endDate) }}</td>
     </tr>
     </tbody>
   </table>
 
+  <!-- Work Location / Street, House No., Postcode and City -->
   <h4>Work Location</h4>
   <table class="table">
     <tbody>
     <tr>
       <th scope="row" style="width: 40%;">Street</th>
-      <td style="width: 60%;">{{ jobData.street }} {{ jobData.houseNumber }}</td>
+      <td style="width: 60%;">{{ format.street(jobData.street, jobData.houseNumber) }}</td>
     </tr>
     <tr>
       <th scope="row">ZIP Code / Place</th>
-      <td>{{ jobData.postcode }} {{ jobData.city }}</td>
+      <td>{{ format.city(jobData.postcode, jobData.city) }}</td>
     </tr>
     </tbody>
   </table>
 
-
+  <!-- Salary / Type and Amount -->
   <h4>Salary</h4>
   <table class="table">
     <tr>
@@ -66,45 +77,53 @@
   </table>
 </div>
 
-
 <!-- Employer Details -->
 <div class="col-sm-4 employer-box">
 
   <h4>About the Employer:</h4>
   <hr>
 
+  <!-- Logo -->
   <img src="{{ format.logo(companyData.logo) }}">
 
+  <!-- Company Name and Status Label (Green: Verified; Red: Unverified) -->
   <p>
     <strong>Company</strong>
     <span class="label label-success pull-right" *ngIf="companyData.verified == true">Verified</span>
     <span class="label label-danger pull-right" *ngIf="companyData.verified == false">Unverified</span><br>
-    {{ format.simpletext(companyData.name) }}
+    {{ format.simpleText(companyData.name) }}
   </p>
+
+  <!-- Description -->
   <p>
     <strong>Description</strong><br>
-    {{ format.simpletext(companyData.description) }}
+    {{ format.simpleText(companyData.description) }}
   </p>
+
+  <!-- Address / Name, Street, House No., Postcode and City -->
   <p>
     <strong>Address</strong><br>
-    {{ format.simpletext(companyData.name) }}<br>
+    {{ format.simpleText(companyData.name) }}<br>
     {{ format.street(companyData.street, companyData.houseNumber) }}<br>
     {{ format.city(companyData.postcode, companyData.city) }}
   </p>
+
+  <!-- Contact Person -->
   <p>
     <strong>Contact Person</strong><br>
-    {{ format.simpletext(companyData.contactName) }}<br>
+    {{ format.simpleText(companyData.contactName) }}<br>
   </p>
 
+  <!-- Contact Details / Phone, E-Mail and Website -->
   <table>
     <tbody>
     <tr>
       <td style="width: 25%">Phone:</td>
-      <td>{{ format.simpletext(companyData.contactPhone) }}</td>
+      <td>{{ format.simpleText(companyData.contactPhone) }}</td>
     </tr>
     <tr>
       <td>E-Mail:</td>
-      <td><a href="mailto:{{ companyData.contactEmail }}">{{ format.simpletext(companyData.contactEmail) }}</a></td>
+      <td><a href="mailto:{{ companyData.contactEmail }}">{{ format.simpleText(companyData.contactEmail) }}</a></td>
     </tr>
     <tr>
       <td>Website:</td>

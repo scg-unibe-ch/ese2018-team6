@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Job } from '../../job.model';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Job} from '../../job.model';
 import {FormatService} from '../../format.service';
 
 @Component({
@@ -7,7 +7,7 @@ import {FormatService} from '../../format.service';
   templateUrl: './job-submission.component.html',
   styleUrls: ['./job-submission.component.css']
 })
-export class JobSubmissionComponent implements OnInit {
+export class JobSubmissionComponent {
 
   @Input()
   jobSubmissionEntry: Job;
@@ -17,14 +17,20 @@ export class JobSubmissionComponent implements OnInit {
   @Output()
   jobSubmissionDenied = new EventEmitter<number>();
 
-  constructor(public format: FormatService) { }
+  constructor(
+    public format: FormatService
+  ) { }
 
-  ngOnInit() { }
-
+  /**
+   *  Emits an event to approve the job submission with the given jobId.
+   */
   onApprovedJobSubmission() {
     this.jobSubmissionApproved.emit(this.jobSubmissionEntry.id);
   }
 
+  /**
+   *  Emits an event to deny the job submission with the given jobId.
+   */
   onDeniedJobSubmission() {
     this.jobSubmissionDenied.emit(this.jobSubmissionEntry.id);
   }

@@ -1,34 +1,35 @@
 <table>
   <tr>
 
+    <!-- Job Posting Details - List of all details provided by the user -->
     <td>
       <p>
         <strong>Title</strong><br>
-        {{ format.simpletext(jobSubmissionEntry.title) }}
+        {{ format.simpleText(jobSubmissionEntry.title) }}
       </p>
       <p>
         <strong>Description</strong><br>
-        {{ format.simpletext(jobSubmissionEntry.description) }}
+        {{ format.simpleText(jobSubmissionEntry.description) }}
       </p>
       <p>
         <strong>Required Skills</strong><br>
-        {{ format.simpletext(jobSubmissionEntry.skills) }}
+        {{ format.simpleText(jobSubmissionEntry.skills) }}
       </p>
       <p>
         <strong>Date Posted</strong><br>
-        {{ format.dateProvisional(jobSubmissionEntry.datePosted) }} <!-- TODO -->
+        {{ format.simpleDate(jobSubmissionEntry.datePosted) }}
       </p>
       <p>
         <strong>Start Date</strong><br>
-        {{ format.dateProvisional(jobSubmissionEntry.startDate) }} <!-- TODO -->
+        {{ format.startDate(jobSubmissionEntry.startDate) }}
       </p>
       <p>
         <strong>End Date</strong><br>
-        {{ format.dateProvisional(jobSubmissionEntry.endDate) }} <!-- TODO -->
+        {{ format.endDate(jobSubmissionEntry.endDate) }}
       </p>
       <p>
         <strong>Offer Valid Until</strong><br>
-        {{ format.dateProvisional(jobSubmissionEntry.validUntil) }} <!-- TODO -->
+        {{ format.simpleDate(jobSubmissionEntry.validUntil) }}
       </p>
       <p>
         <strong>Workload</strong><br>
@@ -36,7 +37,7 @@
       </p>
       <p>
         <strong>Languages</strong><br>
-        {{ format.language(jobSubmissionEntry.firstLanguage, jobSubmissionEntry.secondLanguage) }}
+        {{ format.languages(jobSubmissionEntry.firstLanguage, jobSubmissionEntry.secondLanguage) }}
       </p>
       <p>
         <strong>Street</strong><br>
@@ -56,6 +57,7 @@
       </p>
     </td>
 
+    <!-- Approve/Deny Button for Admin to evaluate Job Posting -->
     <td class="pull-right">
       <button type="button" class="btn btn-success" (click)="onApprovedJobSubmission()">
         <span class="glyphicon glyphicon-ok"></span>

@@ -1,5 +1,16 @@
 p {
+  padding-top: 20px;
   font-size: 16px;
   text-align: justify;
   line-height: 1.8em;
+}
+
+img {
+  max-width: 100%;
+  width: 370px;
+  display: block;
+  vertical-align: center;
+  padding: 15px;
+  margin: 5px auto 5px auto;
+  border: #dddddd solid 1px;
 }

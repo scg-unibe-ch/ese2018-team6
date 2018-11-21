@@ -1,17 +1,19 @@
-<a class="list-group-item list-group-item-action clearfix" [routerLink]="['/jobs/details/', jobData.id]">
+<a class="list-group-item list-group-item-action clearfix" [routerLink]="['/jobs/details/', jobData.id, jobData.companyId]">
   <table>
     <tbody>
     <tr>
 
+      <!-- Title, Description and Skills -->
       <td style="padding-right: 10px;">
-        <h4 class="list-group-item-heading">{{ format.simpletext(jobData.title) }}</h4>
-        <p class="list-group-item-text giveMeEllipsis">{{ format.simpletext(jobData.description) }}</p>
-        <small class="giveMeEllipsis"><em>Required Skills: </em>{{ format.simpletext(jobData.skills) }}</small>
+        <h4 class="list-group-item-heading giveMeEllipsis">{{ format.simpleText(jobData.title) }}</h4>
+        <p class="list-group-item-text giveMeEllipsis">{{ format.simpleText(jobData.description) }}</p>
+        <small class="giveMeEllipsis"><em>Required Skills: </em>{{ format.simpleText(jobData.skills) }}</small>
       </td>
 
+      <!-- Date Posted, Location and Workload -->
       <td class="text-right" style="width: 1%; white-space: nowrap;">
-        <small>{{ jobData.datePosted }}<br>  <!-- TODO -->
-          <strong>{{ jobData.city }}</strong><br> <!-- TODO -->
+        <small>{{ format.simpleDate(jobData.datePosted) }}<br>
+          <strong>{{ format.simpleText(jobData.city) }}</strong><br>
           {{ format.workload(jobData.workloadMin, jobData.workloadMax) }}
         </small>
       </td>

@@ -1,16 +1,19 @@
 p {
-  font-size: 16px;
-  text-align: justify;
+  padding-top: 20px;
+  font-size: 18px;
   line-height: 1.8em;
-}
-
-ul {
-  font-size: 20px;
-  line-height: 2em;
 }
 
 a {
   cursor: pointer;
+}
+
+span {
+  width: 30px !important;
+}
+
+.margin {
+  margin-right: 30px;
 }
 
 .glyphicon {

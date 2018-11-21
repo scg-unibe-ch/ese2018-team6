@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Job} from '../job.model';
-import {HttpClient} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
 import {Company} from '../company.model';
 import {FormatService} from '../format.service';
+import {RequestService} from '../request.service';
 
 @Component({
   selector: 'app-job-detail',
@@ -13,6 +13,7 @@ import {FormatService} from '../format.service';
 export class JobDetailComponent implements OnInit {
 
   jobId: number;
+  companyId: number;
   jobData: Job = new Job(
     null,
     null,
@@ -54,18 +55,28 @@ export class JobDetailComponent implements OnInit {
     null
   );
 
-  constructor(private activatedRoute: ActivatedRoute, private httpClient: HttpClient, public format: FormatService) { }
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private request: RequestService,
+    public format: FormatService
+  ) { }
 
+  /**
+   *  Upon loading the component, parses the jobId and companyId from the parameters in the URL.
+   *  Loads details for both job posting and corresponding company of the given IDs.
+   */
   ngOnInit() {
     this.jobId = parseInt(this.activatedRoute.snapshot.paramMap.get('id'));
-    this.onLoadingJob();
-    setTimeout(() => {
-      this.onLoadingUser();
-    }, 15);
+    this.companyId = parseInt(this.activatedRoute.snapshot.paramMap.get('company'));
+    this.loadJobDetails();
+    this.loadCompanyDetails();
   }
 
-  onLoadingJob() {
-    this.httpClient.get('http://localhost:3000/jobitem/' + this.jobId).subscribe(
+  /**
+   *  Loads details of the job posting with the given ID.
+   */
+  loadJobDetails() {
+    this.request.jobDetails(this.jobId).subscribe(
       (instance: any) => this.jobData = new Job(
         this.jobId,
         instance.title,
@@ -92,10 +103,13 @@ export class JobDetailComponent implements OnInit {
     )
   }
 
-  onLoadingUser() {
-    this.httpClient.get('http://localhost:3000/company/' + this.jobData.companyId).subscribe(
+  /**
+   *  Loads details of the company with the given ID.
+   */
+  loadCompanyDetails() {
+    this.request.companyDetails(this.companyId).subscribe(
       (instance: any) => this.companyData = new Company (
-        this.jobData.companyId,
+        this.companyId,
         instance.companyName,
         instance.companyLogoURL,
         instance.companyStreet,
@@ -110,6 +124,7 @@ export class JobDetailComponent implements OnInit {
         instance.userId,
         '',
         instance.verified
-      ));
+      )
+    )
   }
 }

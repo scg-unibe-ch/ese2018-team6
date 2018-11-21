@@ -3,31 +3,37 @@
     <tr>
 
       <td style="padding-right: 10px;">
-        <h4 class="list-group-item-heading">
-          <a [routerLink]="['/jobs/details/', myJobData.id]">{{ myJobData.title }}</a>
+
+        <!-- Title of Job Posting -->
+        <h4 class="list-group-item-heading giveMeEllipsis">
+          <a [routerLink]="['/jobs/details/', myJobData.id, myJobData.companyId]">{{ format.simpleText(myJobData.title) }}</a>
         </h4>
 
+        <!-- Status Label (Green: Approved; Yellow: In Review; Red: Denied), Date Posted, City and Workload -->
         <small>
           <span class="label label-success" *ngIf="myJobData.accepted == true">Approved</span>
           <span class="label label-warning" *ngIf="myJobData.accepted == null">In Review</span>
           <span class="label label-danger" *ngIf="myJobData.accepted == false">Denied</span>
-          {{ myJobData.datePosted }}
-          &nbsp;|&nbsp;
-          <strong>{{ myJobData.city }}</strong>
-          &nbsp;|&nbsp;
-          {{ myJobData.workloadMin }}-{{ myJobData.workloadMax }}%
+          {{ format.simpleDate(myJobData.datePosted) }}
+           |
+          <strong>{{ format.simpleText(myJobData.city) }}</strong>
+           |
+          {{ format.workload(myJobData.workloadMin, myJobData.workloadMax) }}
         </small>
 
-        <p class="list-group-item-text giveMeEllipsis">{{ myJobData.description }}</p>
-        <small class="text-muted"><em>Required Skills: </em>{{ myJobData.skills }}</small>
+        <!-- Description and Skills -->
+        <p class="list-group-item-text giveMeEllipsis">{{ format.simpleText(myJobData.description) }}</p>
+        <small class="text-muted giveMeEllipsis"><em>Required Skills: </em>{{ format.simpleText(myJobData.skills) }}</small>
 
+        <!-- Message from Admin (only if Job Posting was denied) -->
         <div class="alert alert-danger" *ngIf="myJobData.messageFromAdmin != '' && myJobData.accepted == false">
           <strong>Please fix the following:</strong><br>
-          {{ myJobData.messageFromAdmin }}
+          {{ format.simpleText(myJobData.messageFromAdmin) }}
         </div>
       </td>
 
-      <td class="text-right" style="width: 1%; white-space: nowrap;">
+      <!-- Edit/Delete Button for your Job Posting -->
+      <td class="text-right">
         <button type="button" class="btn btn-primary" (click)="onEditJobItem()">
           <span class="glyphicon glyphicon-edit"></span>
         </button>

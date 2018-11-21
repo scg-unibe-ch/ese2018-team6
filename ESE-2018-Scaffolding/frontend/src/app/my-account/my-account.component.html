@@ -1,222 +1,69 @@
-<div>
-  <h3>
-    My Account
-    <span class="pull-right"><button type="button" class="btn btn-danger" (click)="deleteAccount()">Delete Account</button></span>
-  </h3>
-  <hr>
-  <p><em>Your current account settings:</em></p>
+<h3>
+  My Job Postings
+  <span class="pull-right">
 
-  <form class="form-horizontal">
+    <!-- Buttons for changing job posting view and creating a new one -->
+    <button type="button" class="btn btn-group btn-default" (click)="changeSort()"><span class="glyphicon glyphicon-sort"></span></button>
+    <button type="button" class="btn btn-group btn-primary" routerLink="/jobs/create"><span class="glyphicon glyphicon-plus"></span></button>
+  </span>
+</h3>
+<hr>
 
-    <div class="form-group">
-      <label class="col-sm-3 control-label">E-Mail</label>
-      <div class="col-sm-9">
-        <input type="email" class="form-control" placeholder="E-Mail" name="email" [(ngModel)]="userData.email">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Password</label>
-      <div class="col-sm-9">
-        <input type="password" class="form-control" placeholder="Re-enter Password" name="password" [(ngModel)]="userData.password">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Confirm Password</label>
-      <div class="col-sm-9">
-        <input type="password" class="form-control" placeholder="Confirm Password" name="confirm password" [(ngModel)]="confirmPassword">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-sm-offset-3 col-sm-9">
-        <button type="submit" class="btn btn-primary" (click)="updateAccount()">Save Changes</button>
-      </div>
-    </div>
-
-  </form>
-
-  <hr>
-
-  <p><em>Your current company settings:</em></p>
-
-  <form class="form-horizontal">
-    <!-- Company - Company Details-->
-    <div class="form-group">
-      <div class="col-sm-offset-3 col-sm-9">
-        <h5>
-          Company Details
-          <span class="label label-success pull-right" *ngIf="companyData.verified == true">Verified</span>
-          <span class="label label-danger pull-right" *ngIf="companyData.verified == false">Unverified</span><br>
-        </h5>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Name</label>
-      <div class="col-sm-9">
-        <input class="form-control" placeholder="Name" name="name" [(ngModel)]="companyData.name">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="desc" class="col-sm-3 control-label">Description</label>
-      <div class="col-sm-9">
-        <textarea id="desc" rows="4" class="form-control" placeholder="Description" name="description" [(ngModel)]="companyData.description"></textarea>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Website</label>
-      <div class="col-sm-9">
-        <div class="input-group">
-          <div class="input-group-addon">www.</div>
-          <input type="text" class="form-control" placeholder="Website" name="website" [(ngModel)]="companyData.website">
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Logo</label>
-      <div class="col-sm-9">
-        <input class="form-control" placeholder="URL to image of company logo (preferably .png)" name="logo" [(ngModel)]="companyData.logo">
-      </div>
-    </div>
-
-    <!-- Company - Address -->
-    <div class="form-group">
-      <div class="col-sm-offset-3 col-sm-9">
-        <h5>Address</h5>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Street / House No.</label>
-      <div class="col-sm-7">
-        <input class="form-control" placeholder="Street" name="street" [(ngModel)]="companyData.street">
-      </div>
-      <div class="col-sm-2">
-        <input class="form-control" placeholder="House No." name="houseNumber" [(ngModel)]="companyData.houseNumber">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="col-sm-3 control-label">ZIP Code / Place</label>
-      <div class="col-sm-2">
-        <input class="form-control" placeholder="ZIP Code" name="zipCode" [(ngModel)]="companyData.postcode">
-      </div>
-      <div class="col-sm-7">
-        <input class="form-control" placeholder="Place" name="place" [(ngModel)]="companyData.city">
-      </div>
-    </div>
-
-    <!-- Company - Contact Person -->
-    <div class="form-group">
-      <div class="col-sm-offset-3 col-sm-9">
-        <h5>Contact Person</h5>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Name</label>
-      <div class="col-sm-9">
-        <input class="form-control" placeholder="Name" name="contactName" [(ngModel)]="companyData.contactName">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="col-sm-3 control-label">E-Mail</label>
-      <div class="col-sm-9">
-        <input class="form-control" placeholder="E-Mail" name="contactEmail" [(ngModel)]="companyData.contactEmail">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="col-sm-3 control-label">Phone</label>
-      <div class="col-sm-9">
-        <input class="form-control" placeholder="Phone" name="contactPhone" [(ngModel)]="companyData.contactPhone">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-sm-offset-3 col-sm-9">
-        <div class="alert alert-danger" *ngIf="companyData.messageFromAdmin != '' && companyData.verified == false">
-          <strong>Please fix the following to get verified:</strong><br>
-          {{ companyData.messageFromAdmin }}
-        </div>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-sm-offset-3 col-sm-9">
-        <button type="submit" class="btn btn-primary" (click)="updateCompany()">Save Changes</button>
-      </div>
-    </div>
-  </form>
+<!-- Display message if you don't have any job postings -->
+<div *ngIf="myJobPostings.length == 0">
+  <p><em>You currently don't have any job postings.</em></p>
 </div>
 
-<br><br>
+<!-- Displays job postings (if any exist) -->
+<div *ngIf="myJobPostings.length > 0">
 
-<div>
-  <h3>
-    My Job Postings
-    <span class="pull-right">
-      <button type="button" class="btn btn-group btn-default" (click)="changeSort()"><span class="glyphicon glyphicon-sort"></span></button>
-      <button type="button" class="btn btn-group btn-primary" routerLink="/jobs/create"><span class="glyphicon glyphicon-plus"></span></button>
-    </span>
-  </h3>
-  <hr>
-
-  <div *ngIf="myJobPostings.length == 0">
-    <p><em>You currently don't have any job postings.</em></p>
+  <!-- Displays job postings in single list -->
+  <div *ngIf="myJobPostingsView === 'all'">
+    <app-my-job-item
+      *ngFor="let myJobItem of myJobPostings"
+      [myJobData]="myJobItem"
+      (jobSubmissionEdit)="editJobSubmission($event)"
+      (jobSubmissionDelete)="deleteJobSubmission($event)">
+    </app-my-job-item>
   </div>
 
-  <div *ngIf="myJobPostings.length > 0">
-    <div *ngIf="myJobPostingsView === 'all'">
+  <!-- Displays job postings in grouped view according to status -->
+  <div *ngIf="myJobPostingsView === 'grouped'">
+
+    <!-- Approved job postings-->
+    <div *ngIf="acceptedPostings.length > 0">
+      <h4 class="success"><span class="glyphicon glyphicon-ok-circle"></span> Approved:</h4>
       <app-my-job-item
-        *ngFor="let myJobItem of myJobPostings"
+        *ngFor="let myJobItem of acceptedPostings"
+        [myJobData]="myJobItem"
+        (jobSubmissionEdit)="editJobSubmission($event)"
+        (jobSubmissionDelete)="deleteJobSubmission($event)">
+      </app-my-job-item>
+      <br>
+    </div>
+
+    <!-- In Review job postings -->
+    <div *ngIf="inReviewPostings.length > 0">
+      <h4 class="warning"><span class="glyphicon glyphicon-refresh"></span> In Review:</h4>
+      <app-my-job-item
+        *ngFor="let myJobItem of inReviewPostings"
+        [myJobData]="myJobItem"
+        (jobSubmissionEdit)="editJobSubmission($event)"
+        (jobSubmissionDelete)="deleteJobSubmission($event)">
+      </app-my-job-item>
+      <br>
+    </div>
+
+    <!-- Denied job postings -->
+    <div *ngIf="deniedPostings.length > 0">
+      <h4 class="danger"><span class="glyphicon glyphicon-remove-circle"></span> Denied:</h4>
+      <app-my-job-item
+        *ngFor="let myJobItem of deniedPostings"
         [myJobData]="myJobItem"
         (jobSubmissionEdit)="editJobSubmission($event)"
         (jobSubmissionDelete)="deleteJobSubmission($event)">
       </app-my-job-item>
     </div>
-
-    <div *ngIf="myJobPostingsView === 'grouped'">
-
-      <div *ngIf="acceptedPostings.length > 0">
-        <h4 class="success"><span class="glyphicon glyphicon-ok-circle"></span> Approved:</h4>
-        <app-my-job-item
-          *ngFor="let myJobItem of acceptedPostings"
-          [myJobData]="myJobItem"
-          (jobSubmissionEdit)="editJobSubmission($event)"
-          (jobSubmissionDelete)="deleteJobSubmission($event)">
-        </app-my-job-item>
-        <br>
-      </div>
-
-      <div *ngIf="inReviewPostings.length > 0">
-        <h4 class="warning"><span class="glyphicon glyphicon-refresh"></span> In Review:</h4>
-        <app-my-job-item
-          *ngFor="let myJobItem of inReviewPostings"
-          [myJobData]="myJobItem"
-          (jobSubmissionEdit)="editJobSubmission($event)"
-          (jobSubmissionDelete)="deleteJobSubmission($event)">
-        </app-my-job-item>
-        <br>
-      </div>
-
-      <div *ngIf="deniedPostings.length > 0">
-        <h4 class="danger"><span class="glyphicon glyphicon-remove-circle"></span> Denied:</h4>
-        <app-my-job-item
-          *ngFor="let myJobItem of deniedPostings"
-          [myJobData]="myJobItem"
-          (jobSubmissionEdit)="editJobSubmission($event)"
-          (jobSubmissionDelete)="deleteJobSubmission($event)">
-        </app-my-job-item>
-      </div>
-    </div>
-
   </div>
 
 </div>

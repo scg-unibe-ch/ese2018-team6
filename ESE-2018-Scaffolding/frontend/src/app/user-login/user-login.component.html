@@ -1,29 +1,32 @@
-<h3>Sign in</h3>
+<h3>Sign In</h3>
 <hr>
 
 <form class="form-horizontal">
 
-  <!-- User Details -->
+  <!-- USER DETAILS -->
   <div class="form-group">
     <div class="col-sm-offset-3 col-sm-9">
       <h5>User Details</h5>
     </div>
   </div>
 
-  <div class="form-group">
+  <!-- E-Mail -->
+  <div class="form-group" id="email">
     <label class="col-sm-3 control-label">E-Mail</label>
     <div class="col-sm-9">
       <input type="email" class="form-control" placeholder="E-Mail" name="email" [(ngModel)]="userData.email">
     </div>
   </div>
 
-  <div class="form-group">
+  <!-- Password -->
+  <div class="form-group" id="password">
     <label class="col-sm-3 control-label">Password</label>
     <div class="col-sm-9">
       <input type="password" class="form-control" placeholder="Password" name="password" [(ngModel)]="userData.password">
     </div>
   </div>
 
+  <!-- 'Sign In' Button -->
   <div class="form-group">
     <div class="col-sm-offset-3 col-sm-9">
       <button type="submit" class="btn btn-primary" (click)="onSignIn()">Sign In</button>

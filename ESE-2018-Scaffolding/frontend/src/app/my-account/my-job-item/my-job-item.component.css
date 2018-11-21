@@ -22,16 +22,6 @@ small {
   padding-right: 0;
 }
 
-.giveMeEllipsis {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  line-height: 1.3em;
-  max-height: 1.3em;
-}
-
 .label {
   font-size: 11px;
   font-weight: 500;
@@ -55,4 +45,9 @@ small {
 
 .glyphicon {
   vertical-align: middle;
+}
+
+.text-right {
+  width: 1%;
+  white-space: nowrap;
 }

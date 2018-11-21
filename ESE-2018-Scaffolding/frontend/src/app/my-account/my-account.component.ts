@@ -1,9 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Job} from '../job.model';
-import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
-import {Company} from '../company.model';
-import {User} from '../user.model';
+import {RequestService} from '../request.service';
 
 @Component({
   selector: 'app-my-account',
@@ -12,84 +10,35 @@ import {User} from '../user.model';
 })
 export class MyAccountComponent implements OnInit {
 
-  userId: string;
-  userToken: string;
-  confirmPassword: string;
-  userData: User = new User(
-    null,
-    null,
-  );
-  companyData: Company = new Company(
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null
-  );
   myJobPostings: Job[] = [];
-
   acceptedPostings: Job[] = [];
   inReviewPostings: Job[] = [];
   deniedPostings: Job[] = [];
+
   sortingIncomplete: boolean = true;
   myJobPostingsView: string = 'all';
 
-  constructor(private httpClient: HttpClient, private router: Router) {}
+  constructor(
+    private router: Router,
+    private request: RequestService
+  ) {}
 
+  /**
+   *  Upon loading the component, checks if a user is logged in that could access this page.
+   *  If there is one, it loads all his personal job postings.
+   */
   ngOnInit() {
     this.checkIfLoggedIn();
-    this.loadUserData();
-    this.loadCompanyData();
     this.loadMyJobs();
   }
 
-  loadUserData() {
-    this.getLocalStorage();
-    this.httpClient.get('http://localhost:3000/user/' + this.userId + '/' + this.userToken).subscribe(
-      (instance: any) => this.userData = new User (
-        instance.email,
-        instance.password
-    ));
-  }
-
-  loadCompanyData() {
-    this.getLocalStorage();
-    this.httpClient.get('http://localhost:3000/company/' + this.userId + '/' + this.userToken).subscribe(
-        (instance: any) => this.companyData = new Company (
-          instance.id,
-          instance.companyName,
-          instance.companyLogoURL,
-          instance.companyStreet,
-          instance.companyHouseNumber,
-          instance.companyPostcode,
-          instance.companyCity,
-          instance.contactName,
-          instance.contactEmail,
-          instance.contactPhone,
-          instance.companyWebsite,
-          instance.companyDescription,
-          instance.userId,
-          instance.message,
-          instance.verified
-      ))
-  }
-
+  /**
+   *  Loads all personal job postings of the current user.
+   */
   loadMyJobs() {
-    this.getLocalStorage();
-    this.httpClient.get('http://localhost:3000/jobItem/' + this.userId + '/' + this.userToken)
-      .subscribe(
-        (instances: any) => {
-          this.myJobPostings = instances.map((instance) => new Job(
+    this.request.loadMyJobs().subscribe(
+        (response: any) => {
+          this.myJobPostings = response.map((instance) => new Job(
             instance.id,
             instance.title,
             instance.description,
@@ -111,80 +60,47 @@ export class MyAccountComponent implements OnInit {
             instance.companyId,
             instance.message,
             instance.accepted
-          ))
-        }
+          )
+        )
+      }
     )
   }
 
-  updateAccount() {
-    this.getLocalStorage();
-    this.checkUserData();
-    this.httpClient.put('http://localhost:3000/user/' + this.userId + '/' + this.userToken, {
-      'email': this.userData.email,
-      'password': this.userData.password
-    }).subscribe(
-      // TODO - Give useful feedback on updating Account
-    );
-  }
-
-  checkUserData() {
-    // TODO - Check if changed user data is still valid and can be updated
-  }
-
-  updateCompany() {
-    this.getLocalStorage();
-    this.checkCompanyData();
-    this.httpClient.put('http://localhost:3000/company/' + this.userId + '/' + this.userToken, {
-      'email': this.userData.email,
-      'password': this.userData.password,
-      'companyName': this.companyData.name,
-      'companyLogoURL': this.companyData.logo,
-      'companyStreet': this.companyData.street,
-      'companyHouseNumber': this.companyData.houseNumber,
-      'companyPostcode': this.companyData.postcode,
-      'companyCity': this.companyData.city,
-      'contactName': this.companyData.contactName,
-      'contactEmail': this.companyData.contactEmail,
-      'contactPhone': this.companyData.contactPhone,
-      'companyWebsite': this.companyData.website,
-      'companyDescription': this.companyData.description
-    }).subscribe(
-      // TODO - Give useful feedback on updating Company
-    );
-  }
-
-  checkCompanyData() {
-    // TODO - Check if changed company data is still valid and can be updated
-  }
-
-  deleteAccount() {
-    if(confirm('You are about to delete your account. Are you sure?')){
-      this.getLocalStorage();
-      this.httpClient.delete('http://localhost:3000/user/' + this.userId + '/' + this.userToken).subscribe();
-      localStorage.removeItem('user-id');
-      localStorage.removeItem('user-token');
-      localStorage.removeItem('isAdmin');
-      this.router.navigate(['']);
-    }
-  }
-
+  /**
+   *  Redirects to the edit page of the job posting with the given jobId.
+   *  Requires the jobId of the about to be edited job posting.
+   *
+   *  @param {number} jobId           ID of job posting to be edited.
+   */
   editJobSubmission(jobId: number) {
     this.router.navigate(['/jobs/edit/' + jobId]);
   }
 
+  /**
+   *  Deletes your job posting with the given jobId after confirmation.
+   *  Also removes the deleted job posting from the various job posting lists.
+   *  Requires the jobId of the about to be deleted job posting.
+   *
+   *  @param {number} jobId           ID of job posting to be deleted.
+   */
   deleteJobSubmission(jobId: number) {
-    console.log(jobId);
     if(confirm('You are about to delete your job posting. Are you sure?')){
-      this.getLocalStorage();
-      this.httpClient.delete('http://localhost:3000/jobitem/' + jobId + '/' + this.userId + '/' + this.userToken).subscribe();
-      this.updateListings(this.myJobPostings, jobId);
-      this.updateListings(this.acceptedPostings, jobId); /* TODO - Improve */
-      this.updateListings(this.inReviewPostings, jobId);
-      this.updateListings(this.deniedPostings, jobId);
+      this.request.deleteMyJob(jobId);
+      MyAccountComponent.updateListings(this.myJobPostings, jobId);
+      MyAccountComponent.updateListings(this.acceptedPostings, jobId);
+      MyAccountComponent.updateListings(this.inReviewPostings, jobId);
+      MyAccountComponent.updateListings(this.deniedPostings, jobId);
     }
   }
 
-  updateListings(array, idToDelete){
+  /**
+   *  Updates an array of job postings by removing an element that has been deleted.
+   *  Requires the array that gets updated and the ID of the job posting that gets removed.
+   *
+   *  @param array                    Array that is being updated.
+   *  @param idToDelete               ID of job posting that is being removed.
+   */
+  static updateListings(array, idToDelete){
     for(let i = 0; i < array.length; i++){
       if (array[i].id == idToDelete) {
         array = array.splice(i, 1);
@@ -193,6 +109,9 @@ export class MyAccountComponent implements OnInit {
     }
   }
 
+  /**
+   *  Toggles between the two views 'all' and 'grouped' of personal job postings.
+   */
   changeSort() {
     if(this.sortingIncomplete){
       this.sortPostings();
@@ -201,6 +120,9 @@ export class MyAccountComponent implements OnInit {
     this.myJobPostingsView = (this.myJobPostingsView == 'all') ? (this.myJobPostingsView = 'grouped') : (this.myJobPostingsView = 'all');
   }
 
+  /**
+   *  Sorts personal job postings into separate lists according to their current status.
+   */
   sortPostings() {
     for(let i in this.myJobPostings) {
       switch (this.myJobPostings[i].accepted) {
@@ -220,14 +142,13 @@ export class MyAccountComponent implements OnInit {
     }
   }
 
-  getLocalStorage() {
-    this.userId = localStorage.getItem('user-id');
-    this.userToken = localStorage.getItem('user-token');
-  }
-
+  /**
+   *  Checks if a token from a user is stored in LocalStorage.
+   *  If none is present (no user logged in), it will redirect to home page.
+   */
   checkIfLoggedIn() {
     if(!localStorage.getItem('user-token')){
-      this.router.navigate(['']);
+      this.router.navigate(['']).then();
     }
   }
 }
