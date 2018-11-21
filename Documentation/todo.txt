@@ -1,5 +1,5 @@
 backend:
-- migrate to date format
+- find error in company/allVerified
 - filtering
 - code doc
 

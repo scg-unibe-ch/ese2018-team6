@@ -89,6 +89,7 @@ router.put('/:id/:token', async (req: Request, res: Response) => {
       return;
     }
     companyInstance.fromSimplification(req.body);
+    companyInstance.verified = false;
     await companyInstance.save();
     res.statusCode = 200;
     res.send();

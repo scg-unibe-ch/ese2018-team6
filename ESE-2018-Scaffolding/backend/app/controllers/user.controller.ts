@@ -63,12 +63,20 @@ router.put('/:id/:token', async (req: Request, res: Response) => {
   const token = req.params.token;
   const instance = await User.findById(id);
   if (foundUser(instance, res) && checkToken(instance, res, token) && instance !== null) {
-    const bcrypt = require('bcrypt');
-    instance.fromSimplification(req.body);
-    instance.password = bcrypt.hashSync(req.body.password, saltRounds);
-    await instance.save();
-    res.statusCode = 200;
-    res.send();
+    const sameEmailUser = await User.findOne({where: {email: req.body.email}});
+    if (sameEmailUser == null){
+      const bcrypt = require('bcrypt');
+      instance.fromSimplification(req.body);
+      instance.password = bcrypt.hashSync(req.body.password, saltRounds);
+      await instance.save();
+      res.statusCode = 200;
+      res.send();
+    } else {
+      res.statusCode = 400;
+      res.json({
+        'message': 'user with this email already exists'
+      });
+    }
   }
 });
 
