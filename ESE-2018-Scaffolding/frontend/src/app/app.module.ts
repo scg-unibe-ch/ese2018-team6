@@ -28,6 +28,8 @@ import {JobCreateComponent} from './job-create/job-create.component';
 
 import {FormatService} from './format.service';
 import {RequestService} from './request.service';
+import {ToastrModule} from 'ngx-toastr';
+import {AccountSettingsComponent} from './account-settings/account-settings.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +50,7 @@ import {RequestService} from './request.service';
     JobDetailComponent,
     MyJobItemComponent,
     JobCreateComponent,
+    AccountSettingsComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -59,7 +62,15 @@ import {RequestService} from './request.service';
     MatListModule,
     MatInputModule,
     MatCheckboxModule,
-    MatCardModule
+    MatCardModule,
+    ToastrModule.forRoot({
+      timeOut: 6000,
+      progressBar: true,
+      positionClass: 'toast-bottom-right',
+      maxOpened: 3,
+      preventDuplicates: true,
+      resetTimeoutOnDuplicate: true,
+    }),
   ],
   providers: [FormatService, RequestService],
   bootstrap: [AppComponent]

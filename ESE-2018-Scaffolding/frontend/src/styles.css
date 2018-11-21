@@ -8,3 +8,58 @@ body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
 }
+
+hr {
+  margin: 10px 0 10px 0;
+}
+
+h3 {
+  margin: 10px 0 5px 0;
+}
+
+h5 {
+  font-size: 18px;
+  margin: 5px 0 0 0;
+}
+
+label {
+  margin-bottom: 1px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.toast-title {
+  font-weight: 500;
+}
+
+.toast-message {
+  font-size: 12px;
+}
+
+.toast-bottom-right {
+  margin-bottom: 45px;
+}
+
+.form-group {
+  margin-top: 8px;
+  margin-bottom: 2px;
+}
+
+/* Only show one line of content and hide rest */
+.giveMeEllipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-height: 1.3em;
+  max-height: 1.3em;
+}
+
+.alert {
+  font-size: 11px;
+  padding: 2px;
+  margin: 0 0 2px 0;
+}

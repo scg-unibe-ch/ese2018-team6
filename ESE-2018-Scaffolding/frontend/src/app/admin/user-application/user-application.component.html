@@ -1,6 +1,7 @@
 <table>
   <tr>
 
+    <!-- Company Details - List of all details provided by the user -->
     <td>
       <p>
         <strong>Logo</strong><br>
@@ -8,7 +9,7 @@
       </p>
       <p>
         <strong>Name</strong><br>
-        {{ format.simpletext(userApplicationEntry.name) }}
+        {{ format.simpleText(userApplicationEntry.name) }}
       </p>
       <p>
         <strong>Street</strong><br>
@@ -20,15 +21,15 @@
       </p>
       <p>
         <strong>Contact Name</strong><br>
-        {{ format.simpletext(userApplicationEntry.contactName) }}
+        {{ format.simpleText(userApplicationEntry.contactName) }}
       </p>
       <p>
         <strong>Contact Phone</strong><br>
-        {{ format.simpletext(userApplicationEntry.contactPhone) }}
+        {{ format.simpleText(userApplicationEntry.contactPhone) }}
       </p>
       <p>
         <strong>Contact E-Mail</strong><br>
-        {{ format.simpletext(userApplicationEntry.contactEmail) }}
+        {{ format.simpleText(userApplicationEntry.contactEmail) }}
       </p>
       <p>
         <strong>Website</strong><br>
@@ -36,10 +37,11 @@
       </p>
       <p>
         <strong>Description</strong><br>
-        {{ format.simpletext(userApplicationEntry.description) }}
+        {{ format.simpleText(userApplicationEntry.description) }}
       </p>
     </td>
 
+    <!-- Approve/Deny Button for Admin to evaluate User Application -->
     <td class="pull-right">
       <button type="button" class="btn btn-success" (click)="onApprovedUserApplication()">
         <span class="glyphicon glyphicon-ok"></span>

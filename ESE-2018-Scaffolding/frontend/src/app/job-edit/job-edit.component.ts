@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Job} from '../job.model';
-import {HttpClient} from '@angular/common/http';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
+import {RequestService} from '../request.service';
+import {ToastrService} from 'ngx-toastr';
+import {FormatService} from '../format.service';
 
 @Component({
   selector: 'app-job-edit',
@@ -11,8 +13,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class JobEditComponent implements OnInit {
 
   jobId: number;
-  userId: string;
-  userToken: string;
   jobData: Job = new Job(
     null,
     null,
@@ -36,17 +36,30 @@ export class JobEditComponent implements OnInit {
     null,
     null
   );
+  errorMessage: {[k: string]: any} = {};
 
-  constructor(private httpClient: HttpClient, private router: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(
+    private request: RequestService,
+    private activatedRoute: ActivatedRoute,
+    private toastr: ToastrService,
+    private format: FormatService
+  ) { }
 
+  /**
+   *  Upon loading the page, checks if a user is logged in
+   *  and loads job details according to jobId.
+   */
   ngOnInit() {
-    this.checkIfLoggedIn();
+    this.request.checkIfUser();
     this.jobId = parseInt(this.activatedRoute.snapshot.paramMap.get('id'));
     this.onLoadingJob();
   }
 
+  /**
+   *  Loads all details for a job according to the given jobId.
+   */
   onLoadingJob() {
-    this.httpClient.get('http://localhost:3000/jobitem/' + this.jobId).subscribe(
+    this.request.jobDetails(this.jobId).subscribe(
       (instance: any) => this.jobData = new Job(
         this.jobId,
         instance.title,
@@ -72,51 +85,109 @@ export class JobEditComponent implements OnInit {
       ))
   }
 
+  /**
+   *  Updates job details with currently entered data in form fields.
+   *  Only as long as they are valid.
+   */
   onUpdate() {
+    this.errorMessage = {};
     if(this.isDataValid()){
-      this.getLocalStorage();
-      this.httpClient.put('http://localhost:3000/jobitem/' + this.jobId + '/' + this.userId + '/' + this.userToken, {
-        'title': this.jobData.title,
-        'description': this.jobData.description,
-        'startDate': this.jobData.startDate,
-        'endDate': this.jobData.endDate,
-        'validUntil': this.jobData.validUntil,
-        'workloadMin': this.jobData.workloadMin,
-        'workloadMax': this.jobData.workloadMax,
-        'firstLanguage': this.jobData.firstLanguage,
-        'secondLanguage': this.jobData.secondLanguage,
-        'street': this.jobData.street,
-        'houseNumber': this.jobData.houseNumber,
-        'postcode': this.jobData.postcode,
-        'city': this.jobData.city,
-        'salaryType': this.jobData.salaryType,
-        'salaryAmount': this.jobData.salaryAmount,
-        'skills': this.jobData.skills
-      }).subscribe(
-        res => {
-          this.router.navigate(['/my-account']);
-        },
-        err => {
-          // TODO - Give useful feedback on failed job edit
-          console.log(err.error.message);
-        }
-      );
+      this.request.jobUpdate(this.jobData);
+    } else {
+      this.toastr.error('Invalid Input', 'Job update failed');
     }
   }
 
+  /**
+   *  Checks the entered job data before sending to backend.
+   *  Validation requires title, description, skill, full address.
+   *  If a value fails, user receives accurate feedback.
+   *  Returns true if valid; false otherwise.
+   *
+   *  @returns {boolean}              True if valid; false otherwise
+   */
   isDataValid() {
-    // TODO - Check user inputs (title required; date format; workload & salary is number etc.)
-    return true;
-  }
-
-  getLocalStorage() {
-    this.userId = localStorage.getItem('user-id');
-    this.userToken = localStorage.getItem('user-token');
-  }
-
-  checkIfLoggedIn() {
-    if(!localStorage.getItem('user-token')){
-      this.router.navigate(['']);
+    // Resets styling of all form fields
+    let elements = ['title', 'description', 'skills', 'streetHouse', 'street', 'postcodeCity', 'postcode', 'city'];
+    for(let i=0; i < elements.length; i++){
+      this.format.removeError(elements[i]);
     }
+    let errorFree = true;
+
+    // Title cannot be empty
+    if(this.format.isEmpty(this.jobData.title)){
+      this.format.addError("title");
+      this.errorMessage.titleEmpty = true;
+      errorFree = false;
+    }
+
+    // Description cannot be empty
+    if(this.format.isEmpty(this.jobData.description)){
+      this.format.addError("description");
+      this.errorMessage.descriptionEmpty = true;
+      errorFree = false;
+    }
+
+    // Skills cannot be empty
+    if(this.format.isEmpty(this.jobData.skills)){
+      this.format.addError("skills");
+      this.errorMessage.skillsEmpty = true;
+      errorFree = false;
+    }
+
+    // Street cannot be empty
+    if(this.format.isEmpty(this.jobData.street)){
+      this.format.addError("streetHouse");
+      this.format.addError("street");
+      this.errorMessage.streetEmpty = true;
+      errorFree = false;
+    }
+
+    // Postcode cannot be empty
+    if(this.jobData.postcode === null || this.format.isEmpty(this.jobData.postcode.toString())){
+      this.format.addError("postcodeCity");
+      this.format.addError("postcode");
+      this.errorMessage.postcode = true;
+      this.errorMessage.postcodeEmpty = true;
+      errorFree = false;
+    }
+
+    // Postcode must be number between 1000 and 9999
+    if(!(this.jobData.postcode>=1000 && this.jobData.postcode <= 9999)){
+      this.format.addError("postcodeCity");
+      this.format.addError("postcode");
+      this.errorMessage.postcode = true;
+      this.errorMessage.postcodeNumber = true;
+      errorFree = false;
+    }
+
+    // Postcode must be >= 1000
+    if(this.jobData.postcode < 1000){
+      this.format.addError("postcodeCity");
+      this.format.addError("postcode");
+      this.errorMessage.postcode = true;
+      this.errorMessage.postcodeLow = true;
+      errorFree = false;
+    }
+
+    // Postcode must be <= 10'000
+    if(this.jobData.postcode > 9999){
+      this.format.addError("postcodeCity");
+      this.format.addError("postcode");
+      this.errorMessage.postcode = true;
+      this.errorMessage.postcodeHigh = true;
+      errorFree = false;
+    }
+
+    // City cannot be empty
+    if(this.format.isEmpty(this.jobData.city)){
+      this.format.addError("postcodeCity");
+      this.format.addError("city");
+      this.errorMessage.cityEmpty = true;
+      errorFree = false;
+    }
+
+    // Return validation result
+    return errorFree;
   }
 }

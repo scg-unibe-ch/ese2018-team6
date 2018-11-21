@@ -1,17 +1,18 @@
 <h3>
-  <span *ngIf="showResults === 'allJobs'">Available Offers</span>
+  <!-- Header with chaning titles (depending on shown list of job postings), buttons for toggling search/filter and 'Create New' button for logged in users -->
+  <span *ngIf="showResults === 'allJobs'">Job Offers</span>
   <span *ngIf="showResults === 'searchResults'">Search Results</span>
   <span *ngIf="showResults === 'filterResults'">Filter Results</span>
   <span class="pull-right">
     <button type="button" class="btn" (click)="toggleSearch()"><span class="glyphicon glyphicon-search"></span></button>
     <button type="button" class="btn" (click)="toggleFilter()"><span class="glyphicon glyphicon-filter"></span></button>
-    <button type="button" class="btn btn-primary" routerLink="/jobs/create" *ngIf="isLoggedIn()"><span class="glyphicon glyphicon-plus"></span></button>
+    <button type="button" class="btn btn-primary" routerLink="/jobs/create" *ngIf="this.request.checkIfUser() && !this.request.checkIfAdmin()"><span class="glyphicon glyphicon-plus"></span></button>
   </span>
 </h3>
 <hr>
 
-<div class="form-horizontal">
-
+<!-- Box to specify search term -->
+<form class="form-horizontal">
   <div class="searchFilter" *ngIf="showSearchFilter === 'search'">
     <div class="form-group">
       <label class="col-sm-2 control-label">Search Term</label>
@@ -19,12 +20,15 @@
         <input class="form-control" placeholder="Search Title, Description, City and Skills" name="searchTerm" [(ngModel)]="searchTerm">
       </div>
       <div class="col-sm-4">
-        <button type="button" class="btn btn-success" (click)="submitSearch()">Search</button>
+        <button type="submit" class="btn btn-success" (click)="loadJobListSearch()">Search</button>
         <button type="button" class="btn btn-danger" (click)="cancelSearch()">Cancel</button>
       </div>
     </div>
   </div>
+</form>
 
+<!-- Box to specify filter values -->
+<form class="form-horizontal">
   <div class="searchFilter" *ngIf="showSearchFilter === 'filter'">
     <div class="form-group">
       <label class="col-sm-2 control-label">Filter Term</label>
@@ -32,19 +36,21 @@
         <input class="form-control" placeholder="Filter Term" name="filterTerm" [(ngModel)]="searchTerm">
       </div>
       <div class="col-sm-4">
-        <button type="button" class="btn btn-success" (click)="submitFilter()">Filter</button>
+        <button type="submit" class="btn btn-success" (click)="loadJobListFilter()">Filter</button>
         <button type="button" class="btn btn-danger" (click)="cancelFilter()">Cancel</button>
       </div>
     </div>
   </div>
+</form>
 
-</div>
-
+<!-- List of all verified job postings (default view) -->
 <div *ngIf="showResults === 'allJobs'">
   <div *ngIf="jobData.length == 0">
-    <p><em>There currently aren't any job postings available.</em></p>
+    <p><em>We currently don't have any job postings available</em></p>
   </div>
   <div *ngIf="jobData.length > 0">
+    <p *ngIf="jobData.length == 1"><em>We currently have <strong>1</strong> job posting available</em></p>
+    <p *ngIf="jobData.length > 1"><em>We currently have <strong>{{ jobData.length }}</strong> job postings available</em></p>
     <app-job-item
       *ngFor="let jobItem of jobData"
       [jobData]="jobItem">
@@ -52,11 +58,14 @@
   </div>
 </div>
 
+<!-- List of all job postings matching the search term -->
 <div *ngIf="showResults === 'searchResults'">
   <div *ngIf="searchData.length == 0">
-    <p><em>No job posting matches your search term. Please try again.</em></p>
+    <p><em>No job posting matches '{{ searchTermDisplayed}}'</em></p>
   </div>
   <div *ngIf="searchData.length > 0">
+    <p *ngIf="searchData.length == 1"><em>Found <strong>1</strong> job posting matching '{{ searchTermDisplayed }}'.</em></p>
+    <p *ngIf="searchData.length > 1"><em>Found <strong>{{ searchData.length }}</strong> job postings matching '{{ searchTermDisplayed }}'.</em></p>
     <app-job-item
       *ngFor="let jobItem of searchData"
       [jobData]="jobItem">
@@ -64,16 +73,17 @@
   </div>
 </div>
 
+<!-- List of all job postings matching the filter values -->
 <div *ngIf="showResults === 'filterResults'">
   <div *ngIf="filterData.length == 0">
-    <p><em>No job posting matches your filter criterias. Please try again.</em></p>
+    <p><em>No job posting matches your filter criteria.</em></p>
   </div>
   <div *ngIf="filterData.length > 0">
+    <p *ngIf="filterData.length == 1"><em>Found <strong>{{ filterData.length }}</strong> job posting matching your request.</em></p>
+    <p *ngIf="filterData.length > 1"><em>Found <strong>{{ filterData.length }}</strong> job postings matching your request.</em></p>
     <app-job-item
       *ngFor="let jobItem of filterData"
       [jobData]="jobItem">
     </app-job-item>
   </div>
 </div>
-
-

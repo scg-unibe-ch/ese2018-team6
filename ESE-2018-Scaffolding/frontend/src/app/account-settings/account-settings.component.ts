@@ -1,40 +1,38 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {User} from '../user.model';
-import {Company} from '../company.model';
 import {RequestService} from '../request.service';
-import {ToastrService} from 'ngx-toastr';
+import {Company} from '../company.model';
 import {FormatService} from '../format.service';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
-  selector: 'app-user-register',
-  templateUrl: './user-register.component.html',
-  styleUrls: ['./user-register.component.css']
+  selector: 'app-account-settings',
+  templateUrl: './account-settings.component.html',
+  styleUrls: ['./account-settings.component.css']
 })
+export class AccountSettingsComponent implements OnInit {
 
-export class UserRegisterComponent {
-
-  userData: User = new User (
+  userData: User = new User(
+    null,
+    null,
+  );
+  companyData: Company = new Company(
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
     null,
     null
   );
-  companyData: Company = new Company (
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null
-  );
-  userType: string = '';
   confirmPassword: string = '';
   errorMessage: {[k: string]: any} = {};
 
@@ -45,26 +43,96 @@ export class UserRegisterComponent {
   ) { }
 
   /**
-   *  Adds a new user to the database with status 'open'
+   *  Upon loading the component, it fetches the user and company data of the current user.
    */
-  onRegister() {
+  ngOnInit() {
+    this.loadUserData();
+    this.loadCompanyData();
+  }
+
+  /**
+   *  Loads the user data of the current user.
+   */
+  loadUserData() {
+    this.request.userDataLoad().subscribe(
+      (instance: any) => this.userData = new User (
+        instance.email,
+        ''
+      ));
+  }
+
+  /**
+   *  Updates the user data with the currently entered values from the form fields.
+   *  Requires that the data is valid or the request will not be sent.
+   *  Validation requires email and password (which matches confirmed password).
+   */
+  updateUserData() {
     this.errorMessage = {};
-    if (this.isDataValid()) {
-      this.request.userRegister(this.userData, this.companyData);
+    if(this.checkUserData()){
+      this.request.userDataUpdate(this.userData);
     } else {
-      this.toastr.error('Invalid Input', 'Registration failed');
+      this.toastr.error('Invalid Input', 'User update failed');
     }
   }
 
   /**
-   *  Checks the entered user and company data before submitting to backend.
+   *  Deletes the current user from the database. Requires confirmation from user.
+   *  Also removes any related entries such as company and job postings.
+   */
+  deleteUserData() {
+    if(confirm('You are about to delete your account. Are you sure?')){
+      this.request.userDataDelete();
+    }
+  }
+
+  /**
+   *  Loads the company data of the current user.
+   */
+  loadCompanyData() {
+    this.request.companyDataLoad().subscribe(
+      (instance: any) => this.companyData = new Company (
+        instance.id,
+        instance.companyName,
+        instance.companyLogoURL,
+        instance.companyStreet,
+        instance.companyHouseNumber,
+        instance.companyPostcode,
+        instance.companyCity,
+        instance.contactName,
+        instance.contactEmail,
+        instance.contactPhone,
+        instance.companyWebsite,
+        instance.companyDescription,
+        instance.userId,
+        instance.message,
+        instance.verified
+      )
+    )
+  }
+
+  /**
+   *  Updates the company data with the currently entered values from the form fields.
+   *  Requires that the data is valid or the request will not be sent.
+   *  Validation requires company name, complete address and a description.
+   */
+  updateCompanyData() {
+    this.errorMessage = {};
+    if(this.checkCompanyData()){
+      this.request.companyDataUpdate(this.userData, this.companyData);
+    } else {
+      this.toastr.error('Invalid Input', 'Company update failed');
+    }
+  }
+
+  /**
+   *  Checks the entered user data before submitting to backend.
    *  Returns true if valid; false otherwise.
    *
-   *  @returns {boolean}                True if valid; false otherwise.
+   *  @returns {boolean}               True if valid; false otherwise
    */
-  isDataValid(){
+  checkUserData() {
     // Resets styling of all form fields
-    let elements = ['email', 'password', 'confirmPassword', 'name', 'description', 'streetHouse', 'street', 'postcodeCity', 'postcode', 'city'];
+    let elements = ['email', 'password', 'confirmPassword'];
     for(let i=0; i < elements.length; i++){
       this.format.removeError(elements[i]);
     }
@@ -100,6 +168,24 @@ export class UserRegisterComponent {
       errorFree = false;
     }
 
+    // Return validation result
+    return errorFree;
+  }
+
+  /**
+   *  Checks the entered company data before submitting to backend.
+   *  Returns true if valid; false otherwise.
+   *
+   *  @returns {boolean}                True if valid; false otherwise.
+   */
+  checkCompanyData() {
+    // Resets styling of all form fields
+    let elements = ['name', 'description', 'streetHouse', 'street', 'postcodeCity', 'postcode', 'city'];
+    for(let i=0; i < elements.length; i++){
+      this.format.removeError(elements[i]);
+    }
+    let errorFree = true;
+
     // Company Name cannot be empty
     if(this.format.isEmpty(this.companyData.name)){
       this.format.addError("name");
@@ -123,7 +209,7 @@ export class UserRegisterComponent {
     }
 
     // Postcode cannot be empty
-    if(this.companyData.postcode === null || this.format.isEmpty(this.companyData.postcode.toString())){
+    if(this.format.isEmpty(this.companyData.postcode.toString())){
       this.format.addError("postcodeCity");
       this.format.addError("postcode");
       this.errorMessage.postcode = true;

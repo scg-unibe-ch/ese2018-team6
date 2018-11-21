@@ -27,9 +27,15 @@
               {
                 "input": "node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
               },
+              {
+                "input": "node_modules/ngx-toastr/toastr.css"
+              },
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/frameworks/jquery/jquery.js",
+              "src/frameworks/bootstrap/js/bootstrap.min.js"
+            ]
           },
           "configurations": {
             "production": {
