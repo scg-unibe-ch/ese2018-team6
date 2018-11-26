@@ -69,7 +69,10 @@ router.get('/:id/:token', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/allVerified', async (req: Request, res: Response) => {
+/*
+- simple get request without authentication to get an array with all verified companies
+ */
+router.get('', async (req: Request, res: Response) => {
   const instances = await Company.findAll({ where: {verified: true }});
   res.statusCode = 200;
   res.send(instances.map(e => e.toSimplification()));

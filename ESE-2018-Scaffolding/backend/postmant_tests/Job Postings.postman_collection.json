@@ -599,6 +599,48 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get Company without auth (all verified companies)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "382680cf-402c-44f6-b916-b39fbb990e71",
+								"exec": [
+									"pm.test(\"Unverified Companies are not returned\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var i = 0;",
+									"    for (i = 0; i < jsonData.length; i++) {",
+									"        pm.expect(jsonData[i].userId).to.not.eql(pm.globals.get(\"currentuserid\"));",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/company/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"company",
+								""
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1034,14 +1076,31 @@
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "Uncategorized",
-			"item": [
+				},
 				{
-					"name": "Filter",
+					"name": "Get Company without auth (all verified companies) 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "382680cf-402c-44f6-b916-b39fbb990e71",
+								"exec": [
+									"pm.test(\"Verified Companies are returned\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var i = 0;",
+									"    var found = false;",
+									"    for (i = 0; i < jsonData.length; i++) {",
+									"        if(jsonData[i].userId == pm.globals.get(\"currentuserid\")) {",
+									"            found =  true;",
+									"        }",
+									"    }",
+									"    pm.expect(found).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1050,12 +1109,25 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": ""
+							"raw": "http://localhost:3000/company/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"company",
+								""
+							]
 						}
 					},
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Uncategorized",
+			"item": []
 		}
 	]
 }
