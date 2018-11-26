@@ -351,6 +351,118 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Put User",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "062b1026-6496-474d-bd37-a2dc2bb54987",
+								"exec": [
+									"pm.globals.set(\"uniqueemail\", Math.random(50));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "46a05ab6-cb0a-4a40-af50-61eaa7958296",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\":{{currentemail}}, \n\t\"password\":\"1234\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/{{currentuserid}}/{{currenttoken}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"{{currentuserid}}",
+								"{{currenttoken}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put User keep email",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "062b1026-6496-474d-bd37-a2dc2bb54987",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "46a05ab6-cb0a-4a40-af50-61eaa7958296",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\":{{currentemail}}, \n\t\"password\":\"1234\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/{{currentuserid}}/{{currenttoken}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"{{currentuserid}}",
+								"{{currenttoken}}"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -919,6 +1031,26 @@
 								"{{currentuserid}}",
 								"{{currenttoken}}"
 							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Uncategorized",
+			"item": [
+				{
+					"name": "Filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": ""
 						}
 					},
 					"response": []
