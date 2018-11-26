@@ -21,7 +21,7 @@
 			maxDate: ms since 1970 (int)
 		},
 		{
-			filter:"languages",
+			filter:"language",
 			languages: ["lang1","lang2"]
 		},
 		{

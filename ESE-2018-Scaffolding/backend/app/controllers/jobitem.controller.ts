@@ -57,7 +57,11 @@ router.get('/search/:term', async (req: Request, res: Response) => {
   res.statusCode = 200;
   res.send(instances.map(e => e.toSimplification()));
 });
-
+/*
+- for filtering the jobitem list
+- specify a list of filters as written in the specification
+- jobitem has to be accepted
+ */
 router.post('/filter', async (req: Request, res: Response) => {
   const Op = Sequelize.Op;
   if(req.body.filterList && req.body.filterList.constructor === Array && req.body.filterList.length > 0) {
@@ -75,6 +79,43 @@ router.post('/filter', async (req: Request, res: Response) => {
           if(validateDateFilter(filterObject, res)){
             filterArray.push({
               datePosted: {[Op.between]: [filterObject.minDate, filterObject.maxDate]}
+            });
+          }
+          break;
+        case "startDate":
+          if(validateDateFilter(filterObject, res)){
+            filterArray.push({
+              startDate: {[Op.between]: [filterObject.minDate, filterObject.maxDate]}
+            });
+          }
+          break;
+        case "endDate":
+          if(validateDateFilter(filterObject, res)){
+            filterArray.push({
+              endDate: {[Op.between]: [filterObject.minDate, filterObject.maxDate]}
+            });
+          }
+          break;
+        case "validUntil":
+          if(validateDateFilter(filterObject, res)){
+            filterArray.push({
+              validUntil: {[Op.between]: [filterObject.minDate, filterObject.maxDate]}
+            });
+          }
+          break;
+        case "language":
+          if(validateStringFilter(filterObject, "languages", res)){
+            const opArray = createLanguageFilterOpArray(filterObject.languages);
+            filterArray.push({
+              [Op.or]: opArray
+            });
+          }
+          break;
+        case "postcode":
+          if(validateStringFilter(filterObject, "postcodes", res)){
+            const opArray = createPostcodeFilterOpArray(filterObject.postcodes);
+            filterArray.push({
+              [Op.or]: opArray
             });
           }
           break;
@@ -118,6 +159,50 @@ function validateDateFilter(filterObject: any, res: any){
     return false;
   }
 }
+/*
+checks if the filterObject is a valid string filter (language, postcode). If not, aborts the request and returns Bad Request.
+ */
+function validateStringFilter(filterObject: any, filterType: any, res: any){
+  if(filterObject[filterType] && filterObject[filterType] instanceof Array){
+    return true;
+  } else {
+    res.statusCode = 400;
+    res.json({
+      'message': 'at least one filter is not valid (language/postcode filter)'
+    });
+    return false;
+  }
+}
+/*
+creates a "op" string, which can be passed to sequelize
+ */
+function createLanguageFilterOpArray(array: any){
+  const Op = Sequelize.Op;
+  let i;
+  let opArray = [];
+  for(i = 0; i < array.length; i++) {
+    opArray.push({firstLanguage: {[Op.eq]: array[i]}});
+    opArray.push({secondLanguage: {[Op.eq]: array[i]}});
+  }
+  return opArray;
+}
+/*
+creates a "op" string, which can be passed to sequelize
+ */
+function createPostcodeFilterOpArray(array: any){
+  const Op = Sequelize.Op;
+  let i;
+  let opArray = [];
+  for(i = 0; i < array.length; i++) {
+    opArray.push({postcode: {[Op.eq]: array[i]}});
+  }
+  return opArray;
+}
+
+
+
+
+
 router.get('/', async (req: Request, res: Response) => {
   const instances = await JobItem.findAll(    {
     where:
