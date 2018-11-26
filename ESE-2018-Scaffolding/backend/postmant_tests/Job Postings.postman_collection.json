@@ -641,11 +641,51 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Post Jobitem create Job unverifed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9d07516d-0fff-4e2b-ad26-277bf3f6aa9e",
+								"exec": [
+									"pm.test(\"Status code is 401, because company is not verified and therefore not allowed to post jobitems\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/jobitem/{{currentuserid}}/{{currenttoken}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"jobitem",
+								"{{currentuserid}}",
+								"{{currenttoken}}"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
 		{
-			"name": "Admin",
+			"name": "Admin (User-oriented)",
 			"item": [
 				{
 					"name": "Check admin existance and get token",
@@ -978,6 +1018,28 @@
 					},
 					"response": []
 				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "90e55a52-8b24-4425-9021-9876e3aa7315",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "64e58bf8-6c79-4893-8921-72e71462e745",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
 			]
 		},
 		{
@@ -1124,6 +1186,315 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Job Item (not accepted)",
+			"item": [
+				{
+					"name": "Post Jobitem create Job Item 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9d07516d-0fff-4e2b-ad26-277bf3f6aa9e",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.globals.set(\"item1id\",jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/jobitem/{{currentuserid}}/{{currenttoken}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"jobitem",
+								"{{currentuserid}}",
+								"{{currenttoken}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Jobitem create Job Item 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9d07516d-0fff-4e2b-ad26-277bf3f6aa9e",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.globals.set(\"item2id\",jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/jobitem/{{currentuserid}}/{{currenttoken}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"jobitem",
+								"{{currentuserid}}",
+								"{{currenttoken}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Jobitem create Job Item 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9d07516d-0fff-4e2b-ad26-277bf3f6aa9e",
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.globals.set(\"item3id\",jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/jobitem/{{currentuserid}}/{{currenttoken}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"jobitem",
+								"{{currentuserid}}",
+								"{{currenttoken}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get jobitem (without authentication)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8419f712-3962-4e02-965f-da5a80e1f78c",
+								"exec": [
+									"pm.test(\"Not accepted Jobitems are not returned\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var i = 0;",
+									"    for (i = 0; i < jsonData.length; i++) {",
+									"        pm.expect(jsonData[i].id).to.not.eql(pm.globals.get(\"item1id\"));",
+									"        pm.expect(jsonData[i].id).to.not.eql(pm.globals.get(\"item2id\"));",
+									"        pm.expect(jsonData[i].id).to.not.eql(pm.globals.get(\"item3id\"));",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/jobitem",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"jobitem"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin (Jobitem-oriented)",
+			"item": [
+				{
+					"name": "Put Admin accept Jobitem 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6820b423-afc8-4fec-a1d9-bc0e31e1baf9",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/admin/accept/{{item1id}}/{{adminid}}/{{admintoken}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"accept",
+								"{{item1id}}",
+								"{{adminid}}",
+								"{{admintoken}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put Admin accept Jobitem 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6820b423-afc8-4fec-a1d9-bc0e31e1baf9",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/admin/accept/{{item2id}}/{{adminid}}/{{admintoken}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"accept",
+								"{{item2id}}",
+								"{{adminid}}",
+								"{{admintoken}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put Admin accept Jobitem 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6820b423-afc8-4fec-a1d9-bc0e31e1baf9",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/admin/accept/{{item3id}}/{{adminid}}/{{admintoken}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"accept",
+								"{{item3id}}",
+								"{{adminid}}",
+								"{{admintoken}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Jobitem (accepted)",
+			"item": []
 		},
 		{
 			"name": "Uncategorized",

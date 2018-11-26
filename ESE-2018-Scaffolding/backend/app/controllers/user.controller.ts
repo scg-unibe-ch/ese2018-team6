@@ -87,7 +87,7 @@ router.put('/:id/:token', async (req: Request, res: Response) => {
       }
     }
   } else {
-    res.statusCode = 401;
+    res.statusCode = 400;
     res.json({
       'message': 'provide an non-empty email address and password'
     });
@@ -110,6 +110,10 @@ router.delete('/:id/:token', async (req: Request, res: Response) => {
     }
 });
 
+/*
+- exported helper method to check if user exists
+- if the specified user is null, a request is sent!
+ */
 export function foundUser(user: any, res: any) {
   if (user == null) {
     res.statusCode = 404; // not found
@@ -121,6 +125,10 @@ export function foundUser(user: any, res: any) {
     return true;
   }
 }
+/*
+- checks, if the specified token is valid for the specified id
+- if the token is not valid, a request is sent!
+ */
 export function checkToken(user: any, res: any, token: string) {
   if (token !== user.token) {
     res.statusCode = 401; // unauthorized

@@ -7,14 +7,19 @@ import {Company} from '../models/company.model';
 import {Sequelize} from 'sequelize-typescript';
 
 const router: Router = Router();
+/*
+- for posting a new job item
+- the company has to be verified (checked by this method)
+ */
 router.post('/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
   const user = await User.findById(id);
   const company = await Company.findOne({where: {userId: id}});
-  // @ts-ignore
-  if (foundUser(user, res)  && company.verified == true) {
+  if (foundUser(user, res)  && company != null && company.verified == true) {
+    //please note: if foundUser()==false, the foundUser() method sends the request!
     if (checkToken(user, res, token) && user !== null) {
+      //please note: if checkToken()==false, the checkToken() method sends the request!
       const instance = new JobItem();
       instance.fromSimplification(req.body);
       // @ts-ignore
@@ -28,7 +33,7 @@ router.post('/:id/:token', async (req: Request, res: Response) => {
   } else {
     res.statusCode = 401;
     res.json({
-      'message': 'user is not verified and therefore cannot create job postings'
+      'message': 'company is not verified and therefore cannot create job postings'
     });
   }
 });

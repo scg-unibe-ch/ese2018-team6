@@ -66,7 +66,12 @@ router.get('/unacceptedJobItems/:id/:token', async (req: Request, res: Response)
     res.send(instances.map(e => e.toSimplification()));
   }
 });
-
+/*
+- for accepting job items by an admin
+- the user has to be admin
+- add in the request body a field with accepted == true or false
+- if the admin wants to decline the jobitem (accepted == false), then a message string can be specified
+ */
 router.put('/accept/:jobitemId/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
@@ -114,8 +119,13 @@ router.put('/changeName/:id/:token', async (req: Request, res: Response) => {
   }
 });
 
+/*
+- helper method to check admin authentication
+- if the stated user is not admin a request is sent!
+ */
 function adminAuthentification(user: any, res: any, id: number, token: string, admin: any) {
   if (foundUser(user, res) && checkToken(user, res, token) && admin) {
+    //please note: foundUser() and checkToken() methods send error requests, if needed
       return true;
   } else {
     res.statusCode = 401; // unauthorized
