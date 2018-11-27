@@ -5,6 +5,10 @@ import {JobItem} from '../models/jobitem.model';
 import {foundUser, checkToken, saltRounds} from './user.controller';
 
 const router: Router = Router();
+/*
+- create a new instance of company
+- returns id of created company
+ */
 router.post('/', async (req: Request, res: Response) => {
   const testInstance = await User.findOne({ where: {email: req.body.email }});
   if (req.body.email && req.body.password && testInstance == null) {
@@ -34,6 +38,9 @@ router.post('/', async (req: Request, res: Response) => {
   }
 });
 
+/*
+- returns the company with id that is given in the parameter
+ */
 router.get('/:id', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const instance = await Company.findOne({ where: {userId: id }});
@@ -48,6 +55,10 @@ router.get('/:id', async (req: Request, res: Response) => {
   res.send(instance.toSimplification());
 });
 
+/*
+- returns company object
+- messageFromAdmin can be seen
+ */
 router.get('/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
@@ -78,6 +89,11 @@ router.get('', async (req: Request, res: Response) => {
   res.send(instances.map(e => e.toSimplification()));
 });
 
+/*
+- request to edit company details
+- only works for user himself (userId and token needed)
+- company needs to be verified again
+ */
 router.put('/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
@@ -99,6 +115,10 @@ router.put('/:id/:token', async (req: Request, res: Response) => {
   }
 });
 
+/*
+- for deleting
+- only works for user himself (userId and token needed)
+ */
 router.delete('/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;

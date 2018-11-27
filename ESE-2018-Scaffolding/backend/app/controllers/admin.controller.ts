@@ -7,6 +7,10 @@ import {foundUser, checkToken} from './user.controller';
 
 const router: Router = Router();
 
+/*
+- returns a map of all unverified companies
+- need to be logged in as admin (userId and token needed)
+ */
 router.get('/unverifiedCompanies/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
@@ -19,6 +23,10 @@ router.get('/unverifiedCompanies/:id/:token', async (req: Request, res: Response
   }
 });
 
+/*
+- for editing company verified status to given body boolean
+- need to be logged in as admin (userId and token needed)
+ */
 router.put('/verify/:companyId/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
@@ -55,6 +63,10 @@ router.put('/verify/:companyId/:id/:token', async (req: Request, res: Response) 
   }
 });
 
+/*
+- returns a map of all open JobItems
+- need to be logged in as admin (userId and token needed)
+ */
 router.get('/unacceptedJobItems/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
@@ -102,6 +114,10 @@ router.put('/accept/:jobitemId/:id/:token', async (req: Request, res: Response) 
   }
 });
 
+/*
+- for editing own admin name
+- need to be logged in as admin (userId and token needed)
+ */
 router.put('/changeName/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;

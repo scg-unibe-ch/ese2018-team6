@@ -8,7 +8,7 @@ import {Sequelize} from 'sequelize-typescript';
 
 const router: Router = Router();
 /*
-- for posting a new job item
+- for posting a new job item -> creates a JobItem
 - the company has to be verified (checked by this method)
  */
 router.post('/:id/:token', async (req: Request, res: Response) => {
@@ -37,6 +37,12 @@ router.post('/:id/:token', async (req: Request, res: Response) => {
     });
   }
 });
+
+/*
+- for searching for jobitems -> returns a map of JobItems
+- searches through title, description, skills, city and street
+- only works for accepted jobitems
+ */
 router.get('/search/:term', async (req: Request, res: Response) => {
   const term = req.params.term;
   const Op = Sequelize.Op;
@@ -58,7 +64,7 @@ router.get('/search/:term', async (req: Request, res: Response) => {
   res.send(instances.map(e => e.toSimplification()));
 });
 /*
-- for filtering the jobitem list
+- for filtering the jobitem list -> returns a map of JobItems
 - specify a list of filters as written in the specification
 - jobitem has to be accepted
  */
@@ -199,10 +205,11 @@ function createPostcodeFilterOpArray(array: any){
   return opArray;
 }
 
-
-
-
-
+/*
+ - returns a map of JobItems
+ - ordered according to datePosted
+ - only works for accepted JobItems
+ */
 router.get('/', async (req: Request, res: Response) => {
   const instances = await JobItem.findAll(    {
     where:
@@ -215,6 +222,9 @@ router.get('/', async (req: Request, res: Response) => {
   res.send(instances.map(e => e.toSimplification()));
 });
 
+/*
+- returns the JobItem with id that is in the parameter
+ */
 router.get('/:id', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const instance = await JobItem.findById(id);
@@ -229,6 +239,21 @@ router.get('/:id', async (req: Request, res: Response) => {
   res.send(instance.toSimplification());
 });
 
+/*
+ - returns a map of all JobItems of one company that are accepted
+ */
+router.get('/ofCompany/:companyId', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const instances = await JobItem.findAll({where: {companyId: id, accepted: true}});
+  res.statusCode = 200;
+  res.send(instances.map(e => e.toSimplification()));
+});
+
+/*
+- returns a map of jobitems of one company user
+- messageFromAdmin and accepted status can be seen
+- only works for user himself (userId and token needed)
+ */
 router.get('/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
@@ -254,6 +279,10 @@ router.get('/:id/:token', async (req: Request, res: Response) => {
   }
 });
 
+/*
+- for editing a jobitem (with id in parameter)
+- only possible for the corresponding company user (userid and token needed)
+ */
 router.put('/:jobItemId/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
@@ -284,6 +313,10 @@ router.put('/:jobItemId/:id/:token', async (req: Request, res: Response) => {
   }
 });
 
+/*
+- for deleting a jobitem
+- only possible for the corresponding company user (userid and token needed)
+ */
 router.delete('/:jobItemId/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;

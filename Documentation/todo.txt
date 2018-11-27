@@ -13,6 +13,9 @@ frontend:
 - display input error messages/user feedback
 
 all:
+- admin name change and name display in messages
+- special feature
+
 - Project README
 - Some sort of project documentation: SRS, backlog, sprint schedule
 - Biweekly report about biggest challenges and risks, and learning outcomes

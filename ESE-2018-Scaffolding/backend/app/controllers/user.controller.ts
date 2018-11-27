@@ -5,6 +5,10 @@ import {Company} from '../models/company.model';
 import equals = require('validator/lib/equals');
 
 const router: Router = Router();
+/*
+- to log in
+- returning id: userId, token: token, isAdmin: isAdmin
+ */
 router.post('/token', async (req: Request, res: Response) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -43,6 +47,10 @@ router.post('/token', async (req: Request, res: Response) => {
   }
 });
 
+/*
+- returns user
+- only works for user himself (userId and token needed)
+ */
 router.get('/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
@@ -94,6 +102,10 @@ router.put('/:id/:token', async (req: Request, res: Response) => {
   }
 });
 
+/*
+- for deleting
+- only works for user himself (userId and token needed)
+ */
 router.delete('/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
