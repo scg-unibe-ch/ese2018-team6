@@ -259,7 +259,13 @@ router.get('/:id/:token', async (req: Request, res: Response) => {
   const token = req.params.token;
   const user = await User.findById(id);
   if (foundUser(user, res) && checkToken(user, res, token) && user !== null) {
-    let instances = await JobItem.findAll({where: {companyId: id}});
+    let instances = await JobItem.findAll({
+      where:
+        {companyId: id},
+      order: [
+        ['accepted', 'ASC'],
+      ]
+    });
 
     if (instances == null) {
       res.statusCode = 404;
