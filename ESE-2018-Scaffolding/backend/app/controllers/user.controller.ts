@@ -5,6 +5,10 @@ import {Company} from '../models/company.model';
 import equals = require('validator/lib/equals');
 
 const router: Router = Router();
+/*
+- to log in
+- returning id: userId, token: token, isAdmin: isAdmin
+ */
 router.post('/token', async (req: Request, res: Response) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -43,6 +47,10 @@ router.post('/token', async (req: Request, res: Response) => {
   }
 });
 
+/*
+- returns user
+- only works for user himself (userId and token needed)
+ */
 router.get('/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
@@ -58,28 +66,46 @@ router.get('/:id/:token', async (req: Request, res: Response) => {
   }
 });
 
+/*
+- for updating the user model (password and email address).
+- requires a non-empty password and email field
+- email has to be unique
+ */
 router.put('/:id/:token', async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
-  const token = req.params.token;
-  const instance = await User.findById(id);
-  if (foundUser(instance, res) && checkToken(instance, res, token) && instance !== null) {
-    const sameEmailUser = await User.findOne({where: {email: req.body.email}});
-    if (sameEmailUser == null){
-      const bcrypt = require('bcrypt');
-      instance.fromSimplification(req.body);
-      instance.password = bcrypt.hashSync(req.body.password, saltRounds);
-      await instance.save();
-      res.statusCode = 200;
-      res.send();
-    } else {
-      res.statusCode = 400;
-      res.json({
-        'message': 'user with this email already exists'
-      });
+  if(req.body.email && req.body.password) {
+    //valid request
+    const id = parseInt(req.params.id);
+    const token = req.params.token;
+    const instance = await User.findById(id);
+    if (foundUser(instance, res) && checkToken(instance, res, token) && instance !== null) {
+      const sameEmailUser = await User.findOne({where: {email: req.body.email}});
+      //the user can keep his email if he doesn't want to change it
+      if (sameEmailUser == null || sameEmailUser.id == instance.id) {
+        const bcrypt = require('bcrypt');
+        instance.fromSimplification(req.body);
+        instance.password = bcrypt.hashSync(req.body.password, saltRounds);
+        await instance.save();
+        res.statusCode = 200;
+        res.send();
+      } else {
+        res.statusCode = 400;
+        res.json({
+          'message': 'user with this email already exists'
+        });
+      }
     }
+  } else {
+    res.statusCode = 400;
+    res.json({
+      'message': 'provide an non-empty email address and password'
+    });
   }
 });
 
+/*
+- for deleting
+- only works for user himself (userId and token needed)
+ */
 router.delete('/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
@@ -96,6 +122,10 @@ router.delete('/:id/:token', async (req: Request, res: Response) => {
     }
 });
 
+/*
+- exported helper method to check if user exists
+- if the specified user is null, a request is sent!
+ */
 export function foundUser(user: any, res: any) {
   if (user == null) {
     res.statusCode = 404; // not found
@@ -107,6 +137,10 @@ export function foundUser(user: any, res: any) {
     return true;
   }
 }
+/*
+- checks, if the specified token is valid for the specified id
+- if the token is not valid, a request is sent!
+ */
 export function checkToken(user: any, res: any, token: string) {
   if (token !== user.token) {
     res.statusCode = 401; // unauthorized

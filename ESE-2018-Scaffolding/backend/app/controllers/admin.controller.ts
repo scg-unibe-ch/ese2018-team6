@@ -7,6 +7,10 @@ import {foundUser, checkToken} from './user.controller';
 
 const router: Router = Router();
 
+/*
+- returns a map of all unverified companies
+- need to be logged in as admin (userId and token needed)
+ */
 router.get('/unverifiedCompanies/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
@@ -19,6 +23,10 @@ router.get('/unverifiedCompanies/:id/:token', async (req: Request, res: Response
   }
 });
 
+/*
+- for editing company verified status to given body boolean
+- need to be logged in as admin (userId and token needed)
+ */
 router.put('/verify/:companyId/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
@@ -55,6 +63,10 @@ router.put('/verify/:companyId/:id/:token', async (req: Request, res: Response) 
   }
 });
 
+/*
+- returns a map of all open JobItems
+- need to be logged in as admin (userId and token needed)
+ */
 router.get('/unacceptedJobItems/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
@@ -66,7 +78,12 @@ router.get('/unacceptedJobItems/:id/:token', async (req: Request, res: Response)
     res.send(instances.map(e => e.toSimplification()));
   }
 });
-
+/*
+- for accepting job items by an admin
+- the user has to be admin
+- add in the request body a field with accepted == true or false
+- if the admin wants to decline the jobitem (accepted == false), then a message string can be specified
+ */
 router.put('/accept/:jobitemId/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
@@ -97,6 +114,10 @@ router.put('/accept/:jobitemId/:id/:token', async (req: Request, res: Response) 
   }
 });
 
+/*
+- for editing own admin name
+- need to be logged in as admin (userId and token needed)
+ */
 router.put('/changeName/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const token = req.params.token;
@@ -114,8 +135,13 @@ router.put('/changeName/:id/:token', async (req: Request, res: Response) => {
   }
 });
 
+/*
+- helper method to check admin authentication
+- if the stated user is not admin a request is sent!
+ */
 function adminAuthentification(user: any, res: any, id: number, token: string, admin: any) {
   if (foundUser(user, res) && checkToken(user, res, token) && admin) {
+    //please note: foundUser() and checkToken() methods send error requests, if needed
       return true;
   } else {
     res.statusCode = 401; // unauthorized

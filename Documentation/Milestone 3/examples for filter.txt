@@ -21,17 +21,13 @@
 			maxDate: ms since 1970 (int)
 		},
 		{
-			filter:"languages",
+			filter:"language",
 			languages: ["lang1","lang2"]
 		},
 		{
 			filter:"postcode",
 			postcodes:["3018","3027"]
 		},
-		{
-			filter:"city",
-			cities:["City1","City2","City3"]
-		}
 		{
 			filter:"salaryType",
 			salaryType: int (see model/requests)
@@ -40,6 +36,11 @@
 			filter:"salaryAmount",
 			minSalary: int,
 			maxSalary: int
+		},
+		{
+			filter:"workload",
+			minworkload: int,
+			maxworkload: int
 		}]
 }
 
