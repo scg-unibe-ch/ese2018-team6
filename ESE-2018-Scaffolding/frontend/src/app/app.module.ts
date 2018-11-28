@@ -30,6 +30,7 @@ import {FormatService} from './format.service';
 import {RequestService} from './request.service';
 import {ToastrModule} from 'ngx-toastr';
 import {AccountSettingsComponent} from './account-settings/account-settings.component';
+import {ValidationService} from './validation.service';
 
 @NgModule({
   declarations: [
@@ -72,8 +73,14 @@ import {AccountSettingsComponent} from './account-settings/account-settings.comp
       resetTimeoutOnDuplicate: true,
     }),
   ],
-  providers: [FormatService, RequestService],
-  bootstrap: [AppComponent]
+  providers: [
+    FormatService,
+    RequestService,
+    ValidationService
+  ],
+  bootstrap: [
+    AppComponent
+  ]
 })
 
 export class AppModule { }

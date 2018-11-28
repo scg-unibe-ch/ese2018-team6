@@ -15,7 +15,7 @@
     <label class="col-sm-3 control-label">Title</label>
     <div class="col-sm-9">
       <input class="form-control" placeholder="Title" name="title" [(ngModel)]="jobData.title">
-      <div class="alert alert-danger" *ngIf="errorMessage.titleEmpty === true">
+      <div class="alert alert-danger" *ngIf="error.titleEmpty === true">
         Please enter Title
       </div>
     </div>
@@ -26,7 +26,7 @@
     <label for="desc" class="col-sm-3 control-label">Description</label>
     <div class="col-sm-9">
       <textarea id="desc" rows="3" class="form-control" placeholder="Description" name="description" [(ngModel)]="jobData.description"></textarea>
-      <div class="alert alert-danger" *ngIf="errorMessage.descriptionEmpty === true">
+      <div class="alert alert-danger" *ngIf="error.descriptionEmpty === true">
         Please enter Description
       </div>
     </div>
@@ -36,15 +36,50 @@
   <div class="form-group" id="workload">
     <label class="col-sm-3 control-label">Workload</label>
     <div class="col-sm-4">
-      <div class="input-group" id="workloadMin">
-        <input type="text" class="form-control" placeholder="Min" name="workloadMin" [(ngModel)]="jobData.workloadMin">
-        <div class="input-group-addon">%</div>
+      <div id="workloadMin">
+        <div  class="input-group">
+          <input type="text" class="form-control" placeholder="Min" name="workloadMin" [(ngModel)]="jobData.workloadMin">
+          <div class="input-group-addon">%</div>
+        </div>
+        <div class="alert alert-danger" *ngIf="error.workloadMin === true">
+          <div *ngIf="error.workloadMinEmpty === true">
+            Please enter Minimum
+          </div>
+          <div *ngIf="error.workloadMinNumber === true && error.workloadMinLow != true && error.workloadMinHigh != true">
+            Must be number
+          </div>
+          <div *ngIf="error.workloadMinLow === true && error.workloadMinEmpty != true">
+            Must be ≥ 1
+          </div>
+          <div *ngIf="error.workloadMinHigh === true">
+            Must be ≤ 100
+          </div>
+        </div>
       </div>
     </div>
     <div class="col-sm-offset-1 col-sm-4">
-      <div class="input-group" id="workloadMax">
-        <input type="text" class="form-control" placeholder="Max" name="workloadMax" [(ngModel)]="jobData.workloadMax">
-        <div class="input-group-addon">%</div>
+      <div id="workloadMax">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Max" name="workloadMax" [(ngModel)]="jobData.workloadMax">
+          <div class="input-group-addon">%</div>
+        </div>
+        <div class="alert alert-danger" *ngIf="error.workloadMax == true">
+          <div *ngIf="error.workloadMaxEmpty == true">
+            Please enter Maximum
+          </div>
+          <div *ngIf="error.workloadMaxNumber == true && error.workloadMaxLow == false && error.workloadMaxHigh == false">
+            Must be number
+          </div>
+          <div *ngIf="error.workloadMaxLow == true && error.workloadMaxEmpty == false">
+            Must be ≥ 1
+          </div>
+          <div *ngIf="error.workloadMaxHigh == true">
+            Must be ≤ 100
+          </div>
+          <div *ngIf="error.workloadMaxRange == true">
+            Must be Min ≤ Max
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -61,17 +96,22 @@
     <label class="col-sm-3 control-label">Skills</label>
     <div class="col-sm-9">
       <input class="form-control" placeholder="Required Skills" name="skills" [(ngModel)]="jobData.skills">
-      <div class="alert alert-danger" *ngIf="errorMessage.skillsEmpty === true">
+      <div class="alert alert-danger" *ngIf="error.skillsEmpty === true">
         Please enter Skills
       </div>
     </div>
   </div>
 
   <!-- Languages (First/Second) -->
-  <div class="form-group" id="language">
-    <label class="col-sm-3 control-label">Languages</label>
+  <div class="form-group">
+    <div id="languages">
+      <label class="col-sm-3 control-label">Languages</label>
+    </div>
     <div class="col-sm-4" id="firstLanguage">
       <input class="form-control" placeholder="First Language" name="firstLanguage" [(ngModel)]="jobData.firstLanguage">
+      <div class="alert alert-danger" *ngIf="error.languageEmpty === true">
+        Please enter a Language
+      </div>
     </div>
     <div class="col-sm-offset-1 col-sm-4" id="secondLanguage">
       <input class="form-control" placeholder="Second Language" name="secondLanguage" [(ngModel)]="jobData.secondLanguage">
@@ -89,7 +129,10 @@
   <div class="form-group" id="startDate">
     <label class="col-sm-3 control-label">Start Date</label>
     <div class="col-sm-9">
-      <input class="form-control" placeholder="dd.mm.yyyy" name="startDate" [(ngModel)]="jobData.startDate">
+      <input class="form-control" placeholder="dd.mm.yyyy" name="startDate" [(ngModel)]="startDate">
+      <div class="alert alert-danger" *ngIf="error.startDateFormat === true">
+        Please enter the Start Date in a valid Format
+      </div>
     </div>
   </div>
 
@@ -97,7 +140,10 @@
   <div class="form-group" id="endDate">
     <label class="col-sm-3 control-label">End Date</label>
     <div class="col-sm-9">
-      <input class="form-control" placeholder="dd.mm.yyyy" name="endDate" [(ngModel)]="jobData.endDate">
+      <input class="form-control" placeholder="dd.mm.yyyy" name="endDate" [(ngModel)]="endDate">
+      <div class="alert alert-danger" *ngIf="error.endDateFormat === true">
+        Please enter the End Date in a valid Format
+      </div>
     </div>
   </div>
 
@@ -105,7 +151,15 @@
   <div class="form-group" id="validUntil">
     <label class="col-sm-3 control-label">Offer Valid Until</label>
     <div class="col-sm-9">
-      <input class="form-control" placeholder="dd.mm.yyyy" name="offerValidUntil" [(ngModel)]="jobData.validUntil">
+      <input class="form-control" placeholder="dd.mm.yyyy" name="offerValidUntil" [(ngModel)]="validUntil">
+      <div class="alert alert-danger" *ngIf="error.validUntil === true">
+        <div *ngIf="error.validUntilEmpty === true">
+          Please enter a valid until Date
+        </div>
+        <div *ngIf="error.validUntilFormat == true && error.validUntilEmpty != true">
+          Please enter the valid until Date in a valid Format
+        </div>
+      </div>
     </div>
   </div>
 
@@ -123,7 +177,7 @@
     </div>
     <div class="col-sm-7" id="street">
       <input class="form-control" placeholder="Street" name="street" [(ngModel)]="jobData.street">
-      <div class="alert alert-danger" *ngIf="errorMessage.streetEmpty === true">
+      <div class="alert alert-danger" *ngIf="error.streetEmpty === true">
         Please enter Street
       </div>
     </div>
@@ -139,24 +193,24 @@
     </div>
     <div class="col-sm-2" id="postcode">
       <input class="form-control" placeholder="ZIP Code" name="zipCode" [(ngModel)]="jobData.postcode">
-      <div class="alert alert-danger" *ngIf="errorMessage.postcode === true">
-        <div *ngIf="errorMessage.postcodeEmpty === true">
+      <div class="alert alert-danger" *ngIf="error.postcode === true">
+        <div *ngIf="error.postcodeEmpty === true">
           Please enter ZIP Code
         </div>
-        <div *ngIf="errorMessage.postcodeNumber === true && errorMessage.postcodeLow != true && errorMessage.postcodeHigh != true">
+        <div *ngIf="error.postcodeNumber === true && error.postcodeLow != true && error.postcodeHigh != true">
           Must be number
         </div>
-        <div *ngIf="errorMessage.postcodeLow === true && errorMessage.postcodeEmpty != true">
-          Must be >= 1000
+        <div *ngIf="error.postcodeLow === true && error.postcodeEmpty != true">
+          Must be ≥ 1000
         </div>
-        <div *ngIf="errorMessage.postcodeHigh === true">
-          Must be <= 9999
+        <div *ngIf="error.postcodeHigh === true">
+          Must be ≤ 9999
         </div>
       </div>
     </div>
     <div class="col-sm-7" id="city">
       <input class="form-control" placeholder="Place" name="place" [(ngModel)]="jobData.city">
-      <div class="alert alert-danger" *ngIf="errorMessage.cityEmpty === true">
+      <div class="alert alert-danger" *ngIf="error.cityEmpty === true">
         Please enter City
       </div>
     </div>
@@ -178,6 +232,9 @@
         <option>Hourly</option>
         <option>One Time Payment</option>
       </select>
+      <div class="alert alert-danger" *ngIf="error.salaryTypeEmpty === true">
+        Please enter Salary Type
+      </div>
     </div>
   </div>
 

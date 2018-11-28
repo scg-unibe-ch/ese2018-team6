@@ -14,7 +14,7 @@
           <span class="label label-success" *ngIf="myJobData.accepted == true">Approved</span>
           <span class="label label-warning" *ngIf="myJobData.accepted == null">In Review</span>
           <span class="label label-danger" *ngIf="myJobData.accepted == false">Denied</span>
-          {{ format.simpleDate(myJobData.datePosted) }}
+          {{ format.datePosted(myJobData.datePosted) }}
            |
           <strong>{{ format.simpleText(myJobData.city) }}</strong>
            |
@@ -34,11 +34,11 @@
 
       <!-- Edit/Delete Button for your Job Posting -->
       <td class="text-right">
-        <button type="button" class="btn btn-primary" (click)="onEditJobItem()">
+        <button type="button" class="btn btn-primary" title="Edit" (click)="onEditJobItem()">
           <span class="glyphicon glyphicon-edit"></span>
         </button>
         <br>
-        <button type="button" class="btn btn-danger" (click)="onDeleteJobItem()">
+        <button type="button" class="btn btn-danger" title="Delete" (click)="onDeleteJobItem()">
           <span class="glyphicon glyphicon-trash"></span>
         </button>
       </td>

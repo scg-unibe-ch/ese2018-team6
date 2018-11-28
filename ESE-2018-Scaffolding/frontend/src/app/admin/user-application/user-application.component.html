@@ -16,7 +16,7 @@
         {{ format.street(userApplicationEntry.street, userApplicationEntry.houseNumber) }}
       </p>
       <p>
-        <strong>ZIP Code / Place</strong><br>
+        <strong>Postcode / Place</strong><br>
         {{ format.city(userApplicationEntry.postcode, userApplicationEntry.city) }}
       </p>
       <p>
@@ -43,11 +43,11 @@
 
     <!-- Approve/Deny Button for Admin to evaluate User Application -->
     <td class="pull-right">
-      <button type="button" class="btn btn-success" (click)="onApprovedUserApplication()">
+      <button type="button" class="btn btn-success" title="Accept" (click)="onApprovedUserApplication()">
         <span class="glyphicon glyphicon-ok"></span>
       </button>
       <br>
-      <button type="button" class="btn btn-danger" (click)="onDeniedUserApplication()">
+      <button type="button" class="btn btn-danger" title="Deny" (click)="onDeniedUserApplication()">
         <span class="glyphicon glyphicon-remove"></span>
       </button>
     </td>

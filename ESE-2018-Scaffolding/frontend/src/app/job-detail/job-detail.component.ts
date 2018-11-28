@@ -73,7 +73,7 @@ export class JobDetailComponent implements OnInit {
   }
 
   /**
-   *  Loads details of the job posting with the given ID.
+   *  Loads details of the job posting with the ID that was received as a parameter.
    */
   loadJobDetails() {
     this.request.jobDetails(this.jobId).subscribe(
@@ -104,7 +104,8 @@ export class JobDetailComponent implements OnInit {
   }
 
   /**
-   *  Loads details of the company with the given ID.
+   *  Loads details of company with the ID that was received as a parameter.
+   *  This company is related to the job posting on the given page.
    */
   loadCompanyDetails() {
     this.request.companyDetails(this.companyId).subscribe(

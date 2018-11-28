@@ -58,7 +58,9 @@ export class RequestService {
    *  @returns {Observable<Object>}   Observable of GET-Request.
    */
   jobListFilter(filterValues: string) {
-    // TODO - Filter Request
+    return this.httpClient.post(this.backendURL + 'jobitem/filer', {
+      filterValues
+    });
   }
 
 
@@ -100,15 +102,18 @@ export class RequestService {
    *  Requires userId and userToken for verification and jobData with all details.
    *
    *  @param {Job} jobData            Job object with all required details.
+   *  @param startDate                Start date as string entered by user
+   *  @param endDate                  End date as string entered by user
+   *  @param validUntil               Valid until date as string entered by user
    */
-  jobCreate(jobData: Job) {
+  jobCreate(jobData: Job, startDate: String, endDate: String, validUntil: String) {
     this.getLocalStorage();
     this.httpClient.post(this.backendURL + 'jobitem/' + this.userId + '/' + this.userToken, {
       'title': jobData.title,
       'description': jobData.description,
-      'startDate': jobData.startDate,
-      'endDate': jobData.endDate,
-      'validUntil': jobData.validUntil,
+      'startDate': this.format.dateFromStringToMillisecond(startDate),
+      'endDate': this.format.dateFromStringToMillisecond(endDate),
+      'validUntil': this.format.dateFromStringToMillisecond(validUntil),
       'workloadMin': jobData.workloadMin,
       'workloadMax': jobData.workloadMax,
       'firstLanguage': jobData.firstLanguage,
@@ -142,15 +147,18 @@ export class RequestService {
    *  Requires userId and userToken for verification and jobData with all details.
    *
    *  @param {Job} jobData            Job object with all required details.
+   *  @param startDate                Start date as string entered by user
+   *  @param endDate                  End date as string entered by user
+   *  @param validUntil               Valid until date as string entered by user
    */
-  jobUpdate(jobData: Job){
+  jobUpdate(jobData: Job, startDate: String, endDate: String, validUntil: String){
     this.getLocalStorage();
     this.httpClient.put(this.backendURL + 'jobitem/' + jobData.id + '/' + this.userId + '/' + this.userToken, {
       'title': jobData.title,
       'description': jobData.description,
-      'startDate': jobData.startDate,
-      'endDate': jobData.endDate,
-      'validUntil': jobData.validUntil,
+      'startDate': this.format.dateFromStringToMillisecond(startDate),
+      'endDate': this.format.dateFromStringToMillisecond(endDate),
+      'validUntil': this.format.dateFromStringToMillisecond(validUntil),
       'workloadMin': jobData.workloadMin,
       'workloadMax': jobData.workloadMax,
       'firstLanguage': jobData.firstLanguage,
@@ -484,6 +492,16 @@ export class RequestService {
     this.userToken = localStorage.getItem('user-token');
   }
 
+  /**
+   *  Signs out the current user by deleting the user items in LocalStorage.
+   */
+  onSignOut() {
+    localStorage.removeItem('user-id');
+    localStorage.removeItem('user-token');
+    localStorage.removeItem('isAdmin');
+    this.toastr.warning('', 'You are now signed out');
+    this.router.navigate(['']).then();
+  }
 
   /**
    *  Checks if the current user has a token (and is therefore logged in)

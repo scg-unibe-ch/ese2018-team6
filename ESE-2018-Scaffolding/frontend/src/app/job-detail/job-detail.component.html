@@ -5,9 +5,9 @@
 <!-- Job Details -->
 <div class="col-sm-8">
 
-  <!-- General / Date Posted, City and Workload -->
+  <!-- General: Date Posted, City and Workload -->
   <small>
-    {{ format.simpleDate(jobData.datePosted) }}
+    {{ format.datePosted(jobData.datePosted) }}
      |
     <strong>{{ format.simpleText(jobData.city) }}</strong>
      |
@@ -18,7 +18,7 @@
   <h4>Description</h4>
   <p>{{ format.simpleText(jobData.description) }}</p>
 
-  <!-- Requirements / Skills and Languages -->
+  <!-- Requirements: Skills and Languages -->
   <h4>Requirements</h4>
   <table class="table">
     <tbody>
@@ -33,7 +33,7 @@
     </tbody>
   </table>
 
-  <!-- Dates / Start Date and End Date -->
+  <!-- Dates: Start Date and End Date -->
   <h4>Dates</h4>
   <table class="table">
     <tbody>
@@ -48,7 +48,7 @@
     </tbody>
   </table>
 
-  <!-- Work Location / Street, House No., Postcode and City -->
+  <!-- Work Location: Street, House No., Postcode and City -->
   <h4>Work Location</h4>
   <table class="table">
     <tbody>
@@ -57,13 +57,13 @@
       <td style="width: 60%;">{{ format.street(jobData.street, jobData.houseNumber) }}</td>
     </tr>
     <tr>
-      <th scope="row">ZIP Code / Place</th>
+      <th scope="row">Postcode / Place</th>
       <td>{{ format.city(jobData.postcode, jobData.city) }}</td>
     </tr>
     </tbody>
   </table>
 
-  <!-- Salary / Type and Amount -->
+  <!-- Salary: Type and Amount -->
   <h4>Salary</h4>
   <table class="table">
     <tr>
@@ -100,7 +100,7 @@
     {{ format.simpleText(companyData.description) }}
   </p>
 
-  <!-- Address / Name, Street, House No., Postcode and City -->
+  <!-- Address: Name, Street, House No., Postcode and City -->
   <p>
     <strong>Address</strong><br>
     {{ format.simpleText(companyData.name) }}<br>
@@ -114,18 +114,18 @@
     {{ format.simpleText(companyData.contactName) }}<br>
   </p>
 
-  <!-- Contact Details / Phone, E-Mail and Website -->
+  <!-- Contact Details: Phone, E-Mail and Website -->
   <table>
     <tbody>
-    <tr>
+    <tr *ngIf="!format.isEmpty(companyData.contactPhone)">
       <td style="width: 25%">Phone:</td>
       <td>{{ format.simpleText(companyData.contactPhone) }}</td>
     </tr>
-    <tr>
+    <tr *ngIf="!format.isEmpty(companyData.contactEmail)">
       <td>E-Mail:</td>
       <td><a href="mailto:{{ companyData.contactEmail }}">{{ format.simpleText(companyData.contactEmail) }}</a></td>
     </tr>
-    <tr>
+    <tr *ngIf="!format.isEmpty(companyData.website)">
       <td>Website:</td>
       <td><a href="http://www.{{ companyData.website }}">{{ format.website(companyData.website) }}</a></td>
     </tr>

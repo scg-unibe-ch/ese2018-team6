@@ -7,66 +7,52 @@ export class FormatService {
 
   constructor() { }
 
-  /*
-  // POSSIBLE APPROACH
-  formatDate(datePosted: string) {
-    var tmpDate = datePosted.split('.');
-    var newDate = new Date(parseInt(tmpDate[2]), parseInt(tmpDate[1]), parseInt(tmpDate[0])+1);
 
-    let dd = newDate.getUTCDate();
+  dateFromStringToMillisecond(stringDate: String) {
+    var tmpDate = stringDate.split('.');
+    var year = parseInt(tmpDate[2]);
+    var month = parseInt(tmpDate[1])-1;
+    var day = parseInt(tmpDate[0])+1;
+    var newDate = new Date(year, month, day);
+    return newDate.getTime();
+  }
+
+  dateFromMillisecondToString(ms: number){
+    var tmpDate = new Date(null, null, null, null, null, null, ms);
+
+    let dd = tmpDate.getUTCDate() + 1;
     let day = (dd < 10) ? ('0' + dd) : (dd);
 
-    let mm = newDate.getUTCMonth();
+    let mm = tmpDate.getUTCMonth() + 1;
     let month = (mm < 10) ? ('0' + mm) : (mm);
 
-    let year = newDate.getFullYear() - 2000;
+    let year = tmpDate.getFullYear() + 70;
 
     return day + '.' + month + '.' + year;
   }
-  */
 
-  /**
-   *  Formats a standard date to a string DD.MM.YYYY.
-   *  Requires a date and returns the string of it.
-   *
-   *  @param {Date} date        Date to be formatted.
-   *  @returns {Date}           Formatted date as string.
-   */
-  simpleDate(date: Date) {
-    // TODO - Proper implementation
-    return date;
+  datePosted(ms: number){
+    if(ms < 10){
+      return "Not Published";
+    } else {
+      return this.dateFromMillisecondToString(ms);
+    }
   }
 
-  /**
-   *  Formats the start date to a string DD.MM.YYYY or
-   *  returns 'By Arrangement' if nothing was set.
-   *  Requires a date and returns the string of it.
-   *
-   *  @param {Date} date        Date to be formatted.
-   *  @returns {any}            Formatted date as string.
-   */
-  startDate(date: Date) {
-    if(date == null){
-      return 'By Arrangement'
-      // TODO - Proper implementation
+  startDate(ms: number){
+    if(ms < 10){
+      return "By Arrangement";
+    } else {
+      return this.dateFromMillisecondToString(ms);
     }
-    return date;
   }
 
-  /**
-   *  Formats the end date to a string DD.MM.YYYY or
-   *  returns 'None / Permanent' if nothing was set.
-   *  Requires a date and returns the string of it.
-   *
-   *  @param {Date} date        Date to be formatted.
-   *  @returns {any}            Formatted date as string.
-   */
-  endDate(date: Date) {
-    if(date == null){
-      return 'None / Permanent'
-      // TODO - Proper implementation
+  endDate(ms: number){
+    if(ms < 10){
+      return "None / Permanent";
+    } else {
+      return this.dateFromMillisecondToString(ms);
     }
-    return date;
   }
 
   /**

@@ -1,12 +1,12 @@
 <h3>
-  <!-- Header with chaning titles (depending on shown list of job postings), buttons for toggling search/filter and 'Create New' button for logged in users -->
+  <!-- Header with changing titles (depending on shown list of job postings), buttons for toggling search/filter and 'Create New' button for logged in users -->
   <span *ngIf="showResults === 'allJobs'">Job Offers</span>
   <span *ngIf="showResults === 'searchResults'">Search Results</span>
   <span *ngIf="showResults === 'filterResults'">Filter Results</span>
   <span class="pull-right">
-    <button type="button" class="btn" (click)="toggleSearch()"><span class="glyphicon glyphicon-search"></span></button>
-    <button type="button" class="btn" (click)="toggleFilter()"><span class="glyphicon glyphicon-filter"></span></button>
-    <button type="button" class="btn btn-primary" routerLink="/jobs/create" *ngIf="this.request.checkIfUser() && !this.request.checkIfAdmin()"><span class="glyphicon glyphicon-plus"></span></button>
+    <button type="button" class="btn" title="Search" (click)="toggleSearch()"><span class="glyphicon glyphicon-search"></span></button>
+    <button type="button" class="btn" title="Filter" (click)="toggleFilter()"><span class="glyphicon glyphicon-filter"></span></button>
+    <button type="button" class="btn btn-primary" title="Create new Job Posting" routerLink="/jobs/create" *ngIf="this.request.checkIfUser() && !this.request.checkIfAdmin()"><span class="glyphicon glyphicon-plus"></span></button>
   </span>
 </h3>
 <hr>
@@ -31,11 +31,125 @@
 <form class="form-horizontal">
   <div class="searchFilter" *ngIf="showSearchFilter === 'filter'">
     <div class="form-group">
-      <label class="col-sm-2 control-label">Filter Term</label>
-      <div class="col-sm-6">
-        <input class="form-control" placeholder="Filter Term" name="filterTerm" [(ngModel)]="searchTerm">
+      <label class="col-sm-2 control-label">Date Posted</label>
+      <div class="col-sm-3" id="datePostedFrom">
+        <input class="form-control" placeholder="From (DD.MM.YYYY)" name="datePostedFrom" [(ngModel)]="datePostedFrom">
+        <div class="alert alert-danger" *ngIf="error.filter_datePostedFrom === true">
+          Please enter the date in a valid format
+        </div>
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-3" id="datePostedTo">
+        <input class="form-control" placeholder="To (DD.MM.YYYY)" name="datePostedTo" [(ngModel)]="datePostedTo">
+        <div class="alert alert-danger" *ngIf="error.filter_datePostedTo === true">
+          Please enter the date in a valid format
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Start Date</label>
+      <div class="col-sm-3" id="startDateFrom">
+        <input class="form-control" placeholder="From (DD.MM.YYYY)" name="startDateFrom" [(ngModel)]="startDateFrom">
+        <div class="alert alert-danger" *ngIf="error.filter_startDateFrom === true">
+          Please enter the date in a valid format
+        </div>
+      </div>
+      <div class="col-sm-3" id="startDateTo">
+        <input class="form-control" placeholder="To (DD.MM.YYYY)" name="startDateTo" [(ngModel)]="startDateEnd">
+        <div class="alert alert-danger" *ngIf="error.filter_startDateTo === true">
+          Please enter the date in a valid format
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">End Date</label>
+      <div class="col-sm-3" id="endDateFrom">
+        <input class="form-control" placeholder="From (DD.MM.YYYY)" name="endDateFrom" [(ngModel)]="endDateFrom">
+        <div class="alert alert-danger" *ngIf="error.filter_endDateFrom === true">
+          Please enter the date in a valid format
+        </div>
+      </div>
+      <div class="col-sm-3" id="endDateTo">
+        <input class="form-control" placeholder="To (DD.MM.YYYY)" name="endDateTo" [(ngModel)]="endDateEnd">
+        <div class="alert alert-danger" *ngIf="error.filter_endDateTo === true">
+          Please enter the date in a valid format
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Valid Until</label>
+      <div class="col-sm-3" id="validUntilFrom">
+        <input class="form-control" placeholder="From (DD.MM.YYYY)" name="validUntilFrom" [(ngModel)]="validUntilFrom">
+        <div class="alert alert-danger" *ngIf="error.filter_validUntilFrom === true">
+          Please enter the date in a valid format
+        </div>
+      </div>
+      <div class="col-sm-3" id="validUntilTo">
+        <input class="form-control" placeholder="To (DD.MM.YYYY)" name="validUntilTo" [(ngModel)]="validUntilEnd">
+        <div class="alert alert-danger" *ngIf="error.filter_validUntilTo === true">
+          Please enter the date in a valid format
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Languages</label>
+      <div class="col-sm-3" id="firstLanguage">
+        <input class="form-control" placeholder="First" name="firstLanguage" [(ngModel)]="firstLanguage">
+        <div class="alert alert-danger" *ngIf="error.filter_firstLanguage === true">
+          Please enter a language
+        </div>
+      </div>
+      <div class="col-sm-3" id="secondLanguage">
+        <input class="form-control" placeholder="Second" name="secondLanguage" [(ngModel)]="secondLanguage">
+        <div class="alert alert-danger" *ngIf="error.filter_secondLanguage === true">
+          Please enter a language
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Postcode</label>
+      <div class="col-sm-3" id="postcodeMin">
+        <input class="form-control" placeholder="Min" name="postcodeMin" [(ngModel)]="postcodeMin">
+        <div class="alert alert-danger" *ngIf="error.filter_postcodeMin === true">
+          Please enter number between 1000 and 9999
+        </div>
+      </div>
+      <div class="col-sm-3" id="postcodeMax">
+        <input class="form-control" placeholder="Max" name="postcodeMax" [(ngModel)]="postcodeMax">
+        <div class="alert alert-danger" *ngIf="error.filter_postcodeMax === true">
+          Please enter the date in a valid format
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Salary Amount</label>
+      <div class="col-sm-3" id="salaryMin">
+        <input class="form-control" placeholder="Min" name="salaryAmountMin" [(ngModel)]="salaryAmountMin">
+        <div class="alert alert-danger" *ngIf="error.filter_salaryMin === true">
+          Please enter number
+        </div>
+      </div>
+      <div class="col-sm-3" id="salaryMax">
+        <input class="form-control" placeholder="Max" name="salaryAmountMax" [(ngModel)]="salaryAmountMax">
+        <div class="alert alert-danger" *ngIf="error.filter_salaryMax === true">
+          Please enter number
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Workload</label>
+      <div class="col-sm-3" id="workloadMin">
+        <input class="form-control" placeholder="Min" name="workloadMin" [(ngModel)]="workloadMin">
+        <div class="alert alert-danger" *ngIf="error.filter_workloadMin === true">
+          Please enter number between 1 and 100
+        </div>
+      </div>
+      <div class="col-sm-3" id="workloadMax">
+        <input class="form-control" placeholder="Max" name="workloadMax" [(ngModel)]="workloadMax">
+        <div class="alert alert-danger" *ngIf="error.filter_workloadMax === true">
+          Please enter number between 1 and 100
+        </div>
+      </div>
+      <div class="col-sm-offset-1 col-sm-3">
         <button type="submit" class="btn btn-success" (click)="loadJobListFilter()">Filter</button>
         <button type="button" class="btn btn-danger" (click)="cancelFilter()">Cancel</button>
       </div>

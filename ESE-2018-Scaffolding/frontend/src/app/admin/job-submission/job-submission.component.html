@@ -12,12 +12,20 @@
         {{ format.simpleText(jobSubmissionEntry.description) }}
       </p>
       <p>
+        <strong>Workload</strong><br>
+        {{ format.workload(jobSubmissionEntry.workloadMin, jobSubmissionEntry.workloadMax) }}
+      </p>
+      <p>
         <strong>Required Skills</strong><br>
         {{ format.simpleText(jobSubmissionEntry.skills) }}
       </p>
       <p>
+        <strong>Languages</strong><br>
+        {{ format.languages(jobSubmissionEntry.firstLanguage, jobSubmissionEntry.secondLanguage) }}
+      </p>
+      <p>
         <strong>Date Posted</strong><br>
-        {{ format.simpleDate(jobSubmissionEntry.datePosted) }}
+        {{ format.datePosted(jobSubmissionEntry.datePosted) }}
       </p>
       <p>
         <strong>Start Date</strong><br>
@@ -29,22 +37,14 @@
       </p>
       <p>
         <strong>Offer Valid Until</strong><br>
-        {{ format.simpleDate(jobSubmissionEntry.validUntil) }}
-      </p>
-      <p>
-        <strong>Workload</strong><br>
-        {{ format.workload(jobSubmissionEntry.workloadMin, jobSubmissionEntry.workloadMax) }}
-      </p>
-      <p>
-        <strong>Languages</strong><br>
-        {{ format.languages(jobSubmissionEntry.firstLanguage, jobSubmissionEntry.secondLanguage) }}
+        {{ format.dateFromMillisecondToString(jobSubmissionEntry.validUntil) }}
       </p>
       <p>
         <strong>Street</strong><br>
         {{ format.street(jobSubmissionEntry.street, jobSubmissionEntry.houseNumber) }}
       </p>
       <p>
-        <strong>ZIP Code / Place</strong><br>
+        <strong>Postcode / Place</strong><br>
         {{ format.city(jobSubmissionEntry.postcode, jobSubmissionEntry.city) }}
       </p>
       <p>
@@ -59,11 +59,11 @@
 
     <!-- Approve/Deny Button for Admin to evaluate Job Posting -->
     <td class="pull-right">
-      <button type="button" class="btn btn-success" (click)="onApprovedJobSubmission()">
+      <button type="button" class="btn btn-success" title="Accept" (click)="onApprovedJobSubmission()">
         <span class="glyphicon glyphicon-ok"></span>
       </button>
       <br>
-      <button type="button" class="btn btn-danger" (click)="onDeniedJobSubmission()">
+      <button type="button" class="btn btn-danger" title="Deny" (click)="onDeniedJobSubmission()">
         <span class="glyphicon glyphicon-remove"></span>
       </button>
     </td>

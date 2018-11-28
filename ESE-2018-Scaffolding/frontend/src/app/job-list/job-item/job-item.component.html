@@ -12,7 +12,7 @@
 
       <!-- Date Posted, Location and Workload -->
       <td class="text-right" style="width: 1%; white-space: nowrap;">
-        <small>{{ format.simpleDate(jobData.datePosted) }}<br>
+        <small>{{ format.datePosted(jobData.datePosted) }}<br>
           <strong>{{ format.simpleText(jobData.city) }}</strong><br>
           {{ format.workload(jobData.workloadMin, jobData.workloadMax) }}
         </small>
