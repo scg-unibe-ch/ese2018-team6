@@ -97,10 +97,15 @@ router.put('/accept/:jobitemId/:id/:token', async (req: Request, res: Response) 
       instance.accepted = accept;
       if (accept == false) {
         instance.messageFromAdmin = req.body.message;
-      } else {
+      } else if (accept == true) {
         instance.messageFromAdmin = '';
         let today = new Date();
         instance.datePosted = today.getTime();
+      } else {
+        res.statusCode = 400;
+        res.json({
+          'message': 'please specify accept boolean'
+        });
       }
       await instance.save();
       res.statusCode = 200;
