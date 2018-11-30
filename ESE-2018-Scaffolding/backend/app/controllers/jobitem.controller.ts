@@ -123,6 +123,7 @@ router.post('/filter', async (req: Request, res: Response) => {
             });
           }
           break;
+
         default:
           sendErrorResponse(res,400,
             {'message': 'at least one filter type is not accepted'})
@@ -152,12 +153,12 @@ router.post('/filter', async (req: Request, res: Response) => {
  * @param maximumValue - String of the maximum property
  * @param res - response object, for sending bad request
  */
-function validateMinMaxFilter(filterObject: any, minimumValue: String, maximumValue:String, res: any){
-  if(filterObject.minDate && filterObject.maxDate && !isNaN(filterObject.minDate) && !isNaN(filterObject.maxDate)){
+function validateMinMaxFilter(filterObject: any, minimumValue: any, maximumValue: any, res: any){
+  if(filterObject[minimumValue] && filterObject[maximumValue] && !isNaN(filterObject[minimumValue]) && !isNaN(filterObject[maximumValue])){
     return true;
   } else {
     sendErrorResponse(res, 400,
-      {'message': 'at least one filter is not valid (date filter)'});
+      {'message': 'at least one filter is not valid (date/workload/salaryAmount filter)'});
     return false;
   }
 }
