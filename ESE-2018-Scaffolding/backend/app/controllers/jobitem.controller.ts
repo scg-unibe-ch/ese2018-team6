@@ -123,7 +123,32 @@ router.post('/filter', async (req: Request, res: Response) => {
             });
           }
           break;
-
+        case "salaryType":
+          if(filterObject.salaryType && !isNaN(filterObject.salaryType)){
+            filterArray.push({
+              salaryType: {[Op.eq]: filterObject.salaryType}
+            });
+          } else {
+            sendErrorResponse(res, 400,{'message':'salary type filter is invalid.'})
+          }
+          break;
+        case "salaryAmount":
+          if(validateMinMaxFilter(filterObject,"minSalaryAmount","maxSalaryAmount",res)){
+            filterArray.push({
+              salaryAmount: {[Op.between]: [filterObject.minSalaryAmount, filterObject.maxSalaryAmount]}
+            });
+          }
+          break;
+        case "workload":
+          if(validateMinMaxFilter(filterObject,"minWorkload","maxWorkload",res)){
+            filterArray.push({
+              [Op.and]: [
+                {workloadMin: {[Op.gte]: filterObject.minWorkload}},
+                {workloadMax: {[Op.lte]: filterObject.maxWorkload}}
+              ]
+            });
+          }
+          break;
         default:
           sendErrorResponse(res,400,
             {'message': 'at least one filter type is not accepted'})
