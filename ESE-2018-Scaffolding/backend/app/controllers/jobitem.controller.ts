@@ -76,41 +76,39 @@ router.post('/filter', async (req: Request, res: Response) => {
       let filterObject = req.body.filterList[i];
       switch (filterObject.filter) {
         case undefined:
-          res.statusCode = 400;
-          res.json({
-            'message': 'at least one filter object is invalid (missing filter property)'
-          });
+          sendErrorResponse(res, 400,
+            {'message': 'at least one filter object is invalid (missing filter property)'});
           break;
         case "datePosted":
-          if(validateDateFilter(filterObject, res)){
+          if(validateMinMaxFilter(filterObject,"minDate","maxDate",res)){
             filterArray.push({
               datePosted: {[Op.between]: [filterObject.minDate, filterObject.maxDate]}
             });
           }
           break;
         case "startDate":
-          if(validateDateFilter(filterObject, res)){
+          if(validateMinMaxFilter(filterObject,"minDate","maxDate",res)){
             filterArray.push({
               startDate: {[Op.between]: [filterObject.minDate, filterObject.maxDate]}
             });
           }
           break;
         case "endDate":
-          if(validateDateFilter(filterObject, res)){
+          if(validateMinMaxFilter(filterObject,"minDate","maxDate",res)){
             filterArray.push({
               endDate: {[Op.between]: [filterObject.minDate, filterObject.maxDate]}
             });
           }
           break;
         case "validUntil":
-          if(validateDateFilter(filterObject, res)){
+          if(validateMinMaxFilter(filterObject,"minDate","maxDate",res)){
             filterArray.push({
               validUntil: {[Op.between]: [filterObject.minDate, filterObject.maxDate]}
             });
           }
           break;
         case "language":
-          if(validateStringFilter(filterObject, "languages", res)){
+          if(validateArrayFilter(filterObject, "languages", true, res)){
             const opArray = createLanguageFilterOpArray(filterObject.languages);
             filterArray.push({
               [Op.or]: opArray
@@ -118,7 +116,7 @@ router.post('/filter', async (req: Request, res: Response) => {
           }
           break;
         case "postcode":
-          if(validateStringFilter(filterObject, "postcodes", res)){
+          if(validateArrayFilter(filterObject, "postcodes", true, res)){
             const opArray = createPostcodeFilterOpArray(filterObject.postcodes);
             filterArray.push({
               [Op.or]: opArray
@@ -126,10 +124,8 @@ router.post('/filter', async (req: Request, res: Response) => {
           }
           break;
         default:
-          res.statusCode = 400;
-          res.json({
-            'message': 'at least one filter type is not accepted'
-          });
+          sendErrorResponse(res,400,
+            {'message': 'at least one filter type is not accepted'})
       }
     }
     //now apply all these filter:
@@ -145,39 +141,50 @@ router.post('/filter', async (req: Request, res: Response) => {
     res.send(instances.map(e => e.toSimplification()));
 
   } else {
-    res.statusCode = 400;
-    res.json({
-      'message': 'please specify a filter list with at least filter object'
-    });
+    sendErrorResponse(res, 400, {'message': 'please specify a filter list with at least filter object'});
   }
 });
-/*
-checks if the filterObject is a valid date filter. If not, aborts the request and returns Bad Request.
+/**
+ * checks if the filterObject is a valid min/max filter (date, salaryAmount, workload). If not, aborts the request and returns Bad Request.
+ *
+ * @param filterObject - object to validate
+ * @param minimumValue - String of the minimum property
+ * @param maximumValue - String of the maximum property
+ * @param res - response object, for sending bad request
  */
-function validateDateFilter(filterObject: any, res: any){
+function validateMinMaxFilter(filterObject: any, minimumValue: String, maximumValue:String, res: any){
   if(filterObject.minDate && filterObject.maxDate && !isNaN(filterObject.minDate) && !isNaN(filterObject.maxDate)){
     return true;
   } else {
-    res.statusCode = 400;
-    res.json({
-      'message': 'at least one filter is not valid (date filter)'
-    });
+    sendErrorResponse(res, 400,
+      {'message': 'at least one filter is not valid (date filter)'});
     return false;
   }
 }
-/*
-checks if the filterObject is a valid string filter (language, postcode). If not, aborts the request and returns Bad Request.
+/**
+ * checks if the filterObject is a valid array filter (language, postcode). If not, aborts the request and returns Bad Request.
+ *
+ * @param filterObject - object to validate
+ * @param filterType - String with the name of the property which stores the array
+ * @param hasStringElements - flag, if true, the Elements in the array are Strings, otherwise numbers.
+ * @param res - response object, for sending bad request.
  */
-function validateStringFilter(filterObject: any, filterType: any, res: any){
-  if(filterObject[filterType] && filterObject[filterType] instanceof Array){
-    return true;
-  } else {
-    res.statusCode = 400;
-    res.json({
-      'message': 'at least one filter is not valid (language/postcode filter)'
-    });
-    return false;
+function validateArrayFilter(filterObject: any, filterType: any, hasStringElements: boolean, res: any){
+  if(filterObject[filterType] && filterObject[filterType] instanceof Array) {
+    if (hasStringElements) {
+      if (filterObject[filterType].length > 0 && typeof filterObject[filterType][0] === "string") {
+        return true;
+      }
+    }
+    if (!hasStringElements) {
+      if (filterObject[filterType].length > 0 && !isNaN(filterObject[filterType][0])) {
+        return true;
+      }
+    }
   }
+  sendErrorResponse(res,400,
+    {'message': 'at least one filter is not valid (language/postcode/salaryType filter)'} );
+  return false;
 }
 /*
 creates a "op" string, which can be passed to sequelize
@@ -203,6 +210,19 @@ function createPostcodeFilterOpArray(array: any){
     opArray.push({postcode: {[Op.eq]: array[i]}});
   }
   return opArray;
+}
+/**
+ * sends a response, but only if the response is not sent already
+ *
+ * @param res - response object
+ * @param statusCode - sets the status code of the response
+ * @param object - object, that is sent via json() method
+ */
+function sendErrorResponse(res: any, statusCode: number, object:any){
+  if(!res.headersSent){
+    res.statusCode = statusCode;
+    res.json(object);
+  }
 }
 
 /*
