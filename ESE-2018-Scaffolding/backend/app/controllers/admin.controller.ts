@@ -8,6 +8,38 @@ import {foundUser, checkToken} from './user.controller';
 const router: Router = Router();
 
 /*
+- returns a map of all jobitems which exist
+- need to be logged in as admin (userId and token needed)
+ */
+router.get('/allJobItems/:id/:token', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const token = req.params.token;
+  const user = await User.findById(id);
+  const admin = await Admin.findOne({ where: {userId: id }});
+  if (adminAuthentification(user, res, id, token, admin) && user !== null) {
+    const instances = await JobItem.findAll();
+    res.statusCode = 200;
+    res.send(instances.map(e => e.toSimplification()));
+  }
+});
+
+/*
+- returns a map of all companies which exist
+- need to be logged in as admin (userId and token needed)
+ */
+router.get('/allCompanies/:id/:token', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const token = req.params.token;
+  const user = await User.findById(id);
+  const admin = await Admin.findOne({ where: {userId: id }});
+  if (adminAuthentification(user, res, id, token, admin) && user !== null) {
+    const instances = await Company.findAll();
+    res.statusCode = 200;
+    res.send(instances.map(e => e.toSimplification()));
+  }
+});
+
+/*
 - returns a map of all unverified companies
 - need to be logged in as admin (userId and token needed)
  */
@@ -17,7 +49,7 @@ router.get('/unverifiedCompanies/:id/:token', async (req: Request, res: Response
   const user = await User.findById(id);
   const admin = await Admin.findOne({ where: {userId: id }});
   if (adminAuthentification(user, res, id, token, admin) && user !== null) {
-    const instances = await Company.findAll({where: {verified: false}});
+    const instances = await Company.findAll({where: {verified: null}});
     res.statusCode = 200;
     res.send(instances.map(e => e.toSimplification()));
   }
@@ -26,6 +58,7 @@ router.get('/unverifiedCompanies/:id/:token', async (req: Request, res: Response
 /*
 - for editing company verified status to given body boolean
 - need to be logged in as admin (userId and token needed)
+- sets 'onceVerified' to true
  */
 router.put('/verify/:companyId/:id/:token', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
@@ -38,7 +71,6 @@ router.put('/verify/:companyId/:id/:token', async (req: Request, res: Response) 
     });
     return;
   }
-
   const user = await User.findById(id);
   const admin = await Admin.findOne({ where: {userId: id }});
   if (adminAuthentification(user, res, id, token, admin) && user !== null) {
@@ -46,13 +78,13 @@ router.put('/verify/:companyId/:id/:token', async (req: Request, res: Response) 
     const instance = await Company.findOne({where: {userId: companyId}});
     if (instance !== null) {
       instance.verified = verify;
+      if (verify == true)
+        instance.onceVerified = true;
       if(req.body.message) {
         instance.messageFromAdmin = req.body.message;
       }
-
       res.statusCode = 200;
       await instance.save();
-
       res.send();
     } else {
       res.statusCode = 404;

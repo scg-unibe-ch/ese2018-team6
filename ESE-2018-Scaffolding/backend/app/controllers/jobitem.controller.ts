@@ -353,6 +353,8 @@ router.put('/:jobItemId/:id/:token', async (req: Request, res: Response) => {
       instance.fromSimplification(req.body);
       // @ts-ignore
       instance.accepted = null; // when edited, needs to be accepted again by admin
+      // @ts-ignore
+      instance.datePosted = null;
       await instance.save();
       res.statusCode = 200;
       res.send(instance.toSimplification());

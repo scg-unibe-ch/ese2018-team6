@@ -41,6 +41,9 @@ export class Company extends Model<Company> {
   verified!: boolean;
 
   @Column
+  onceVerified!: boolean;
+
+  @Column
   messageFromAdmin!: string;
 
   @ForeignKey(() => User)

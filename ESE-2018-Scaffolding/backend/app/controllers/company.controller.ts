@@ -22,7 +22,9 @@ router.post('/', async (req: Request, res: Response) => {
 
     const company = new Company();
     company.fromSimplification(req.body);
-    company.verified = false;
+    // @ts-ignore
+    company.verified = null;
+    company.onceVerified = false;
     company.userId = instance.id;
     company.messageFromAdmin = '';
 
@@ -84,7 +86,7 @@ router.get('/:id/:token', async (req: Request, res: Response) => {
 - simple get request without authentication to get an array with all verified companies
  */
 router.get('', async (req: Request, res: Response) => {
-  const instances = await Company.findAll({ where: {verified: true }});
+  const instances = await Company.findAll({ where: {onceVerified: true }});
   res.statusCode = 200;
   res.send(instances.map(e => e.toSimplification()));
 });
@@ -108,7 +110,8 @@ router.put('/:id/:token', async (req: Request, res: Response) => {
       return;
     }
     companyInstance.fromSimplification(req.body);
-    companyInstance.verified = false;
+    // @ts-ignore
+    companyInstance.verified = null;
     await companyInstance.save();
     res.statusCode = 200;
     res.send();
