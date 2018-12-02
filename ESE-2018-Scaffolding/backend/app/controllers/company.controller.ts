@@ -84,9 +84,16 @@ router.get('/:id/:token', async (req: Request, res: Response) => {
 
 /*
 - simple get request without authentication to get an array with all verified companies
+- return featured ones on top
  */
 router.get('', async (req: Request, res: Response) => {
-  const instances = await Company.findAll({ where: {onceVerified: true }});
+  const instances = await Company.findAll({
+    where: {onceVerified: true },
+    order: [
+      ['featured', 'DESC'],
+      ['accepted', 'ASC'],
+    ]
+  });
   res.statusCode = 200;
   res.send(instances.map(e => e.toSimplification()));
 });

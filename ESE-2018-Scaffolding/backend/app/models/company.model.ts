@@ -46,6 +46,9 @@ export class Company extends Model<Company> {
   @Column
   messageFromAdmin!: string;
 
+  @Column
+  featured!: boolean;
+
   @ForeignKey(() => User)
   @Column
   userId!: number;
@@ -68,6 +71,7 @@ export class Company extends Model<Company> {
       'companyDescription': this.companyDescription,
       'companyLogoURL' : this.companyLogoURL,
       'verified' : this.verified,
+      'featured' : this.featured,
     };
   }
 

@@ -62,6 +62,9 @@ export class JobItem extends Model<JobItem> {
   accepted!: boolean;
 
   @Column
+  featured!: boolean;
+
+  @Column
   messageFromAdmin!: string;
 
   @ForeignKey(() => User)
@@ -93,7 +96,8 @@ export class JobItem extends Model<JobItem> {
       'salaryAmount': this.salaryAmount,
       //'accepted': this.accepted,
       //'messageFromAdmin': this.messageFromAdmin, // no need to
-      'companyId': this.companyId
+      'companyId': this.companyId,
+      'featured' : this.featured,
     };
   }
 

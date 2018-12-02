@@ -173,6 +173,126 @@ router.put('/changeName/:id/:token', async (req: Request, res: Response) => {
 });
 
 /*
+- for deleting a jobitem
+- only possible for an admin
+ */
+router.delete('/deleteJobItem/:jobItemId/:id/:token', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const token = req.params.token;
+  const user = await User.findById(id);
+  const admin = await Admin.findOne({ where: {userId: id }});
+  if (adminAuthentification(user, res, id, token, admin) && user !== null){
+    const jobItemId = parseInt(req.params.jobItemId);
+    const jobItem = await JobItem.findById(jobItemId);
+    if (jobItem == null) {
+      res.statusCode = 404;
+      res.json({
+        'message': 'jobitem not found'
+      });
+      return;
+    }
+    await jobItem.destroy();
+    res.statusCode = 204;
+    res.send();
+  }
+});
+
+/*
+- for deleting a company
+- only possible for an admin
+ */
+router.delete('/deleteCompany/:companyId/:id/:token', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const token = req.params.token;
+  const companyId = req.params.companyId;
+  const user = await User.findById(id);
+  const admin = await Admin.findOne({ where: {userId: id }});
+  if (adminAuthentification(user, res, id, token, admin) && user !== null){
+    const companyInstance = await Company.findOne({ where: {userId: companyId }});
+    const companyUser = await User.findById(companyId);
+    if (companyInstance !== null && companyUser !== null) {
+      await companyUser.destroy();
+      await companyInstance.destroy();
+      res.statusCode = 204;
+      res.send();
+    } else {
+      res.statusCode = 404;
+      res.json({
+        'message': 'company not found'
+      });
+    }
+  }
+});
+
+/*
+- feature a company
+- need to be logged in as admin (userId and token needed)
+ */
+router.put('/featureCompany/:companyId/:id/:token', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const token = req.params.token;
+  const companyId = req.params.companyId;
+  const feature = req.body.feature;
+  if(!(feature == true || feature == false)){
+    res.statusCode = 400;
+    res.json({
+      'message': 'please set a valid boolean for feature'
+    });
+    return;
+  }
+  const user = await User.findById(id);
+  const admin = await Admin.findOne({ where: {userId: id }});
+  if (adminAuthentification(user, res, id, token, admin) && user !== null) {
+    const instance = await Company.findOne({where: {userId: companyId}});
+    if (instance !== null) {
+      instance.featured = feature;
+      res.statusCode = 200;
+      await instance.save();
+      res.send();
+    } else {
+      res.statusCode = 404;
+      res.json({
+        'message': 'company not found'
+      });
+    }
+  }
+});
+
+/*
+- feature a jobItem
+- need to be logged in as admin (userId and token needed)
+ */
+router.put('/featureJobItem/:jobItemId/:id/:token', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const token = req.params.token;
+  const jobItemId = req.params.jobItemId;
+  const feature = req.body.feature;
+  if(!(feature == true || feature == false)){
+    res.statusCode = 400;
+    res.json({
+      'message': 'please set a valid boolean for feature'
+    });
+    return;
+  }
+  const user = await User.findById(id);
+  const admin = await Admin.findOne({ where: {userId: id }});
+  if (adminAuthentification(user, res, id, token, admin) && user !== null) {
+    const instance = await Company.findById(jobItemId);
+    if (instance !== null) {
+      instance.featured = feature;
+      res.statusCode = 200;
+      await instance.save();
+      res.send();
+    } else {
+      res.statusCode = 404;
+      res.json({
+        'message': 'jobItem not found'
+      });
+    }
+  }
+});
+
+/*
 - helper method to check admin authentication
 - if the stated user is not admin a request is sent!
  */

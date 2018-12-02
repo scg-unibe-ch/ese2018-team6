@@ -57,6 +57,7 @@ router.get('/search/:term', async (req: Request, res: Response) => {
       ]
     },
     order: [
+      ['featured', 'DESC'],
       ['datePosted', 'DESC'],
     ]
   });
@@ -67,6 +68,7 @@ router.get('/search/:term', async (req: Request, res: Response) => {
 - for filtering the jobitem list -> returns a map of JobItems
 - specify a list of filters as written in the specification
 - jobitem has to be accepted
+- return featured ones on top
  */
 router.post('/filter', async (req: Request, res: Response) => {
   const Op = Sequelize.Op;
@@ -160,6 +162,7 @@ router.post('/filter', async (req: Request, res: Response) => {
         [Op.and]: filterArray
       },
       order: [
+        ['featured', 'DESC'],
         ['datePosted', 'DESC'],
       ]
     });
@@ -255,12 +258,14 @@ function sendErrorResponse(res: any, statusCode: number, object:any){
  - returns a map of JobItems
  - ordered according to datePosted
  - only works for accepted JobItems
+ - return featured ones on top
  */
 router.get('/', async (req: Request, res: Response) => {
   const instances = await JobItem.findAll(    {
     where:
       {accepted: true},
     order: [
+      ['featured', 'DESC'],
       ['datePosted', 'DESC'],
     ]
   });
