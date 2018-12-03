@@ -3,6 +3,7 @@ import {User} from '../models/user.model';
 import {Company} from '../models/company.model';
 import {JobItem} from '../models/jobitem.model';
 import {foundUser, checkToken, saltRounds} from './user.controller';
+import sequelize = require('sequelize');
 
 const router: Router = Router();
 /*
@@ -25,6 +26,7 @@ router.post('/', async (req: Request, res: Response) => {
     // @ts-ignore
     company.verified = null;
     company.onceVerified = false;
+    company.featured = false;
     company.userId = instance.id;
     company.messageFromAdmin = '';
 
@@ -91,7 +93,7 @@ router.get('', async (req: Request, res: Response) => {
     where: {onceVerified: true },
     order: [
       ['featured', 'DESC'],
-      ['accepted', 'ASC'],
+      ['companyName', 'ASC']
     ]
   });
   res.statusCode = 200;

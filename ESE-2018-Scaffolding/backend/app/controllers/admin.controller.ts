@@ -18,8 +18,13 @@ router.get('/allJobItems/:id/:token', async (req: Request, res: Response) => {
   const admin = await Admin.findOne({ where: {userId: id }});
   if (adminAuthentification(user, res, id, token, admin) && user !== null) {
     const instances = await JobItem.findAll();
+    let returnArray = instances.map(e => e.toSimplification());
+    for(let i = 0; i < returnArray.length; i++){
+      returnArray[i].message = instances[i].messageFromAdmin;
+      returnArray[i].accepted = instances[i].accepted;
+    }
     res.statusCode = 200;
-    res.send(instances.map(e => e.toSimplification()));
+    res.send(returnArray);
   }
 });
 
@@ -106,8 +111,14 @@ router.get('/unacceptedJobItems/:id/:token', async (req: Request, res: Response)
   const admin = await Admin.findOne({ where: {userId: id }});
   if (adminAuthentification(user, res, id, token, admin) && user !== null) {
     const instances = await JobItem.findAll({where: {accepted: null}});
+    let returnArray = instances.map(e => e.toSimplification());
+    for(let i = 0; i < returnArray.length; i++){
+      const company = await Company.findOne({where: {userId: instances[i].companyId}});
+      if (company !== null)
+        returnArray[i].companyName = company.companyName;
+    }
     res.statusCode = 200;
-    res.send(instances.map(e => e.toSimplification()));
+    res.send(returnArray);
   }
 });
 /*
@@ -277,7 +288,7 @@ router.put('/featureJobItem/:jobItemId/:id/:token', async (req: Request, res: Re
   const user = await User.findById(id);
   const admin = await Admin.findOne({ where: {userId: id }});
   if (adminAuthentification(user, res, id, token, admin) && user !== null) {
-    const instance = await Company.findById(jobItemId);
+    const instance = await JobItem.findById(jobItemId);
     if (instance !== null) {
       instance.featured = feature;
       res.statusCode = 200;
