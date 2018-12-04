@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {current} from 'codelyzer/util/syntaxKind';
 
 @Component({
@@ -24,6 +24,8 @@ export class FilterComponent implements OnInit {
   workloadMax: number = 0;
 
   nextMonth: Date = new Date();
+
+  @Output() sendFilter: EventEmitter<any> = new EventEmitter();
 
   constructor() {
     this.nextMonth.setMonth(6);
@@ -57,8 +59,8 @@ export class FilterComponent implements OnInit {
       let currentMonth = new Date();
       currentMonth.setMonth(new Date().getMonth() + i);
 
-      months.push(new OptionItem(monthStrings[currentMonth.getMonth()], currentMonth));
-      if(i == 0 || i == 11 || currentMonth.getMonth() == 0){
+      months.push(new OptionItem(monthStrings[currentMonth.getMonth()] + " " + currentMonth.getFullYear(), currentMonth));
+      if(i == 0 || i == 12 || currentMonth.getMonth() == 0){
         //add  year to the first item, last item and to every january item
         months[i].label += " " + currentMonth.getFullYear();
       }
@@ -82,7 +84,6 @@ export class FilterComponent implements OnInit {
     let filterList = [];
     if(this.datePostedMin.toString() != "null"){
       this.datePostedMin = new Date(this.datePostedMin);
-      console.log(this.datePostedMin);
       let datePostedMax = new Date();
       datePostedMax.setFullYear(2050);
       filterList.push(
@@ -90,6 +91,7 @@ export class FilterComponent implements OnInit {
         "maxDate", datePostedMax.getTime())
       );
     }
+    this.sendFilter.emit(filterList);
   }
 
   /**
@@ -122,8 +124,8 @@ class OptionItem {
   };
 }
 class Filter{
-  filterType: String = '';
-  constructor(filterType: string){
-    this.filterType = filterType;
+  filter: String = '';
+  constructor(filter: string){
+    this.filter = filter;
   }
 }
