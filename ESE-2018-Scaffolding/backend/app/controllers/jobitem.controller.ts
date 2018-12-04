@@ -24,6 +24,7 @@ router.post('/:id/:token', async (req: Request, res: Response) => {
       instance.fromSimplification(req.body);
       // @ts-ignore
       instance.accepted = null; // should not be decided by client
+      instance.featured = false;
       instance.messageFromAdmin = ''; // should not be decided by client
       instance.companyId = id; // should not be decided by client
       await instance.save();
@@ -57,16 +58,24 @@ router.get('/search/:term', async (req: Request, res: Response) => {
       ]
     },
     order: [
+      ['featured', 'DESC'],
       ['datePosted', 'DESC'],
     ]
   });
+  let returnArray = instances.map(e => e.toSimplification());
+  for(let i = 0; i < returnArray.length; i++){
+    const company = await Company.findOne({where: {userId: instances[i].companyId}});
+    if (company !== null)
+      returnArray[i].companyName = company.companyName;
+  }
   res.statusCode = 200;
-  res.send(instances.map(e => e.toSimplification()));
+  res.send(returnArray);
 });
 /*
 - for filtering the jobitem list -> returns a map of JobItems
 - specify a list of filters as written in the specification
 - jobitem has to be accepted
+- return featured ones on top
  */
 router.post('/filter', async (req: Request, res: Response) => {
   const Op = Sequelize.Op;
@@ -160,11 +169,19 @@ router.post('/filter', async (req: Request, res: Response) => {
         [Op.and]: filterArray
       },
       order: [
+        ['featured', 'DESC'],
         ['datePosted', 'DESC'],
       ]
     });
+
+    let returnArray = instances.map(e => e.toSimplification());
+    for(let i = 0; i < returnArray.length; i++){
+      const company = await Company.findOne({where: {userId: instances[i].companyId}});
+      if (company !== null)
+        returnArray[i].companyName = company.companyName;
+    }
     res.statusCode = 200;
-    res.send(instances.map(e => e.toSimplification()));
+    res.send(returnArray);
 
   } else {
     sendErrorResponse(res, 400, {'message': 'please specify a filter list with at least filter object'});
@@ -255,17 +272,25 @@ function sendErrorResponse(res: any, statusCode: number, object:any){
  - returns a map of JobItems
  - ordered according to datePosted
  - only works for accepted JobItems
+ - return featured ones on top
  */
 router.get('/', async (req: Request, res: Response) => {
   const instances = await JobItem.findAll(    {
     where:
       {accepted: true},
     order: [
+      ['featured', 'DESC'],
       ['datePosted', 'DESC'],
     ]
   });
+  let returnArray = instances.map(e => e.toSimplification());
+  for(let i = 0; i < returnArray.length; i++){
+    const company = await Company.findOne({where: {userId: instances[i].companyId}});
+    if (company !== null)
+      returnArray[i].companyName = company.companyName;
+  }
   res.statusCode = 200;
-  res.send(instances.map(e => e.toSimplification()));
+  res.send(returnArray);
 });
 
 /*
