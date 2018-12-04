@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Job} from '../../job.model';
 import {FormatService} from '../../format.service';
 
@@ -10,12 +10,12 @@ import {FormatService} from '../../format.service';
 export class JobSubmissionComponent {
 
   @Input()
-  jobSubmissionEntry: Job;
+  jobEntry: Job;
 
   @Output()
-  jobSubmissionApproved = new EventEmitter<number>();
+  jobApproved = new EventEmitter<number>();
   @Output()
-  jobSubmissionDenied = new EventEmitter<number>();
+  jobDenied = new EventEmitter<number>();
 
   constructor(
     public format: FormatService
@@ -24,14 +24,14 @@ export class JobSubmissionComponent {
   /**
    *  Emits an event to approve the job submission with the given jobId.
    */
-  onApprovedJobSubmission() {
-    this.jobSubmissionApproved.emit(this.jobSubmissionEntry.id);
+  onApproveJob() {
+    this.jobApproved.emit(this.jobEntry.id);
   }
 
   /**
    *  Emits an event to deny the job submission with the given jobId.
    */
-  onDeniedJobSubmission() {
-    this.jobSubmissionDenied.emit(this.jobSubmissionEntry.id);
+  onDenyJob() {
+    this.jobDenied.emit(this.jobEntry.id);
   }
 }

@@ -59,7 +59,8 @@ export class MyAccountComponent implements OnInit {
             instance.salaryAmount,
             instance.companyId,
             instance.message,
-            instance.accepted
+            instance.accepted,
+            instance.featured,
           )
         )
       }

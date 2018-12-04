@@ -264,27 +264,60 @@ export class RequestService {
    ************************************************************************/
 
   /**
-   *  GET-Request to fetch all unverified companies. Only available for Admin.
-   *  Requires userId and userToken for verification. Returns the observable of the request.
+   *  GET-Request to fetch all company entries from the database no matter what status they have.
+   *  Only available for Admin. Requires userId and userToken for verification. Returns the observable.
    *
    *  @returns {Observable<Object>}   Observable of GET-Request.
    */
-  userApplicationFetching() {
+  companyFetchAll() {
+    this.getLocalStorage();
+    return this.httpClient.get(this.backendURL + 'admin/allCompanies/' + this.userId + '/' + this.userToken);
+  }
+
+  /**
+   *  GET-Request to fetch all company entries from the database that are unverified.
+   *  Only available for Admin. Requires userId and userToken for verification. Returns the observable.
+   *
+   *  @returns {Observable<Object>}   Observable of GET-Request.
+   */
+  companyFetchUnverified() {
     this.getLocalStorage();
     return this.httpClient.get(this.backendURL + 'admin/unverifiedCompanies/' + this.userId + '/' + this.userToken);
+  }
+
+  /**
+   *  PUT-Request to update the featured status of a company. Only available for Admin.
+   *  Requires userId and userToken for verification. Requires companyId and new featured status (boolean).
+   *
+   *  @param companyId                ID of the company who's featured status gets changed
+   *  @param featured                 New featured status (TRUE = featured, FALSE = unfeatured)
+   */
+  companyFeaturedStatus(companyId: number, featured: boolean) {
+    this.getLocalStorage();
+    this.httpClient.put(this.backendURL + 'admin/featureCompany/' + companyId + '/' + this.userId + '/' + this.userToken, {
+      'feature': featured
+    }).subscribe(
+      res => {
+        this.toastr.success('', 'Company Status updated successfully');
+      }
+    );
   }
 
   /**
    *  PUT-Request to approve an unverified company. Only available for Admin.
    *  Requires userId and userToken for verification. Requires userId of approved company.
    *
-   *  @param {number} userId          ID of company to be approved.
+   *  @param {number} companyId       ID of company to be approved.
    */
-  userApplicationApproved(userId: number) {
+  companyApprove(companyId: number) {
     this.getLocalStorage();
-    this.httpClient.put(this.backendURL + 'admin/verify/' + userId + '/' + this.userId + '/' + this.userToken, {
+    this.httpClient.put(this.backendURL + 'admin/verify/' + companyId + '/' + this.userId + '/' + this.userToken, {
       'verify': true
-    }).subscribe();
+    }).subscribe(
+      res => {
+        this.toastr.success('', 'Company approved successfully');
+      }
+    );
   }
 
   /**
@@ -292,15 +325,46 @@ export class RequestService {
    *  Requires userId and userToken for verification.
    *  Requires userId of denied company and message from Admin with explanation.
    *
-   *  @param {number} userId         ID of company to be denied.
+   *  @param {number} companyId      ID of company to be denied.
    *  @param {string} adminMessage   Reasons why company was denied.
    */
-  userApplicationDenied(userId: number, adminMessage: string) {
+  companyDeny(companyId: number, adminMessage: string) {
     this.getLocalStorage();
-    this.httpClient.put(this.backendURL + 'admin/verify/' + userId + '/' + this.userId + '/' + this.userToken, {
+    this.httpClient.put(this.backendURL + 'admin/verify/' + companyId + '/' + this.userId + '/' + this.userToken, {
       'verify': false,
       'message': adminMessage
-    }).subscribe();
+    }).subscribe(
+      res => {
+        this.toastr.success('', 'Company denied successfully');
+      }
+    );
+  }
+
+  /**
+   *  Deletes a company and all its related database entries such as users and job postings. Only available for Admin.
+   *  Requires userId and userToken for verification. Requires ID of the company that gets deleted.
+   *
+   *  @param companyId                 ID of the company that gets deleted
+   */
+  companyDelete(companyId: number) {
+    this.getLocalStorage();
+    this.httpClient.delete(this.backendURL + 'admin/deleteCompany/' + companyId + '/' + this.userId + '/' + this.userToken)
+      .subscribe(
+        res => {
+          this.toastr.success('', 'Company deleted successfully');
+        }
+      );
+  }
+
+  /**
+   *  GET-Request to fetch all job posting entries from the database no matter what status they have.
+   *  Only available for Admin. Requires userId and userToken for verification. Returns the observable.
+   *
+   *  @returns {Observable<Object>}   Observable of GET-Request.
+   */
+  jobFetchAll() {
+    this.getLocalStorage();
+    return this.httpClient.get(this.backendURL + 'admin/allJobItems/' + this.userId + '/' + this.userToken);
   }
 
   /**
@@ -309,9 +373,27 @@ export class RequestService {
    *
    *  @returns {Observable<Object>}   Observable of GET-Request.
    */
-  jobSubmissionFetching() {
+  jobFetchUnaccepted() {
     this.getLocalStorage();
     return this.httpClient.get(this.backendURL + 'admin/unacceptedJobItems/' + this.userId + '/' + this.userToken);
+  }
+
+  /**
+   *  PUT-Request to update the featured status of a job item. Only available for Admin.
+   *  Requires userId and userToken for verification. Requires jobId and new featured status (boolean).
+   *
+   *  @param jobId                    ID of the job item who's featured status gets changed
+   *  @param featured                 New featured status (TRUE = featured, FALSE = unfeatured)
+   */
+  jobFeaturedStatus(jobId: number, featured: boolean) {
+    this.getLocalStorage();
+    this.httpClient.put(this.backendURL + 'admin/featureJobitem/' + jobId + '/' + this.userId + '/' + this.userToken, {
+      'feature': featured
+    }).subscribe(
+      res => {
+        this.toastr.success('', 'Job Status updated successfully');
+      }
+    );
   }
 
   /**
@@ -320,11 +402,15 @@ export class RequestService {
    *
    *  @param {number} jobId           ID of job posting to be approved.
    */
-  jobSubmissionApproved(jobId: number) {
+  jobApprove(jobId: number) {
     this.getLocalStorage();
     this.httpClient.put(this.backendURL + 'admin/accept/' + jobId + '/' + this.userId + '/' + this.userToken, {
       'accept': true
-    }).subscribe();
+    }).subscribe(
+      res => {
+        this.toastr.success('', 'Job accepted successfully');
+      }
+    );
   }
 
   /**
@@ -335,12 +421,32 @@ export class RequestService {
    *  @param {number} jobId           ID of job posting to be denied.
    *  @param {string} adminMessage    Reasons why job posting was denied.
    */
-  jobSubmissionDenied(jobId: number, adminMessage: string) {
+  jobDeny(jobId: number, adminMessage: string) {
     this.getLocalStorage();
     this.httpClient.put(this.backendURL + 'admin/accept/' + jobId + '/' + this.userId + '/' + this.userToken, {
       'accept': false,
       'message': adminMessage
-    }).subscribe();
+    }).subscribe(
+      res => {
+        this.toastr.success('', 'Job denied successfully');
+      }
+    );
+  }
+
+  /**
+   *  Deletes a job item from the database. Only available for Admin.
+   *  Requires userId and userToken for verification. Requires ID of the job item that gets deleted.
+   *
+   *  @param jobId                   ID of the job item that gets deleted
+   */
+  jobDelete(jobId: number) {
+    this.getLocalStorage();
+    this.httpClient.delete(this.backendURL + 'admin/deleteJobItem/' + jobId + '/' + this.userId + '/' + this.userToken)
+      .subscribe(
+        res => {
+          this.toastr.success('', 'Job deleted successfully');
+        }
+      );
   }
 
 
@@ -509,8 +615,14 @@ export class RequestService {
    *  @returns {boolean}              True if logged in; False otherwise
    */
   checkIfUser() {
-    /* TODO - Check with backend if current userId & userToken are valid (not expired or fake) */
     return localStorage.getItem('user-token');
+  }
+
+  checkIfAccess() {
+    if(!localStorage.getItem('user-token')){
+      this.router.navigate(['']).then();
+      this.toastr.error('You need to be logged in', 'Access denied');
+    }
   }
 
   /**

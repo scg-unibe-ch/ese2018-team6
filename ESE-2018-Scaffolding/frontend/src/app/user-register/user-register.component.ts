@@ -32,7 +32,9 @@ export class UserRegisterComponent {
     null,
     null,
     null,
-    null
+    null,
+    null,
+    null,
   );
   userType: string = '';
   confirmPassword: string = '';

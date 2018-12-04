@@ -36,7 +36,8 @@ export class JobEditComponent implements OnInit {
     null,
     null,
     null,
-    null
+    null,
+    null,
   );
   startDate: String = '';
   endDate: String = '';
@@ -52,11 +53,11 @@ export class JobEditComponent implements OnInit {
   ) { }
 
   /**
-   *  Upon loading the page, checks if a user is logged in
-   *  and loads job details according to jobId.
+   *  Upon loading the page, checks if a user is logged in and loads job details according to jobId.
+   *  If not he will be redirected to home page.
    */
   ngOnInit() {
-    this.request.checkIfUser();
+    this.request.checkIfAccess();
     this.jobId = parseInt(this.activatedRoute.snapshot.paramMap.get('id'));
     this.onLoadingJob();
   }
@@ -86,17 +87,17 @@ export class JobEditComponent implements OnInit {
         instance.salaryType,
         instance.salaryAmount,
         instance.companyId,
-        '',
-        instance.accepted
+        '', /* TODO - Add instance.messageFromAdmin */
+        instance.accepted,
+        instance.featured,
       ));
     setTimeout(() => {
       this.setDates();
-    }, 70);
+    }, 100);
   }
 
   /**
-   *  Updates job details with currently entered data in form fields.
-   *  Only as long as they are valid.
+   *  Updates job details with currently entered data in form fields if they are valid.
    */
   onUpdate() {
     this.error = new ErrorMessage();
@@ -109,7 +110,7 @@ export class JobEditComponent implements OnInit {
 
   /**
    *  Checks the entered job data before sending to backend.
-   *  Validation requires title, description, skill, full address.
+   *  Validation requires title, description, skills and full address.
    *  If a value fails, user receives accurate feedback.
    *  Returns true if valid; false otherwise.
    *
@@ -126,6 +127,10 @@ export class JobEditComponent implements OnInit {
     }
   }
 
+  /**
+   *  If the backend has values set for startDate, endDate and/or validUntil, it will convert
+   *  the stored milliseconds into a proper Date to display it in the form fields.
+   */
   setDates() {
     if(this.jobData.startDate > 0){
       this.startDate = this.format.dateFromMillisecondToString(this.jobData.startDate);

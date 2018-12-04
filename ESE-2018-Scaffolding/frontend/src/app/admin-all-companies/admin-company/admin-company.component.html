@@ -1,0 +1,46 @@
+<table>
+  <tbody>
+  <tr>
+
+    <td>
+      <a [routerLink]="['/company/details/', companyEntry.id]">{{ format.simpleText(companyEntry.name) }}</a>&nbsp;
+      <small>
+        <span class="label label-success" *ngIf="companyEntry.verified == true">Approved</span>
+        <span class="label label-warning" *ngIf="companyEntry.verified == null">In Review</span>
+        <span class="label label-danger" *ngIf="companyEntry.verified == false">Denied</span>
+      </small>
+    </td>
+
+    <td style="width: 135px !important;">
+      <div class="pull-right">
+        <span *ngIf="companyEntry.featured == true">
+          <button type="button" class="btn btn-info" title="Currently featured" (click)="onUnfeatureCompany()">
+            <span class="glyphicon glyphicon-star"></span>
+          </button>
+        </span>
+        <span *ngIf="companyEntry.featured != true">
+          <button type="button" class="btn btn-default" title="Currently unfeatured" (click)="onFeatureCompany()">
+            <span class="glyphicon glyphicon-star"></span>
+          </button>
+        </span>
+
+        <span *ngIf="companyEntry.verified == false">
+          <button type="button" class="btn btn-success" title="Accept" (click)="onApprovedCompany()">
+            <span class="glyphicon glyphicon-ok"></span>
+          </button>
+        </span>
+        <span *ngIf="companyEntry.verified != false">
+          <button type="button" class="btn btn-danger" title="Deny" (click)="onDeniedCompany()">
+            <span class="glyphicon glyphicon-remove"></span>
+          </button>
+        </span>
+
+        <button type="button" class="btn" title="Delete" (click)="onDeleteCompany()">
+          <span class="glyphicon glyphicon-trash"></span>
+        </button>
+      </div>
+    </td>
+
+  </tr>
+  </tbody>
+</table>

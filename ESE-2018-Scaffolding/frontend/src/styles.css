@@ -63,3 +63,15 @@ textarea {
   padding: 2px;
   margin: 0 0 2px 0;
 }
+
+.displayMobile {
+  display: none
+}
+
+/* Media query to trigger mobile header */
+@media(max-width: 767px){
+  .navbar-toggle-btn{display: inline-block}
+  .navbar-hidden{display: none}
+  .displayMobile{display: inline-block}
+  .displayDesktop{display: none}
+}
