@@ -36,6 +36,8 @@ import {RequestService} from './request.service';
 import {ToastrModule} from 'ngx-toastr';
 import {AccountSettingsComponent} from './account-settings/account-settings.component';
 import {ValidationService} from './validation.service';
+import { FilterComponent } from './filter/filter.component';
+import { CompanyListComponent } from './company-list/company-list.component';
 import {CompanyDetailComponent} from './company-detail/company-detail.component';
 
 @NgModule({
@@ -55,6 +57,8 @@ import {CompanyDetailComponent} from './company-detail/company-detail.component'
     MyJobItemComponent,
     JobCreateComponent,
     AccountSettingsComponent,
+    FilterComponent,
+    CompanyListComponent,
     AdminAllCompaniesComponent,
     AdminAllJobsComponent,
     AdminUnverifiedCompaniesComponent,

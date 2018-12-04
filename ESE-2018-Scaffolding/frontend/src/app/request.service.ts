@@ -57,9 +57,9 @@ export class RequestService {
    *  @param {string} filterValues    Values to be filtered after.
    *  @returns {Observable<Object>}   Observable of GET-Request.
    */
-  jobListFilter(filterValues: string) {
-    return this.httpClient.post(this.backendURL + 'jobitem/filer', {
-      filterValues
+  jobListFilter(filterList: string) {
+    return this.httpClient.post(this.backendURL + 'jobitem/filter', {
+      filterList:filterList
     });
   }
 
@@ -217,6 +217,19 @@ export class RequestService {
     );
   }
 
+  /*************************************************************************
+   COMPANY LIST
+   ************************************************************************/
+
+  /**
+   *  GET-Request to fetch all approved companies.
+   *  Returns the observable of the request.
+   *
+   *  @returns {Observable<Object>}   Observable of GET-Request.
+   */
+  companyListAll() {
+    return this.httpClient.get(this.backendURL + 'company');
+  }
 
 
   /*************************************************************************
