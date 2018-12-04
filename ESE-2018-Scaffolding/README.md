@@ -23,6 +23,7 @@ $ cd frontend
 $ npm install
 $ npm install ngx-toastr --save
 $ npm install @angular/animations --save
+$ npm install ng5-slider --save
 ```
 
 ##### Run the application

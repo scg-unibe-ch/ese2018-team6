@@ -1,56 +1,54 @@
 <table>
   <tr>
-
     <!-- Company Details - List of all details provided by the user -->
     <td>
       <p>
         <strong>Logo</strong><br>
-        <img src="{{ format.logo(userApplicationEntry.logo) }}">
+        <img src="{{ format.logo(companyEntry.logo) }}">
       </p>
       <p>
         <strong>Name</strong><br>
-        {{ format.simpleText(userApplicationEntry.name) }}
+        {{ format.simpleText(companyEntry.name) }}
       </p>
       <p>
         <strong>Street</strong><br>
-        {{ format.street(userApplicationEntry.street, userApplicationEntry.houseNumber) }}
+        {{ format.street(companyEntry.street, companyEntry.houseNumber) }}
       </p>
       <p>
         <strong>Postcode / Place</strong><br>
-        {{ format.city(userApplicationEntry.postcode, userApplicationEntry.city) }}
+        {{ format.city(companyEntry.postcode, companyEntry.city) }}
       </p>
       <p>
         <strong>Contact Name</strong><br>
-        {{ format.simpleText(userApplicationEntry.contactName) }}
+        {{ format.simpleText(companyEntry.contactName) }}
       </p>
       <p>
         <strong>Contact Phone</strong><br>
-        {{ format.simpleText(userApplicationEntry.contactPhone) }}
+        {{ format.simpleText(companyEntry.contactPhone) }}
       </p>
       <p>
         <strong>Contact E-Mail</strong><br>
-        {{ format.simpleText(userApplicationEntry.contactEmail) }}
+        {{ format.simpleText(companyEntry.contactEmail) }}
       </p>
       <p>
         <strong>Website</strong><br>
-        {{ format.website(userApplicationEntry.website) }}
+        {{ format.website(companyEntry.website) }}
       </p>
       <p>
         <strong>Description</strong><br>
-        {{ format.simpleText(userApplicationEntry.description) }}
+        {{ format.simpleText(companyEntry.description) }}
       </p>
     </td>
 
     <!-- Approve/Deny Button for Admin to evaluate User Application -->
     <td class="pull-right">
-      <button type="button" class="btn btn-success" title="Accept" (click)="onApprovedUserApplication()">
+      <button type="button" class="btn btn-success" title="Accept" (click)="onApproveCompany()">
         <span class="glyphicon glyphicon-ok"></span>
       </button>
       <br>
-      <button type="button" class="btn btn-danger" title="Deny" (click)="onDeniedUserApplication()">
+      <button type="button" class="btn btn-danger" title="Deny" (click)="onDenyCompany()">
         <span class="glyphicon glyphicon-remove"></span>
       </button>
     </td>
-
   </tr>
 </table>

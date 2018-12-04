@@ -21,15 +21,10 @@ export class User extends Model<User> {
     return {
       'id': this.id,
       'email': this.email,
-      // 'password': this.password,
-      // 'token' : this.token,
-      // 'tokenExpirationDate' : this.tokenExpirationDate
     };
   }
 
   fromSimplification(simplification: any): void {
     this.email = simplification['email'];
-    //this.password = simplification['password'];
-    // this.token = simplification['token'];
   }
 }

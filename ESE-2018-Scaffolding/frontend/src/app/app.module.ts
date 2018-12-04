@@ -18,20 +18,29 @@ import {UserRegisterComponent} from './user-register/user-register.component';
 import {JobEditComponent} from './job-edit/job-edit.component';
 import {ContactComponent} from './contact/contact.component';
 import {AboutComponent} from './about/about.component';
-import {AdminComponent} from './admin/admin.component';
-import {UserApplicationComponent} from './admin/user-application/user-application.component';
-import {JobSubmissionComponent} from './admin/job-submission/job-submission.component';
 import {MyAccountComponent} from './my-account/my-account.component';
 import {JobDetailComponent} from './job-detail/job-detail.component';
 import {MyJobItemComponent} from './my-account/my-job-item/my-job-item.component';
 import {JobCreateComponent} from './job-create/job-create.component';
+import {AdminAllCompaniesComponent} from './admin-all-companies/admin-all-companies.component';
+import {AdminAllJobsComponent} from './admin-all-jobs/admin-all-jobs.component';
+import {AdminUnverifiedCompaniesComponent} from './admin-unverified-companies/admin-unverified-companies.component';
+import {AdminUnacceptedJobsComponent} from './admin-unaccepted-jobs/admin-unaccepted-jobs.component';
+import {AdminCompanyComponent} from './admin-all-companies/admin-company/admin-company.component';
+import {AdminJobComponent} from './admin-all-jobs/admin-job/admin-job.component';
+import {CompanyApplicationComponent} from './admin-unverified-companies/company-application/company-application.component';
+import {JobSubmissionComponent} from './admin-unaccepted-jobs/job-submission/job-submission.component';
 
 import {FormatService} from './format.service';
 import {RequestService} from './request.service';
 import {ToastrModule} from 'ngx-toastr';
 import {AccountSettingsComponent} from './account-settings/account-settings.component';
 import {ValidationService} from './validation.service';
+<<<<<<< HEAD
 import { FilterComponent } from './filter/filter.component';
+=======
+import {CompanyDetailComponent} from './company-detail/company-detail.component';
+>>>>>>> 032065abcc2275bfd9bbf76667edfb10f3f3a3be
 
 @NgModule({
   declarations: [
@@ -45,15 +54,24 @@ import { FilterComponent } from './filter/filter.component';
     JobEditComponent,
     ContactComponent,
     AboutComponent,
-    AdminComponent,
-    UserApplicationComponent,
-    JobSubmissionComponent,
     MyAccountComponent,
     JobDetailComponent,
     MyJobItemComponent,
     JobCreateComponent,
     AccountSettingsComponent,
+<<<<<<< HEAD
     FilterComponent,
+=======
+    AdminAllCompaniesComponent,
+    AdminAllJobsComponent,
+    AdminUnverifiedCompaniesComponent,
+    AdminUnacceptedJobsComponent,
+    AdminCompanyComponent,
+    AdminJobComponent,
+    CompanyApplicationComponent,
+    JobSubmissionComponent,
+    CompanyDetailComponent,
+>>>>>>> 032065abcc2275bfd9bbf76667edfb10f3f3a3be
   ],
   imports: [
     AppRoutingModule,

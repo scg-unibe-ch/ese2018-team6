@@ -87,7 +87,5 @@ export class Company extends Model<Company> {
     this.companyLogoURL = simplification['companyLogoURL'];
     this.contactEmail = simplification['contactEmail'];
     this.companyWebsite = simplification['companyWebsite'];
-    // this.userId = simplification['userId'];
-    // this.verified = simplification['verified'];
   }
 }

@@ -18,6 +18,6 @@ export class HeaderComponent {
    */
   toggleMenu() {
     const element = document.getElementById('navbar-toggable');
-    element.classList.toggle("navbar-hidden");
+    element.classList.toggle("displayDesktop");
   }
 }

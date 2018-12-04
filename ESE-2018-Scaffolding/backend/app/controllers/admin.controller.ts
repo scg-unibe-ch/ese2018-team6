@@ -4,6 +4,7 @@ import {Company} from '../models/company.model';
 import {User} from '../models/user.model';
 import {JobItem} from '../models/jobitem.model';
 import {foundUser, checkToken} from './user.controller';
+import {addAcceptedAndMessage, sendErrorResponse} from './jobitem.controller';
 
 const router: Router = Router();
 
@@ -19,10 +20,7 @@ router.get('/allJobItems/:id/:token', async (req: Request, res: Response) => {
   if (adminAuthentification(user, res, id, token, admin) && user !== null) {
     const instances = await JobItem.findAll();
     let returnArray = instances.map(e => e.toSimplification());
-    for(let i = 0; i < returnArray.length; i++){
-      returnArray[i].message = instances[i].messageFromAdmin;
-      returnArray[i].accepted = instances[i].accepted;
-    }
+    returnArray = addAcceptedAndMessage(returnArray, instances);
     res.statusCode = 200;
     res.send(returnArray);
   }
@@ -70,10 +68,7 @@ router.put('/verify/:companyId/:id/:token', async (req: Request, res: Response) 
   const token = req.params.token;
   const verify = req.body.verify;
   if(!(verify == true || verify == false)){
-    res.statusCode = 400;
-    res.json({
-      'message': 'please set a valid boolean for verify'
-    });
+    sendErrorResponse(res, 400, {'message': 'please set a valid boolean for verify'});
     return;
   }
   const user = await User.findById(id);
@@ -92,10 +87,7 @@ router.put('/verify/:companyId/:id/:token', async (req: Request, res: Response) 
       await instance.save();
       res.send();
     } else {
-      res.statusCode = 404;
-      res.json({
-        'message': 'company not found'
-      });
+      sendErrorResponse(res, 404, {'message': 'company not found'});
     }
   }
 });
@@ -145,19 +137,13 @@ router.put('/accept/:jobitemId/:id/:token', async (req: Request, res: Response) 
         let today = new Date();
         instance.datePosted = today.getTime();
       } else {
-        res.statusCode = 400;
-        res.json({
-          'message': 'please specify accept boolean'
-        });
+        sendErrorResponse(res, 400, {'message': 'please specify accept boolean'});
       }
       await instance.save();
       res.statusCode = 200;
       res.send()
     } else {
-      res.statusCode = 404;
-      res.json({
-        'message': 'jobitem not found'
-      });
+      sendErrorResponse(res, 404, {'message': 'jobItem not found'});
     }
   }
 });
@@ -196,10 +182,7 @@ router.delete('/deleteJobItem/:jobItemId/:id/:token', async (req: Request, res: 
     const jobItemId = parseInt(req.params.jobItemId);
     const jobItem = await JobItem.findById(jobItemId);
     if (jobItem == null) {
-      res.statusCode = 404;
-      res.json({
-        'message': 'jobitem not found'
-      });
+      sendErrorResponse(res, 404, {'message': 'jobItem not found'});
       return;
     }
     await jobItem.destroy();
@@ -227,10 +210,7 @@ router.delete('/deleteCompany/:companyId/:id/:token', async (req: Request, res: 
       res.statusCode = 204;
       res.send();
     } else {
-      res.statusCode = 404;
-      res.json({
-        'message': 'company not found'
-      });
+      sendErrorResponse(res, 404, {'message': 'company not found'});
     }
   }
 });
@@ -245,10 +225,7 @@ router.put('/featureCompany/:companyId/:id/:token', async (req: Request, res: Re
   const companyId = req.params.companyId;
   const feature = req.body.feature;
   if(!(feature == true || feature == false)){
-    res.statusCode = 400;
-    res.json({
-      'message': 'please set a valid boolean for feature'
-    });
+    sendErrorResponse(res, 400, {'message': 'please set a valid boolean for feature'});
     return;
   }
   const user = await User.findById(id);
@@ -261,10 +238,7 @@ router.put('/featureCompany/:companyId/:id/:token', async (req: Request, res: Re
       await instance.save();
       res.send();
     } else {
-      res.statusCode = 404;
-      res.json({
-        'message': 'company not found'
-      });
+      sendErrorResponse(res, 404, {'message': 'company not found'});
     }
   }
 });
@@ -279,10 +253,7 @@ router.put('/featureJobItem/:jobItemId/:id/:token', async (req: Request, res: Re
   const jobItemId = req.params.jobItemId;
   const feature = req.body.feature;
   if(!(feature == true || feature == false)){
-    res.statusCode = 400;
-    res.json({
-      'message': 'please set a valid boolean for feature'
-    });
+    sendErrorResponse(res, 400, {'message': 'please set a valid boolean for feature'});
     return;
   }
   const user = await User.findById(id);
@@ -295,10 +266,7 @@ router.put('/featureJobItem/:jobItemId/:id/:token', async (req: Request, res: Re
       await instance.save();
       res.send();
     } else {
-      res.statusCode = 404;
-      res.json({
-        'message': 'jobItem not found'
-      });
+      sendErrorResponse(res, 404, {'message': 'jobItem not found'});
     }
   }
 });
@@ -312,10 +280,7 @@ function adminAuthentification(user: any, res: any, id: number, token: string, a
     //please note: foundUser() and checkToken() methods send error requests, if needed
       return true;
   } else {
-    res.statusCode = 401; // unauthorized
-    res.json({
-      'message': 'not authorized'
-    });
+    sendErrorResponse(res, 401, {'message': 'not authorized: you are not an admin'});
     return false;
   }
 }

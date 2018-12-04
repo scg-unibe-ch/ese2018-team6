@@ -35,7 +35,8 @@ export class JobDetailComponent implements OnInit {
     null,
     null,
     '',
-    null
+    null,
+    null,
   );
   companyData: Company = new Company(
     null,
@@ -52,7 +53,9 @@ export class JobDetailComponent implements OnInit {
     null,
     null,
     '',
-    null
+    null,
+    null,
+    null,
   );
 
   constructor(
@@ -98,7 +101,8 @@ export class JobDetailComponent implements OnInit {
         instance.salaryAmount,
         instance.companyId,
         '',
-        instance.accepted
+        instance.accepted,
+        instance.featured,
       )
     )
   }
@@ -124,7 +128,9 @@ export class JobDetailComponent implements OnInit {
         instance.companyDescription,
         instance.userId,
         '',
-        instance.verified
+        instance.verified,
+        instance.onceVerified,
+        instance.featured,
       )
     )
   }

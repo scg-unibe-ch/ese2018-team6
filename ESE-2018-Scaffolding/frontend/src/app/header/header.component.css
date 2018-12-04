@@ -36,10 +36,6 @@
   max-width: 280px;
 }
 
-.navbar-toggle-btn {
-  display: none;
-}
-
 .navbar-right {
   padding-bottom: 10px;
 }
@@ -63,16 +59,22 @@
   display: inline-block;
 }
 
-.dropdown ul {
-  margin-right: -40px;
+.dropdownUser ul {
+  margin-right: -38px;
+}
+
+.dropdownAdmin ul {
+  margin-right: -72px;
 }
 
 .dropdown a {
   padding: 10px 15px 10px 15px;
 }
 
-/* Media query to trigger mobile header */
-@media(max-width: 767px){
-  .navbar-toggle-btn{display: inline-block}
-  .navbar-hidden{display: none}
+.dropdown-header {
+  font-weight: bolder;
+  text-decoration: underline;
+  text-transform: uppercase;
+  padding-left: 15px;
 }
+
