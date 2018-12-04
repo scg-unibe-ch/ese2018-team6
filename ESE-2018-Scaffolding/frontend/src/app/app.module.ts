@@ -31,6 +31,7 @@ import {RequestService} from './request.service';
 import {ToastrModule} from 'ngx-toastr';
 import {AccountSettingsComponent} from './account-settings/account-settings.component';
 import {ValidationService} from './validation.service';
+import { FilterComponent } from './filter/filter.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import {ValidationService} from './validation.service';
     MyJobItemComponent,
     JobCreateComponent,
     AccountSettingsComponent,
+    FilterComponent,
   ],
   imports: [
     AppRoutingModule,
