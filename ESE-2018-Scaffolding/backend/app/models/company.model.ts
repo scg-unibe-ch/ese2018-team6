@@ -41,7 +41,13 @@ export class Company extends Model<Company> {
   verified!: boolean;
 
   @Column
+  onceVerified!: boolean;
+
+  @Column
   messageFromAdmin!: string;
+
+  @Column
+  featured!: boolean;
 
   @ForeignKey(() => User)
   @Column
@@ -65,6 +71,7 @@ export class Company extends Model<Company> {
       'companyDescription': this.companyDescription,
       'companyLogoURL' : this.companyLogoURL,
       'verified' : this.verified,
+      'featured' : this.featured,
     };
   }
 
@@ -80,7 +87,5 @@ export class Company extends Model<Company> {
     this.companyLogoURL = simplification['companyLogoURL'];
     this.contactEmail = simplification['contactEmail'];
     this.companyWebsite = simplification['companyWebsite'];
-    // this.userId = simplification['userId'];
-    // this.verified = simplification['verified'];
   }
 }

@@ -1,0 +1,21 @@
+<h3>All Jobs</h3>
+<hr>
+
+<!-- Displays message if no job posting is in the system -->
+<div>
+  <p *ngIf="jobList.length == 0"><em>There are currently no jobs in the system.</em></p>
+</div>
+
+<!-- Displays list of all job postings in the database no matter the status -->
+<div>
+  <p *ngIf="jobList.length > 0"><em>The following jobs are in the system:</em></p>
+  <app-admin-job
+    *ngFor="let jobEntry of jobList"
+    [jobEntry]="jobEntry"
+    (jobApproved)="approveJob($event)"
+    (jobDenied)="denyJob($event)"
+    (jobFeatured)="featureJob($event)"
+    (jobUnfeatured)="unfeatureJob($event)"
+    (jobDeleted)="deleteJob($event)">
+  </app-admin-job>
+</div>

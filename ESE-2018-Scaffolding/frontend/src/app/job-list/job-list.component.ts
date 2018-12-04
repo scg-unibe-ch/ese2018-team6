@@ -83,7 +83,8 @@ export class JobListComponent implements OnInit {
           instance.salaryAmount,
           instance.companyId,
           '',
-          instance.accepted
+          instance.accepted,
+          instance.featured,
         ))
       },
       (err) => {
@@ -122,7 +123,8 @@ export class JobListComponent implements OnInit {
             instance.salaryAmount,
             instance.companyId,
             '',
-            instance.accepted
+            instance.accepted,
+            instance.featured,
           ))
         },
         (err) => {
@@ -327,7 +329,8 @@ export class JobListComponent implements OnInit {
             instance.salaryAmount,
             instance.companyId,
             '',
-            instance.accepted
+            instance.accepted,
+            instance.featured,
           ))
         },
         (err) => {

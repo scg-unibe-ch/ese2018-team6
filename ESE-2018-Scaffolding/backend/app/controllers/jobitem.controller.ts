@@ -1,5 +1,4 @@
 import {Router, Request, Response} from 'express';
-// import {JobList} from '../models/joblist.model';
 import {JobItem} from '../models/jobitem.model';
 import {User} from '../models/user.model';
 import {checkToken, foundUser} from './user.controller';
@@ -24,6 +23,7 @@ router.post('/:id/:token', async (req: Request, res: Response) => {
       instance.fromSimplification(req.body);
       // @ts-ignore
       instance.accepted = null; // should not be decided by client
+      instance.featured = false;
       instance.messageFromAdmin = ''; // should not be decided by client
       instance.companyId = id; // should not be decided by client
       await instance.save();
@@ -31,10 +31,8 @@ router.post('/:id/:token', async (req: Request, res: Response) => {
       res.send(instance.toSimplification());
     }
   } else {
-    res.statusCode = 401;
-    res.json({
-      'message': 'company is not verified and therefore cannot create job postings'
-    });
+    sendErrorResponse(res,401,
+      {'message': 'company is not verified and therefore cannot create job postings'})
   }
 });
 
@@ -57,16 +55,24 @@ router.get('/search/:term', async (req: Request, res: Response) => {
       ]
     },
     order: [
+      ['featured', 'DESC'],
       ['datePosted', 'DESC'],
     ]
   });
+  let returnArray = instances.map(e => e.toSimplification());
+  for(let i = 0; i < returnArray.length; i++){
+    const company = await Company.findOne({where: {userId: instances[i].companyId}});
+    if (company !== null)
+      returnArray[i].companyName = company.companyName;
+  }
   res.statusCode = 200;
-  res.send(instances.map(e => e.toSimplification()));
+  res.send(returnArray);
 });
 /*
 - for filtering the jobitem list -> returns a map of JobItems
 - specify a list of filters as written in the specification
 - jobitem has to be accepted
+- return featured ones on top
  */
 router.post('/filter', async (req: Request, res: Response) => {
   const Op = Sequelize.Op;
@@ -76,41 +82,39 @@ router.post('/filter', async (req: Request, res: Response) => {
       let filterObject = req.body.filterList[i];
       switch (filterObject.filter) {
         case undefined:
-          res.statusCode = 400;
-          res.json({
-            'message': 'at least one filter object is invalid (missing filter property)'
-          });
+          sendErrorResponse(res, 400,
+            {'message': 'at least one filter object is invalid (missing filter property)'});
           break;
         case "datePosted":
-          if(validateDateFilter(filterObject, res)){
+          if(validateMinMaxFilter(filterObject,"minDate","maxDate",res)){
             filterArray.push({
               datePosted: {[Op.between]: [filterObject.minDate, filterObject.maxDate]}
             });
           }
           break;
         case "startDate":
-          if(validateDateFilter(filterObject, res)){
+          if(validateMinMaxFilter(filterObject,"minDate","maxDate",res)){
             filterArray.push({
               startDate: {[Op.between]: [filterObject.minDate, filterObject.maxDate]}
             });
           }
           break;
         case "endDate":
-          if(validateDateFilter(filterObject, res)){
+          if(validateMinMaxFilter(filterObject,"minDate","maxDate",res)){
             filterArray.push({
               endDate: {[Op.between]: [filterObject.minDate, filterObject.maxDate]}
             });
           }
           break;
         case "validUntil":
-          if(validateDateFilter(filterObject, res)){
+          if(validateMinMaxFilter(filterObject,"minDate","maxDate",res)){
             filterArray.push({
               validUntil: {[Op.between]: [filterObject.minDate, filterObject.maxDate]}
             });
           }
           break;
         case "language":
-          if(validateStringFilter(filterObject, "languages", res)){
+          if(validateArrayFilter(filterObject, "languages", true, res)){
             const opArray = createLanguageFilterOpArray(filterObject.languages);
             filterArray.push({
               [Op.or]: opArray
@@ -118,18 +122,42 @@ router.post('/filter', async (req: Request, res: Response) => {
           }
           break;
         case "postcode":
-          if(validateStringFilter(filterObject, "postcodes", res)){
+          if(validateArrayFilter(filterObject, "postcodes", true, res)){
             const opArray = createPostcodeFilterOpArray(filterObject.postcodes);
             filterArray.push({
               [Op.or]: opArray
             });
           }
           break;
+        case "salaryType":
+          if(filterObject.salaryType && !isNaN(filterObject.salaryType)){
+            filterArray.push({
+              salaryType: {[Op.eq]: filterObject.salaryType}
+            });
+          } else {
+            sendErrorResponse(res, 400,{'message':'salary type filter is invalid.'})
+          }
+          break;
+        case "salaryAmount":
+          if(validateMinMaxFilter(filterObject,"minSalaryAmount","maxSalaryAmount",res)){
+            filterArray.push({
+              salaryAmount: {[Op.between]: [filterObject.minSalaryAmount, filterObject.maxSalaryAmount]}
+            });
+          }
+          break;
+        case "workload":
+          if(validateMinMaxFilter(filterObject,"minWorkload","maxWorkload",res)){
+            filterArray.push({
+              [Op.and]: [
+                {workloadMin: {[Op.gte]: filterObject.minWorkload}},
+                {workloadMax: {[Op.lte]: filterObject.maxWorkload}}
+              ]
+            });
+          }
+          break;
         default:
-          res.statusCode = 400;
-          res.json({
-            'message': 'at least one filter type is not accepted'
-          });
+          sendErrorResponse(res,400,
+            {'message': 'at least one filter type is not accepted'})
       }
     }
     //now apply all these filter:
@@ -138,46 +166,65 @@ router.post('/filter', async (req: Request, res: Response) => {
         [Op.and]: filterArray
       },
       order: [
+        ['featured', 'DESC'],
         ['datePosted', 'DESC'],
       ]
     });
+
+    let returnArray = instances.map(e => e.toSimplification());
+    for(let i = 0; i < returnArray.length; i++){
+      const company = await Company.findOne({where: {userId: instances[i].companyId}});
+      if (company !== null)
+        returnArray[i].companyName = company.companyName;
+    }
     res.statusCode = 200;
-    res.send(instances.map(e => e.toSimplification()));
+    res.send(returnArray);
 
   } else {
-    res.statusCode = 400;
-    res.json({
-      'message': 'please specify a filter list with at least filter object'
-    });
+    sendErrorResponse(res, 400, {'message': 'please specify a filter list with at least filter object'});
   }
 });
-/*
-checks if the filterObject is a valid date filter. If not, aborts the request and returns Bad Request.
+/**
+ * checks if the filterObject is a valid min/max filter (date, salaryAmount, workload). If not, aborts the request and returns Bad Request.
+ *
+ * @param filterObject - object to validate
+ * @param minimumValue - String of the minimum property
+ * @param maximumValue - String of the maximum property
+ * @param res - response object, for sending bad request
  */
-function validateDateFilter(filterObject: any, res: any){
-  if(filterObject.minDate && filterObject.maxDate && !isNaN(filterObject.minDate) && !isNaN(filterObject.maxDate)){
+function validateMinMaxFilter(filterObject: any, minimumValue: any, maximumValue: any, res: any){
+  if(filterObject[minimumValue] && filterObject[maximumValue] && !isNaN(filterObject[minimumValue]) && !isNaN(filterObject[maximumValue])){
     return true;
   } else {
-    res.statusCode = 400;
-    res.json({
-      'message': 'at least one filter is not valid (date filter)'
-    });
+    sendErrorResponse(res, 400,
+      {'message': 'at least one filter is not valid (date/workload/salaryAmount filter)'});
     return false;
   }
 }
-/*
-checks if the filterObject is a valid string filter (language, postcode). If not, aborts the request and returns Bad Request.
+/**
+ * checks if the filterObject is a valid array filter (language, postcode). If not, aborts the request and returns Bad Request.
+ *
+ * @param filterObject - object to validate
+ * @param filterType - String with the name of the property which stores the array
+ * @param hasStringElements - flag, if true, the Elements in the array are Strings, otherwise numbers.
+ * @param res - response object, for sending bad request.
  */
-function validateStringFilter(filterObject: any, filterType: any, res: any){
-  if(filterObject[filterType] && filterObject[filterType] instanceof Array){
-    return true;
-  } else {
-    res.statusCode = 400;
-    res.json({
-      'message': 'at least one filter is not valid (language/postcode filter)'
-    });
-    return false;
+function validateArrayFilter(filterObject: any, filterType: any, hasStringElements: boolean, res: any){
+  if(filterObject[filterType] && filterObject[filterType] instanceof Array) {
+    if (hasStringElements) {
+      if (filterObject[filterType].length > 0 && typeof filterObject[filterType][0] === "string") {
+        return true;
+      }
+    }
+    if (!hasStringElements) {
+      if (filterObject[filterType].length > 0 && !isNaN(filterObject[filterType][0])) {
+        return true;
+      }
+    }
   }
+  sendErrorResponse(res,400,
+    {'message': 'at least one filter is not valid (language/postcode/salaryType filter)'} );
+  return false;
 }
 /*
 creates a "op" string, which can be passed to sequelize
@@ -209,17 +256,25 @@ function createPostcodeFilterOpArray(array: any){
  - returns a map of JobItems
  - ordered according to datePosted
  - only works for accepted JobItems
+ - return featured ones on top
  */
 router.get('/', async (req: Request, res: Response) => {
   const instances = await JobItem.findAll(    {
     where:
       {accepted: true},
     order: [
+      ['featured', 'DESC'],
       ['datePosted', 'DESC'],
     ]
   });
+  let returnArray = instances.map(e => e.toSimplification());
+  for(let i = 0; i < returnArray.length; i++){
+    const company = await Company.findOne({where: {userId: instances[i].companyId}});
+    if (company !== null)
+      returnArray[i].companyName = company.companyName;
+  }
   res.statusCode = 200;
-  res.send(instances.map(e => e.toSimplification()));
+  res.send(returnArray);
 });
 
 /*
@@ -229,10 +284,7 @@ router.get('/:id', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const instance = await JobItem.findById(id);
   if (instance == null) {
-    res.statusCode = 404;
-    res.json({
-      'message': 'not found'
-    });
+    sendErrorResponse(res, 404, {'message': 'jobItem not found'});
     return;
   }
   res.statusCode = 200;
@@ -259,21 +311,21 @@ router.get('/:id/:token', async (req: Request, res: Response) => {
   const token = req.params.token;
   const user = await User.findById(id);
   if (foundUser(user, res) && checkToken(user, res, token) && user !== null) {
-    let instances = await JobItem.findAll({where: {companyId: id}});
+    let instances = await JobItem.findAll({
+      where:
+        {companyId: id},
+      order: [
+        ['accepted', 'ASC'],
+      ]
+    });
 
     if (instances == null) {
-      res.statusCode = 404;
-      res.json({
-        'message': 'jobitem not found'
-      });
+      sendErrorResponse(res, 404, {'message': 'jobItem not found'});
       return;
     }
 
     let returnArray = instances.map(e => e.toSimplification());
-    for(let i = 0; i < returnArray.length; i++){
-      returnArray[i].message = instances[i].messageFromAdmin;
-      returnArray[i].accepted = instances[i].accepted;
-    }
+    returnArray = addAcceptedAndMessage(returnArray, instances);
     res.statusCode = 200;
     res.send(returnArray);
   }
@@ -291,24 +343,20 @@ router.put('/:jobItemId/:id/:token', async (req: Request, res: Response) => {
     const jobItemId = parseInt(req.params.jobItemId);
     const instance = await JobItem.findById(jobItemId);
     if (instance == null) {
-      res.statusCode = 404;
-      res.json({
-        'message': 'not found'
-      });
+      sendErrorResponse(res, 404, {'message': 'jobItem not found'});
       return;
     }
     if (instance.companyId == user.id) { // check if user corresponds to this jobItem
       instance.fromSimplification(req.body);
       // @ts-ignore
       instance.accepted = null; // when edited, needs to be accepted again by admin
+      // @ts-ignore
+      instance.datePosted = null;
       await instance.save();
       res.statusCode = 200;
       res.send(instance.toSimplification());
     } else {
-      res.statusCode = 401;
-      res.json({
-        'message': 'not your job posting'
-      });
+      sendErrorResponse(res,401,{'message': 'not your job posting'});
     }
   }
 });
@@ -325,24 +373,39 @@ router.delete('/:jobItemId/:id/:token', async (req: Request, res: Response) => {
     const jobItemId = parseInt(req.params.jobItemId);
     const jobItem = await JobItem.findById(jobItemId);
     if (jobItem == null) {
-      res.statusCode = 404;
-      res.json({
-        'message': 'not found'
-      });
+      sendErrorResponse(res, 404, {'message': 'jobItem not found'});
       return;
     }
     if (jobItem.companyId == user.id) {
-      // jobItem.fromSimplification(req.body);
       await jobItem.destroy();
       res.statusCode = 204;
       res.send();
     } else {
-      res.statusCode = 401;
-      res.json({
-        'message': 'not your job posting'
-      });
+      sendErrorResponse(res,401,{'message': 'not your job posting'});
     }
   }
 });
+
+/**
+ * sends a response, but only if the response is not sent already
+ *
+ * @param res - response object
+ * @param statusCode - sets the status code of the response
+ * @param object - object, that is sent via json() method
+ */
+export function sendErrorResponse(res: any, statusCode: number, object:any){
+  if(!res.headersSent){
+    res.statusCode = statusCode;
+    res.json(object);
+  }
+}
+
+export function addAcceptedAndMessage(array: any, instances: any){
+  for(let i = 0; i < array.length; i++){
+    array[i].message = instances[i].messageFromAdmin;
+    array[i].accepted = instances[i].accepted;
+  }
+  return array;
+}
 
 export const JobItemController: Router = router;

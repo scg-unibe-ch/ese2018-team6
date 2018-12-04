@@ -24,7 +24,11 @@
         <option name="ITERATION_ELEMENTS_WRAPPING" value="chop_down_if_not_single" />
       </formatting-settings>
     </DBN-SQL>
+<<<<<<< HEAD
     <TypeScriptCodeStyleSettings>
+=======
+    <TypeScriptCodeStyleSettings version="0">
+>>>>>>> 032065abcc2275bfd9bbf76667edfb10f3f3a3be
       <option name="USE_DOUBLE_QUOTES" value="false" />
       <option name="FORCE_QUOTE_STYlE" value="true" />
     </TypeScriptCodeStyleSettings>

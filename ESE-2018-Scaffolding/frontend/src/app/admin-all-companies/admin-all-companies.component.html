@@ -1,0 +1,21 @@
+<h3>All Companies</h3>
+<hr>
+
+<!-- Displays message if no company is in the system -->
+<div>
+  <p *ngIf="companyList.length == 0"><em>There are currently no companies in the system.</em></p>
+</div>
+
+<!-- Displays list of all companies in the database no matter the status -->
+<div>
+  <p *ngIf="companyList.length > 0"><em>The following companies are in the system:</em></p>
+  <app-admin-company
+    *ngFor="let companyEntry of companyList"
+    [companyEntry]="companyEntry"
+    (companyApproved)="approveCompany($event)"
+    (companyDenied)="denyCompany($event)"
+    (companyFeatured)="featureCompany($event)"
+    (companyUnfeatured)="unfeatureCompany($event)"
+    (companyDeleted)="deleteCompany($event)">
+  </app-admin-company>
+</div>

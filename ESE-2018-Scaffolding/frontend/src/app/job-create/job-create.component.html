@@ -12,7 +12,7 @@
 
   <!-- Title -->
   <div class="form-group" id="title">
-    <label class="col-sm-3 control-label">Title</label>
+    <label class="col-sm-3 control-label">Title *</label>
     <div class="col-sm-9">
       <input class="form-control" placeholder="Title" name="title" [(ngModel)]="jobData.title">
       <div class="alert alert-danger" *ngIf="error.titleEmpty === true">
@@ -23,7 +23,7 @@
 
   <!-- Description -->
   <div class="form-group" id="description">
-    <label for="desc" class="col-sm-3 control-label">Description</label>
+    <label for="desc" class="col-sm-3 control-label">Description *</label>
     <div class="col-sm-9">
       <textarea id="desc" rows="3" class="form-control" placeholder="Description" name="description" [(ngModel)]="jobData.description"></textarea>
       <div class="alert alert-danger" *ngIf="error.descriptionEmpty === true">
@@ -34,7 +34,7 @@
 
   <!-- Workload (Min/Max) -->
   <div class="form-group" id="workload">
-    <label class="col-sm-3 control-label">Workload</label>
+    <label class="col-sm-3 control-label">Workload *</label>
     <div class="col-sm-4">
       <div id="workloadMin">
         <div  class="input-group">
@@ -93,7 +93,7 @@
 
   <!-- Skills -->
   <div class="form-group" id="skills">
-    <label class="col-sm-3 control-label">Skills</label>
+    <label class="col-sm-3 control-label">Skills *</label>
     <div class="col-sm-9">
       <input class="form-control" placeholder="Required Skills" name="skills" [(ngModel)]="jobData.skills">
       <div class="alert alert-danger" *ngIf="error.skillsEmpty === true">
@@ -105,7 +105,7 @@
   <!-- Languages (First/Second) -->
   <div class="form-group">
     <div id="languages">
-      <label class="col-sm-3 control-label">Languages</label>
+      <label class="col-sm-3 control-label">Languages *</label>
     </div>
     <div class="col-sm-4" id="firstLanguage">
       <input class="form-control" placeholder="First Language" name="firstLanguage" [(ngModel)]="jobData.firstLanguage">
@@ -149,7 +149,7 @@
 
   <!-- Offer Valid Until -->
   <div class="form-group" id="validUntil">
-    <label class="col-sm-3 control-label">Offer Valid Until</label>
+    <label class="col-sm-3 control-label">Offer Valid Until *</label>
     <div class="col-sm-9">
       <input class="form-control" placeholder="dd.mm.yyyy" name="offerValidUntil" [(ngModel)]="validUntil">
       <div class="alert alert-danger" *ngIf="error.validUntil === true">
@@ -173,7 +173,7 @@
   <!-- Street and House No. -->
   <div class="form-group">
     <div id="streetHouse">
-      <label class="col-sm-3 control-label">Street / House No.</label>
+      <label class="col-sm-3 control-label">Street / House No. *</label>
     </div>
     <div class="col-sm-7" id="street">
       <input class="form-control" placeholder="Street" name="street" [(ngModel)]="jobData.street">
@@ -189,7 +189,7 @@
   <!-- Postcode and Place -->
   <div class="form-group">
     <div  id="postcodeCity">
-      <label class="col-sm-3 control-label">ZIP Code / Place</label>
+      <label class="col-sm-3 control-label">ZIP Code / Place *</label>
     </div>
     <div class="col-sm-2" id="postcode">
       <input class="form-control" placeholder="ZIP Code" name="zipCode" [(ngModel)]="jobData.postcode">
@@ -225,7 +225,7 @@
 
   <!-- Type -->
   <div class="form-group" id="salaryType">
-    <label class="col-sm-3 control-label">Type</label>
+    <label class="col-sm-3 control-label">Type *</label>
     <div class="col-sm-9">
       <select class="form-control" name="salaryType" [(ngModel)]="jobData.salaryType">
         <option>Monthly</option>
@@ -253,6 +253,7 @@
   <div class="form-group">
     <div class="col-sm-offset-3 col-sm-9">
       <button type="submit" class="btn btn-success" (click)="onCreate()">Submit</button>
+      <span class="pull-right"><strong>* Required</strong></span>
     </div>
   </div>
 

@@ -10,11 +10,21 @@
     </div>
   </div>
 
+  <!-- Display Message from Admin if job posting is unaccepted and message contains text -->
+  <div class="form-group" *ngIf="(!this.format.isEmpty(jobData.messageFromAdmin)) && jobData.accepted != true">
+    <div class="col-sm-offset-3 col-sm-9">
+      <div class="alert alert-danger">
+        <strong>Please fix the following to get this job posting accepted:</strong><br>
+        {{ jobData.messageFromAdmin }}
+      </div>
+    </div>
+  </div>
+
   <!-- Title -->
   <div class="form-group" id="title">
-    <label class="col-sm-3 control-label">Title</label>
+    <label class="col-sm-3 control-label">Title *</label>
     <div class="col-sm-9">
-      <input class="form-control" placeholder="Title*" name="title" [(ngModel)]="jobData.title">
+      <input class="form-control" placeholder="Title" name="title" [(ngModel)]="jobData.title">
       <div class="alert alert-danger" *ngIf="error.titleEmpty === true">
         Please enter Title
       </div>
@@ -23,9 +33,9 @@
 
   <!-- Description -->
   <div class="form-group" id="description">
-    <label for="desc" class="col-sm-3 control-label">Description</label>
+    <label for="desc" class="col-sm-3 control-label">Description *</label>
     <div class="col-sm-9">
-      <textarea id="desc" rows="3" class="form-control" placeholder="Description*" name="description" [(ngModel)]="jobData.description"></textarea>
+      <textarea id="desc" rows="3" class="form-control" placeholder="Description" name="description" [(ngModel)]="jobData.description"></textarea>
       <div class="alert alert-danger" *ngIf="error.descriptionEmpty === true">
         Please enter Description
       </div>
@@ -34,11 +44,11 @@
 
   <!-- Workload (Min/Max) -->
   <div class="form-group" id="workload">
-    <label class="col-sm-3 control-label">Workload</label>
+    <label class="col-sm-3 control-label">Workload *</label>
     <div class="col-sm-4">
       <div id="workloadMin">
         <div  class="input-group">
-          <input type="text" class="form-control" placeholder="Min*" name="workloadMin" [(ngModel)]="jobData.workloadMin">
+          <input type="text" class="form-control" placeholder="Min" name="workloadMin" [(ngModel)]="jobData.workloadMin">
           <div class="input-group-addon">%</div>
         </div>
         <div class="alert alert-danger" *ngIf="error.workloadMin === true">
@@ -60,7 +70,7 @@
     <div class="col-sm-offset-1 col-sm-4">
       <div id="workloadMax">
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Max*" name="workloadMax" [(ngModel)]="jobData.workloadMax">
+          <input type="text" class="form-control" placeholder="Max" name="workloadMax" [(ngModel)]="jobData.workloadMax">
           <div class="input-group-addon">%</div>
         </div>
         <div class="alert alert-danger" *ngIf="error.workloadMax == true">
@@ -93,9 +103,9 @@
 
   <!-- Skills -->
   <div class="form-group" id="skills">
-    <label class="col-sm-3 control-label">Skills</label>
+    <label class="col-sm-3 control-label">Skills *</label>
     <div class="col-sm-9">
-      <input class="form-control" placeholder="Skills*" name="skills" [(ngModel)]="jobData.skills">
+      <input class="form-control" placeholder="Skills" name="skills" [(ngModel)]="jobData.skills">
       <div class="alert alert-danger" *ngIf="error.skillsEmpty === true">
         Please enter Skills
       </div>
@@ -105,10 +115,10 @@
   <!-- Languages (First/Second) -->
   <div class="form-group">
     <div id="languages">
-      <label class="col-sm-3 control-label">Languages</label>
+      <label class="col-sm-3 control-label">Languages *</label>
     </div>
     <div class="col-sm-4" id="firstLanguage">
-      <input class="form-control" placeholder="First Language*" name="firstLanguage" [(ngModel)]="jobData.firstLanguage">
+      <input class="form-control" placeholder="First Language" name="firstLanguage" [(ngModel)]="jobData.firstLanguage">
       <div class="alert alert-danger" *ngIf="error.languageEmpty === true">
         Please enter a Language
       </div>
@@ -149,9 +159,9 @@
 
   <!-- Offer Valid Until -->
   <div class="form-group" id="validUntil">
-    <label class="col-sm-3 control-label">Offer Valid Until</label>
+    <label class="col-sm-3 control-label" title="Set the date to which this job posting should be available">Offer Valid Until *</label>
     <div class="col-sm-9">
-      <input class="form-control" placeholder="DD.MM.YYYY*" name="offerValidUntil" [(ngModel)]="validUntil">
+      <input class="form-control" placeholder="DD.MM.YYYY" name="offerValidUntil" [(ngModel)]="validUntil">
       <div class="alert alert-danger" *ngIf="error.validUntil === true">
         <div *ngIf="error.validUntilEmpty === true">
           Please enter a valid until Date
@@ -173,10 +183,10 @@
   <!-- Street and House No. -->
   <div class="form-group">
     <div id="streetHouse">
-      <label class="col-sm-3 control-label">Street / House No.</label>
+      <label class="col-sm-3 control-label">Street / House No. *</label>
     </div>
     <div class="col-sm-7" id="street">
-      <input class="form-control" placeholder="Street*" name="street" [(ngModel)]="jobData.street">
+      <input class="form-control" placeholder="Street" name="street" [(ngModel)]="jobData.street">
       <div class="alert alert-danger" *ngIf="error.streetEmpty === true">
         Please enter Street
       </div>
@@ -189,10 +199,10 @@
   <!-- Postcode and Place -->
   <div class="form-group">
     <div  id="postcodeCity">
-      <label class="col-sm-3 control-label">Postcode / Place</label>
+      <label class="col-sm-3 control-label">Postcode / Place *</label>
     </div>
     <div class="col-sm-2" id="postcode">
-      <input class="form-control" placeholder="Postcode*" name="zipCode" [(ngModel)]="jobData.postcode">
+      <input class="form-control" placeholder="Postcode" name="zipCode" [(ngModel)]="jobData.postcode">
       <div class="alert alert-danger" *ngIf="error.postcode === true">
         <div *ngIf="error.postcodeEmpty === true">
           Please enter ZIP Code
@@ -209,7 +219,7 @@
       </div>
     </div>
     <div class="col-sm-7" id="city">
-      <input class="form-control" placeholder="Place*" name="place" [(ngModel)]="jobData.city">
+      <input class="form-control" placeholder="Place" name="place" [(ngModel)]="jobData.city">
       <div class="alert alert-danger" *ngIf="error.cityEmpty === true">
         Please enter City
       </div>
@@ -225,7 +235,7 @@
 
   <!-- Type -->
   <div class="form-group" id="salaryType">
-    <label class="col-sm-3 control-label">Type</label>
+    <label class="col-sm-3 control-label">Type *</label>
     <div class="col-sm-9">
       <select class="form-control" name="salaryType" [(ngModel)]="jobData.salaryType">
         <option>Monthly</option>
