@@ -5,65 +5,65 @@
     <td>
       <p>
         <strong>Title</strong><br>
-        {{ format.simpleText(jobSubmissionEntry.title) }}
+        {{ format.simpleText(jobEntry.title) }}
       </p>
       <p>
         <strong>Description</strong><br>
-        {{ format.simpleText(jobSubmissionEntry.description) }}
+        {{ format.simpleText(jobEntry.description) }}
       </p>
       <p>
         <strong>Workload</strong><br>
-        {{ format.workload(jobSubmissionEntry.workloadMin, jobSubmissionEntry.workloadMax) }}
+        {{ format.workload(jobEntry.workloadMin, jobEntry.workloadMax) }}
       </p>
       <p>
         <strong>Required Skills</strong><br>
-        {{ format.simpleText(jobSubmissionEntry.skills) }}
+        {{ format.simpleText(jobEntry.skills) }}
       </p>
       <p>
         <strong>Languages</strong><br>
-        {{ format.languages(jobSubmissionEntry.firstLanguage, jobSubmissionEntry.secondLanguage) }}
+        {{ format.languages(jobEntry.firstLanguage, jobEntry.secondLanguage) }}
       </p>
       <p>
         <strong>Date Posted</strong><br>
-        {{ format.datePosted(jobSubmissionEntry.datePosted) }}
+        {{ format.datePosted(jobEntry.datePosted) }}
       </p>
       <p>
         <strong>Start Date</strong><br>
-        {{ format.startDate(jobSubmissionEntry.startDate) }}
+        {{ format.startDate(jobEntry.startDate) }}
       </p>
       <p>
         <strong>End Date</strong><br>
-        {{ format.endDate(jobSubmissionEntry.endDate) }}
+        {{ format.endDate(jobEntry.endDate) }}
       </p>
       <p>
         <strong>Offer Valid Until</strong><br>
-        {{ format.dateFromMillisecondToString(jobSubmissionEntry.validUntil) }}
+        {{ format.dateFromMillisecondToString(jobEntry.validUntil) }}
       </p>
       <p>
         <strong>Street</strong><br>
-        {{ format.street(jobSubmissionEntry.street, jobSubmissionEntry.houseNumber) }}
+        {{ format.street(jobEntry.street, jobEntry.houseNumber) }}
       </p>
       <p>
         <strong>Postcode / Place</strong><br>
-        {{ format.city(jobSubmissionEntry.postcode, jobSubmissionEntry.city) }}
+        {{ format.city(jobEntry.postcode, jobEntry.city) }}
       </p>
       <p>
         <strong>Salary Type</strong><br>
-        {{ format.salaryType(jobSubmissionEntry.salaryType) }}
+        {{ format.salaryType(jobEntry.salaryType) }}
       </p>
       <p>
         <strong>Salary Amount</strong><br>
-        {{ format.salaryAmount(jobSubmissionEntry.salaryAmount) }}
+        {{ format.salaryAmount(jobEntry.salaryAmount) }}
       </p>
     </td>
 
     <!-- Approve/Deny Button for Admin to evaluate Job Posting -->
     <td class="pull-right">
-      <button type="button" class="btn btn-success" title="Accept" (click)="onApprovedJobSubmission()">
+      <button type="button" class="btn btn-success" title="Accept" (click)="onApproveJob()">
         <span class="glyphicon glyphicon-ok"></span>
       </button>
       <br>
-      <button type="button" class="btn btn-danger" title="Deny" (click)="onDeniedJobSubmission()">
+      <button type="button" class="btn btn-danger" title="Deny" (click)="onDenyJob()">
         <span class="glyphicon glyphicon-remove"></span>
       </button>
     </td>

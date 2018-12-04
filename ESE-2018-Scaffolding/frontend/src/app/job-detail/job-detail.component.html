@@ -77,6 +77,8 @@
   </table>
 </div>
 
+
+
 <!-- Employer Details -->
 <div class="col-sm-4 employer-box">
 
@@ -90,8 +92,9 @@
   <p>
     <strong>Company</strong>
     <span class="label label-success pull-right" *ngIf="companyData.verified == true">Verified</span>
+    <span class="label label-warning pull-right" *ngIf="companyData.verified == null">In Review</span>
     <span class="label label-danger pull-right" *ngIf="companyData.verified == false">Unverified</span><br>
-    {{ format.simpleText(companyData.name) }}
+    <a [routerLink]="['/company/', companyData.id]">{{ format.simpleText(companyData.name) }}</a>
   </p>
 
   <!-- Description -->

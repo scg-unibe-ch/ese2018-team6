@@ -1,0 +1,18 @@
+<h3>Unaccepted Jobs</h3>
+<hr>
+
+<!-- Displays message if no job submission needs approval -->
+<div>
+  <p *ngIf="jobList.length == 0"><em>There are currently no open job submissions to approve.</em></p>
+</div>
+
+<!-- Displays list of all unaccepted job submissions -->
+<div>
+  <p *ngIf="jobList.length > 0"><em>The following job submissions await approval:</em></p>
+  <app-job-submission
+    *ngFor="let jobEntry of jobList"
+    [jobEntry]="jobEntry"
+    (jobApproved)="approveJob($event)"
+    (jobDenied)="denyJob($event)">
+  </app-job-submission>
+</div>

@@ -33,7 +33,8 @@ export class JobCreateComponent implements OnInit {
     null,
     null,
     null,
-    null
+    null,
+    null,
   );
   startDate: String = '';
   endDate: String = '';
@@ -51,7 +52,7 @@ export class JobCreateComponent implements OnInit {
    *  If not he will be redirected to home page.
    */
   ngOnInit() {
-    this.request.checkIfUser();
+    this.request.checkIfAccess();
   }
 
   /**
@@ -70,7 +71,7 @@ export class JobCreateComponent implements OnInit {
 
   /**
    *  Checks the entered job data before sending to backend.
-   *  Validation requires title, description, skill, full address.
+   *  Validation requires title, description, skills and a full address.
    *  If a value fails, user receives accurate feedback.
    *  Returns true if valid; false otherwise.
    *

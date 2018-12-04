@@ -31,7 +31,9 @@ export class AccountSettingsComponent implements OnInit {
     null,
     null,
     null,
-    null
+    null,
+    null,
+    null,
   );
   confirmPassword: string = '';
   errorMessage: {[k: string]: any} = {};
@@ -105,7 +107,9 @@ export class AccountSettingsComponent implements OnInit {
         instance.companyDescription,
         instance.userId,
         instance.message,
-        instance.verified
+        instance.verified,
+        instance.onceVerified,
+        instance.featured,
       )
     )
   }

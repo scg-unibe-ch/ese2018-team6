@@ -1,0 +1,46 @@
+<table>
+  <tbody>
+  <tr>
+
+    <td>
+      <a [routerLink]="['/job/details/', jobEntry.id, jobEntry.companyId]">{{ format.simpleText(jobEntry.title) }}</a>&nbsp;
+      <small>
+        <span class="label label-success" *ngIf="jobEntry.accepted == true">Approved</span>
+        <span class="label label-warning" *ngIf="jobEntry.accepted == null">In Review</span>
+        <span class="label label-danger" *ngIf="jobEntry.accepted == false">Denied</span>
+      </small>
+    </td>
+
+    <td style="width: 135px !important;">
+      <div class="pull-right">
+        <span *ngIf="jobEntry.featured == true">
+          <button type="button" class="btn btn-info" title="Currently featured" (click)="onUnfeatureJob()">
+            <span class="glyphicon glyphicon-star"></span>
+          </button>
+        </span>
+        <span *ngIf="jobEntry.featured != true">
+          <button type="button" class="btn btn-default" title="Currently unfeatured" (click)="onFeatureJob()">
+            <span class="glyphicon glyphicon-star"></span>
+          </button>
+        </span>
+
+        <span *ngIf="jobEntry.accepted == false">
+          <button type="button" class="btn btn-success" title="Accept" (click)="onApprovedJob()">
+            <span class="glyphicon glyphicon-ok"></span>
+          </button>
+        </span>
+        <span *ngIf="jobEntry.accepted != false">
+          <button type="button" class="btn btn-danger" title="Deny" (click)="onDeniedJob()">
+            <span class="glyphicon glyphicon-remove"></span>
+          </button>
+        </span>
+
+        <button type="button" class="btn" title="Delete" (click)="onDeleteJob()">
+          <span class="glyphicon glyphicon-trash"></span>
+        </button>
+      </div>
+    </td>
+
+  </tr>
+  </tbody>
+</table>

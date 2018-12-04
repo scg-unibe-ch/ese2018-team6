@@ -1,0 +1,63 @@
+BACKLOG REPORT
+
+01 - SEP 17
+- Start of lecture. Registering for exercises.
+
+02 - SEP 24
+- Announcement of the different groups.
+
+03 - OCT 01
+- First short team meeting on WE getting to know each other. General discussion about project.
+- Longer team meeting on FR splitting team up into Back- and Frontend.
+- Reading into existing project files of ToDo-List and understanding general structure of Angular.
+
+04 - OCT 08
+- Based upon the initial ToDo-List, we created a Job-List with individual Job-Items that held some basic details (Title, Description & Required Skills).
+- This process was mostly copy-pasting as most of what happened was still quite unclear at this time, but it helped in understanding the existing parts of the project.
+- Most of the time was spent into looking up tutorials for Angular on how it works. Other tutorials for HTML, CSS, Java-/Typescript.
+
+05 - OCT 15
+- No changes as far as code goes this week.
+- Instead of rushing into the project (as far as coding goes), we gave ourselves some time to properly read into Angular to better understand how it and its compoments work together.
+- Long team meeting on FR where we discussed the project in details and what we had learned so far of Angular.
+- We specified some models for users and job postings; made a list of all the components we would require and defined some of the requests that we would need to communicate between Front- and Backend.
+- we figured that this would be very helpful for the next steps of the project as both Front- and Backend could start working on their implementation quite individually as all the necessary specifications had been defined.
+
+06 - OCT 22
+- Now that we had a better understanding of Angular on how it works and the structure of our project has been discussed, we started working on the implementation.
+- One of the first decisions we made was to change from Angular Material to the Bootstrap Framework, since we preferred the look of it and styling the website would be quite quickly and look good too.
+- We created the necessary models and compoments (Header, Footer, Contact, About, User Login/Register, Job List/Detail/Create/Edit, My Account & Admin). To each compoment was added some basic CSS and some dummy data to see the current layout.
+- It was this week that we really got into the project as we started to understand how everything is connected and works together. The progress we made with the corresponding results were really motivating and fun.
+
+07 - OCT 19
+- This week we updated/improved most of the models and components we had created in the previous week.
+- We also added some new compoments (My Job Item and Job Detail) which were missing
+- Additionally we implemented proper navigation routing.
+- All form fields were updated with two-way databinding, which means the displayed data was now linked to an object/array of dummy-data that could later be replaced with data from the database using the HTTP-requests.
+- Up to this point we didn't have any major issues. Most problems we had were minor ones that were resolved rather quickly. Creating the components and designing them all worked quite well and also the databinding worked thanks to some helpful tutorials on the internet.
+
+08 - NOV 05
+- Now that HTTP-request from the backend were mostly ready and the frontend was also progressed far enough with all the forms etc., we started implementing the HTTP-requests.
+- Due to some changes in the models, we also updated the entire website accordingly.
+- One bigger issues we had was that in one instance we sent two requests upon loading a component. This issue was that for the second request we needed some data that was only received from the first request. Since the second request was sent before the data from the first one was received, we had annoying NULL errors.
+
+09 - NOV 12
+- Continuing from last week, we implemented the remaining HTTP-requests.
+- The frontend also received multiple updates and improvements as far as styling goes (glyphicons, messages for user if certain lists were empty...).
+- Companies and jobs now also display their status with an appropriate label.
+- To reduce duplicated code and keep responsibilities together, we created a RequestService that handels all requests with the backend and a FormatService that correctly displays data in the frontend. 
+
+10 - NOV 19
+- This week we implemented ngx-toastr for user feedback. They are very helpful and are a major improvement for the user experience.
+- We also added a first implementation of form validation that gives useful and precise feedback to the user if one of his inputs is invalid.
+- For documentation purposes we also started adding DocComments to our code.
+- The layout received some improvements and we also added details of the MIB to the header, footer, contact and about us pages.
+- Additional, we added the search feature which allows to search for strings in the title, description, skills and place of a job posting.
+
+11 - NOV 26
+- After the search feature we also implemented a first version of the filter features this week, although there are still some issues with it.
+- This week we also solved an issues we had with the dates. Instead of storing them as a string or Date, we now store them in milliseconds since 1970 which makes everything a bit easier (also filtering becomes alot easier this way)
+- Error messages are now included in their own model which tracks all errors a form has / can have.
+- Further little improvements as far as layout and user experience goes.
+
+12 - DEC 03
