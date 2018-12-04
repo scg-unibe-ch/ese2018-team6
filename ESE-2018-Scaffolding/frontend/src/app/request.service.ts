@@ -217,6 +217,19 @@ export class RequestService {
     );
   }
 
+  /*************************************************************************
+   COMPANY LIST
+   ************************************************************************/
+
+  /**
+   *  GET-Request to fetch all approved companies.
+   *  Returns the observable of the request.
+   *
+   *  @returns {Observable<Object>}   Observable of GET-Request.
+   */
+  companyListAll() {
+    return this.httpClient.get(this.backendURL + 'company');
+  }
 
 
   /*************************************************************************

@@ -36,11 +36,9 @@ import {RequestService} from './request.service';
 import {ToastrModule} from 'ngx-toastr';
 import {AccountSettingsComponent} from './account-settings/account-settings.component';
 import {ValidationService} from './validation.service';
-<<<<<<< HEAD
 import { FilterComponent } from './filter/filter.component';
-=======
+import { CompanyListComponent } from './company-list/company-list.component';
 import {CompanyDetailComponent} from './company-detail/company-detail.component';
->>>>>>> 032065abcc2275bfd9bbf76667edfb10f3f3a3be
 
 @NgModule({
   declarations: [
@@ -59,9 +57,8 @@ import {CompanyDetailComponent} from './company-detail/company-detail.component'
     MyJobItemComponent,
     JobCreateComponent,
     AccountSettingsComponent,
-<<<<<<< HEAD
     FilterComponent,
-=======
+    CompanyListComponent,
     AdminAllCompaniesComponent,
     AdminAllJobsComponent,
     AdminUnverifiedCompaniesComponent,
@@ -71,7 +68,6 @@ import {CompanyDetailComponent} from './company-detail/company-detail.component'
     CompanyApplicationComponent,
     JobSubmissionComponent,
     CompanyDetailComponent,
->>>>>>> 032065abcc2275bfd9bbf76667edfb10f3f3a3be
   ],
   imports: [
     AppRoutingModule,
