@@ -5,7 +5,6 @@ import { ContactComponent } from './contact/contact.component';
 import { AboutComponent } from './about/about.component';
 import { UserLoginComponent } from './user-login/user-login.component';
 import { UserRegisterComponent } from './user-register/user-register.component';
-import { AdminComponent } from './admin/admin.component';
 import { MyAccountComponent } from './my-account/my-account.component';
 import { JobEditComponent } from './job-edit/job-edit.component';
 import { JobDetailComponent } from './job-detail/job-detail.component';

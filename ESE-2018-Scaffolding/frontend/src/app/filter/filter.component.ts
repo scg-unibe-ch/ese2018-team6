@@ -44,8 +44,6 @@ export class FilterComponent implements OnInit {
     thisWeek.setDate(new Date().getDate() - 7);
     let thisMonth = new Date();
     thisMonth.setMonth(new Date().getMonth() - 7);
-    let all = new Date();
-    all.setFullYear(1990);
 
 
     this.datePosted.push(new OptionItem("this week", thisWeek),
@@ -59,7 +57,7 @@ export class FilterComponent implements OnInit {
       let currentMonth = new Date();
       currentMonth.setMonth(new Date().getMonth() + i);
 
-      months.push(new OptionItem(monthStrings[currentMonth.getMonth()] + " " + currentMonth.getFullYear(), currentMonth));
+      months.push(new OptionItem(monthStrings[currentMonth.getMonth()], currentMonth));
       if(i == 0 || i == 12 || currentMonth.getMonth() == 0){
         //add  year to the first item, last item and to every january item
         months[i].label += " " + currentMonth.getFullYear();
@@ -82,7 +80,8 @@ export class FilterComponent implements OnInit {
    */
   filter(){
     let filterList = [];
-    if(this.datePostedMin.toString() != "null"){
+    //datePosted
+    if(this.datePostedMin != null && this.datePostedMin.toString() != "null"){
       this.datePostedMin = new Date(this.datePostedMin);
       let datePostedMax = new Date();
       datePostedMax.setFullYear(2050);
@@ -91,6 +90,27 @@ export class FilterComponent implements OnInit {
         "maxDate", datePostedMax.getTime())
       );
     }
+    //startDate
+    if(this.startDateMin != null && this.startDateMin.toString() != "null"){
+      this.startDateMin = new Date(this.startDateMin);
+      let startDateMax = new Date();
+      startDateMax.setFullYear(2050);
+      filterList.push(
+        this.createFilterObject("startDate","minDate",this.startDateMin.getTime(),
+          "maxDate", startDateMax.getTime())
+      );
+    }
+    //endDate
+    if(this.endDateMax != null && this.endDateMax.toString() != "null"){
+      this.endDateMax = new Date(this.endDateMax);
+      let endDateMin = new Date();
+      endDateMin.setFullYear(1990);
+      filterList.push(
+        this.createFilterObject("endDate","minDate",endDateMin.getTime(),
+          "maxDate", this.endDateMax.getTime())
+      );
+    }
+
     this.sendFilter.emit(filterList);
   }
 
