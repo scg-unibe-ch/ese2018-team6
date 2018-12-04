@@ -1,9 +1,8 @@
 import {Router, Request, Response} from 'express';
 import {User} from '../models/user.model';
 import {Company} from '../models/company.model';
-import {JobItem} from '../models/jobitem.model';
 import {foundUser, checkToken, saltRounds} from './user.controller';
-import sequelize = require('sequelize');
+import {sendErrorResponse} from './jobitem.controller';
 
 const router: Router = Router();
 /*
@@ -18,7 +17,6 @@ router.post('/', async (req: Request, res: Response) => {
 
     instance.fromSimplification(req.body);
     instance.password = bcrypt.hashSync(req.body.password, saltRounds);
-
     await instance.save();
 
     const company = new Company();
@@ -35,10 +33,8 @@ router.post('/', async (req: Request, res: Response) => {
     res.json({
       id: instance.id
     });
-  } else { res.statusCode = 403;
-  res.json({
-    'message': 'email already used or bad request (missing email or password)'
-  });
+  } else {
+    sendErrorResponse(res, 403, {'message': 'email already used or bad request (missing email or password)'});
   }
 });
 
@@ -49,10 +45,7 @@ router.get('/:id', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const instance = await Company.findOne({ where: {userId: id }});
   if (instance == null) {
-    res.statusCode = 404;
-    res.json({
-      'message': 'company not found'
-    });
+    sendErrorResponse(res, 404, {'message': 'company not found'});
     return;
   }
   res.statusCode = 200;
@@ -70,14 +63,10 @@ router.get('/:id/:token', async (req: Request, res: Response) => {
   if (foundUser(instance, res) && checkToken(instance, res, token) && instance !== null) {
     const companyInstance = await Company.findOne({ where: {userId: id }});
     if (companyInstance == null) {
-      res.statusCode = 404;
-      res.json({
-        'message': 'company not found'
-      });
+      sendErrorResponse(res, 404, {'message': 'company not found'});
       return;
     }
     res.statusCode = 200;
-
     const returnObject = companyInstance.toSimplification();
     returnObject.message = companyInstance.messageFromAdmin;
     res.send(returnObject);
@@ -112,10 +101,7 @@ router.put('/:id/:token', async (req: Request, res: Response) => {
   if (foundUser(instance, res) && checkToken(instance, res, token) && instance !== null) {
     const companyInstance = await Company.findOne({ where: {userId: id }});
     if (companyInstance == null) {
-      res.statusCode = 404; // not found
-      res.json({
-        'message': 'company not found'
-      });
+      sendErrorResponse(res, 404, {'message': 'company not found'});
       return;
     }
     companyInstance.fromSimplification(req.body);
@@ -143,10 +129,7 @@ router.delete('/:id/:token', async (req: Request, res: Response) => {
       res.statusCode = 204;
       res.send();
     } else {
-      res.statusCode = 404;
-      res.json({
-      'message': 'company not found'
-    });
+      sendErrorResponse(res, 404, {'message': 'company not found'});
     }
   }
 });

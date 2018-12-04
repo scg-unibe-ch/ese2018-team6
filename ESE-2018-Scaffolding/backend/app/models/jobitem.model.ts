@@ -1,8 +1,5 @@
 import {Table, Column, Model, HasMany, BelongsTo, ForeignKey, PrimaryKey} from 'sequelize-typescript';
-import {JobList} from './joblist.model';
-import {Sequelize} from 'sequelize';
 import {User} from './user.model';
-import {Company} from './company.model';
 
 @Table
 export class JobItem extends Model<JobItem> {
@@ -94,8 +91,6 @@ export class JobItem extends Model<JobItem> {
       'city': this.city,
       'salaryType': this.salaryType,
       'salaryAmount': this.salaryAmount,
-      //'accepted': this.accepted,
-      //'messageFromAdmin': this.messageFromAdmin, // no need to
       'companyId': this.companyId,
       'featured' : this.featured,
     };
@@ -118,8 +113,6 @@ export class JobItem extends Model<JobItem> {
     this.city = simplification['city'];
     this.salaryType = simplification['salaryType'];
     this.salaryAmount = simplification['salaryAmount'];
-    // this.accepted = simplification['accepted'];
-    // this.messageFromAdmin = simplification['messageFromAdmin']; Companies must not change this column.
   }
 
 }

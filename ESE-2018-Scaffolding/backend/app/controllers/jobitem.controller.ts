@@ -1,5 +1,4 @@
 import {Router, Request, Response} from 'express';
-// import {JobList} from '../models/joblist.model';
 import {JobItem} from '../models/jobitem.model';
 import {User} from '../models/user.model';
 import {checkToken, foundUser} from './user.controller';
@@ -32,10 +31,8 @@ router.post('/:id/:token', async (req: Request, res: Response) => {
       res.send(instance.toSimplification());
     }
   } else {
-    res.statusCode = 401;
-    res.json({
-      'message': 'company is not verified and therefore cannot create job postings'
-    });
+    sendErrorResponse(res,401,
+      {'message': 'company is not verified and therefore cannot create job postings'})
   }
 });
 
@@ -254,19 +251,6 @@ function createPostcodeFilterOpArray(array: any){
   }
   return opArray;
 }
-/**
- * sends a response, but only if the response is not sent already
- *
- * @param res - response object
- * @param statusCode - sets the status code of the response
- * @param object - object, that is sent via json() method
- */
-function sendErrorResponse(res: any, statusCode: number, object:any){
-  if(!res.headersSent){
-    res.statusCode = statusCode;
-    res.json(object);
-  }
-}
 
 /*
  - returns a map of JobItems
@@ -300,10 +284,7 @@ router.get('/:id', async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
   const instance = await JobItem.findById(id);
   if (instance == null) {
-    res.statusCode = 404;
-    res.json({
-      'message': 'not found'
-    });
+    sendErrorResponse(res, 404, {'message': 'jobItem not found'});
     return;
   }
   res.statusCode = 200;
@@ -339,18 +320,12 @@ router.get('/:id/:token', async (req: Request, res: Response) => {
     });
 
     if (instances == null) {
-      res.statusCode = 404;
-      res.json({
-        'message': 'jobitem not found'
-      });
+      sendErrorResponse(res, 404, {'message': 'jobItem not found'});
       return;
     }
 
     let returnArray = instances.map(e => e.toSimplification());
-    for(let i = 0; i < returnArray.length; i++){
-      returnArray[i].message = instances[i].messageFromAdmin;
-      returnArray[i].accepted = instances[i].accepted;
-    }
+    returnArray = addAcceptedAndMessage(returnArray, instances);
     res.statusCode = 200;
     res.send(returnArray);
   }
@@ -368,10 +343,7 @@ router.put('/:jobItemId/:id/:token', async (req: Request, res: Response) => {
     const jobItemId = parseInt(req.params.jobItemId);
     const instance = await JobItem.findById(jobItemId);
     if (instance == null) {
-      res.statusCode = 404;
-      res.json({
-        'message': 'not found'
-      });
+      sendErrorResponse(res, 404, {'message': 'jobItem not found'});
       return;
     }
     if (instance.companyId == user.id) { // check if user corresponds to this jobItem
@@ -384,10 +356,7 @@ router.put('/:jobItemId/:id/:token', async (req: Request, res: Response) => {
       res.statusCode = 200;
       res.send(instance.toSimplification());
     } else {
-      res.statusCode = 401;
-      res.json({
-        'message': 'not your job posting'
-      });
+      sendErrorResponse(res,401,{'message': 'not your job posting'});
     }
   }
 });
@@ -404,24 +373,39 @@ router.delete('/:jobItemId/:id/:token', async (req: Request, res: Response) => {
     const jobItemId = parseInt(req.params.jobItemId);
     const jobItem = await JobItem.findById(jobItemId);
     if (jobItem == null) {
-      res.statusCode = 404;
-      res.json({
-        'message': 'not found'
-      });
+      sendErrorResponse(res, 404, {'message': 'jobItem not found'});
       return;
     }
     if (jobItem.companyId == user.id) {
-      // jobItem.fromSimplification(req.body);
       await jobItem.destroy();
       res.statusCode = 204;
       res.send();
     } else {
-      res.statusCode = 401;
-      res.json({
-        'message': 'not your job posting'
-      });
+      sendErrorResponse(res,401,{'message': 'not your job posting'});
     }
   }
 });
+
+/**
+ * sends a response, but only if the response is not sent already
+ *
+ * @param res - response object
+ * @param statusCode - sets the status code of the response
+ * @param object - object, that is sent via json() method
+ */
+export function sendErrorResponse(res: any, statusCode: number, object:any){
+  if(!res.headersSent){
+    res.statusCode = statusCode;
+    res.json(object);
+  }
+}
+
+export function addAcceptedAndMessage(array: any, instances: any){
+  for(let i = 0; i < array.length; i++){
+    array[i].message = instances[i].messageFromAdmin;
+    array[i].accepted = instances[i].accepted;
+  }
+  return array;
+}
 
 export const JobItemController: Router = router;

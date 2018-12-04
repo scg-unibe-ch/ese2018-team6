@@ -1,8 +1,7 @@
 import {Router, Request, Response} from 'express';
 import {User} from '../models/user.model';
 import {Admin} from '../models/admin.model';
-import {Company} from '../models/company.model';
-import equals = require('validator/lib/equals');
+import {sendErrorResponse} from './jobitem.controller';
 
 const router: Router = Router();
 /*
@@ -34,16 +33,10 @@ router.post('/token', async (req: Request, res: Response) => {
         isAdmin: isAdmin
       });
     } else {
-      res.statusCode = 401;
-      res.json({
-        'message': 'wrong password'
-      });
+      sendErrorResponse(res, 401, {'message': 'wrong password'});
     }
   } else {
-    res.statusCode = 400;
-    res.json({
-      'message': 'user not found or bad request (email or password missing)'
-    });
+    sendErrorResponse(res, 400, {'message': 'user not found or bad request (email or password missing)'});
   }
 });
 
@@ -59,10 +52,7 @@ router.get('/:id/:token', async (req: Request, res: Response) => {
     res.statusCode = 200;
     res.send(instance.toSimplification());
   } else {
-    res.statusCode = 404;
-    res.json({
-      'message': 'user not found'
-    });
+    sendErrorResponse(res, 404, {'message': 'user not found'});
   }
 });
 
@@ -88,17 +78,11 @@ router.put('/:id/:token', async (req: Request, res: Response) => {
         res.statusCode = 200;
         res.send();
       } else {
-        res.statusCode = 400;
-        res.json({
-          'message': 'user with this email already exists'
-        });
+        sendErrorResponse(res, 400, {'message': 'user with this email already exists'});
       }
     }
   } else {
-    res.statusCode = 400;
-    res.json({
-      'message': 'provide an non-empty email address and password'
-    });
+    sendErrorResponse(res, 400, {'message': 'provide an non-empty email address and password'});
   }
 });
 
@@ -115,10 +99,7 @@ router.delete('/:id/:token', async (req: Request, res: Response) => {
       res.statusCode = 204;
       res.send();
   } else {
-      res.statusCode = 404;
-      res.json({
-        'message': 'user not found'
-      });
+    sendErrorResponse(res, 404, {'message': 'user not found'});
     }
 });
 
@@ -128,10 +109,7 @@ router.delete('/:id/:token', async (req: Request, res: Response) => {
  */
 export function foundUser(user: any, res: any) {
   if (user == null) {
-    res.statusCode = 404; // not found
-    res.json({
-      'message': 'user not found'
-    });
+    sendErrorResponse(res, 404, {'message': 'user not found'});
     return false;
   } else {
     return true;
@@ -143,16 +121,10 @@ export function foundUser(user: any, res: any) {
  */
 export function checkToken(user: any, res: any, token: string) {
   if (token !== user.token) {
-    res.statusCode = 401; // unauthorized
-    res.json({
-      'message': 'wrong token'
-    });
+    sendErrorResponse(res, 401, {'message': 'wrong token'});
     return false;
   } else if (user.tokenExpirationDate < Date.now()) {
-    res.statusCode = 401; // unauthorized
-    res.json({
-      'message': 'token expired'
-    });
+    sendErrorResponse(res, 401, {'message': 'token expired, please sign in again'});
     return false;
   } else {
     return true;
