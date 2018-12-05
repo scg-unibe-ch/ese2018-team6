@@ -35,10 +35,10 @@ import {RequestService} from './request.service';
 import {ToastrModule} from 'ngx-toastr';
 import {AccountSettingsComponent} from './account-settings/account-settings.component';
 import {ValidationService} from './validation.service';
-import { FilterComponent } from './filter/filter.component';
-import { CompanyListComponent } from './company-list/company-list.component';
+import {FilterComponent} from './filter/filter.component';
+import {CompanyListComponent} from './company-list/company-list.component';
 import {CompanyDetailComponent} from './company-detail/company-detail.component';
-import { CompanyItemComponent } from './company-list/company-item/company-item.component';
+import {CompanyItemComponent} from './company-list/company-item/company-item.component';
 
 @NgModule({
   declarations: [

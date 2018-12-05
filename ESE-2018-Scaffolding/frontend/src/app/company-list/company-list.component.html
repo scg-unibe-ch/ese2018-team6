@@ -1,22 +1,14 @@
-
-<h3>
-  <!-- Header with changing titles (depending on shown list of job postings), buttons for toggling search/filter and 'Create New' button for logged in users -->
-  <span *ngIf="showResults === 'allCompanies'">Companies</span>
-
-</h3>
+<h3>Companies</h3>
 <hr>
 
-
 <!-- List of all companies -->
-<div *ngIf="showResults === 'allCompanies'">
-  <div *ngIf="companyData.length == 0">
-    <p><em>We currently don't have any available companies</em></p>
-  </div>
-  <div *ngIf="companyData.length > 0">
-    <p><em>Our partners</em></p>
-    <app-company-item
-      *ngFor="let companyItem of companyData"
-      [companyData]="companyItem">
-    </app-company-item>
-  </div>
+<div *ngIf="companyData.length == 0">
+  <p><em>We currently don't have any available companies</em></p>
+</div>
+<div *ngIf="companyData.length > 0">
+  <p><em>Our partners</em></p>
+  <app-company-item
+    *ngFor="let companyItem of companyData"
+    [companyData]="companyItem">
+  </app-company-item>
 </div>

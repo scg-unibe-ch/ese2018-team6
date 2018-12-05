@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Company} from '../../company.model';
 import {FormatService} from '../../format.service';
 
@@ -7,16 +7,12 @@ import {FormatService} from '../../format.service';
   templateUrl: './company-item.component.html',
   styleUrls: ['./company-item.component.css']
 })
-export class CompanyItemComponent implements OnInit {
+export class CompanyItemComponent {
 
   @Input()
   companyData: Company;
 
   constructor(
-    public format: FormatService
+    public format: FormatService,
   ) { }
-
-  ngOnInit() {
-  }
-
 }

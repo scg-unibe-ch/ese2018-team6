@@ -1,0 +1,65 @@
+h4 {
+  color: #2b669a !important;
+  margin: 5px 0;
+}
+
+p {
+  margin: 5px 0 0 0;
+}
+
+table {
+  width: 100%;
+  vertical-align: top;
+}
+
+img {
+  max-width: 80%;
+  max-height: 60px;
+  display: block;
+  margin: 5px auto;
+}
+
+.list-group-item {
+  color: #000;
+  padding: 10px;
+}
+
+.featured {
+  background-color: rgba(42, 171, 210, 0.2);
+  border-color: #036dd2;
+}
+
+.featured:hover {
+  color: #000;
+  background-color: rgba(42, 171, 210, 0.3);
+}
+
+.featured-star {
+  font-size: 15px;
+  margin-right: 2px;
+}
+
+.list-group-item-heading {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.caption h4 {
+  font-size: 17px;
+}
+
+.caption {
+  padding: 5px 10px;
+}
+
+.thumbnail {
+  height: 140px !important;
+}
+
+.thumbnail:hover {
+  cursor: pointer;
+}
+
+.emptyImage {
+  height: 60px !important;
+}
