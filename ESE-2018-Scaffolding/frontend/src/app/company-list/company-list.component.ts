@@ -32,7 +32,7 @@ export class CompanyListComponent implements OnInit {
   loadCompanyDetails() {
     this.request.companyListAll().subscribe(
       (response: any) => {
-        this.companyData = response.map((instance) => new Company(
+        this.companyData = response.map((instance) => new Company (
           instance.id,
           instance.name,
           instance.logo,
@@ -48,7 +48,8 @@ export class CompanyListComponent implements OnInit {
           instance.userId,
           instance.messageFromAdmin,
           instance.verified,
-
+          instance.onceVerified,
+          instance.featured
         ))
       },
       (err) => {

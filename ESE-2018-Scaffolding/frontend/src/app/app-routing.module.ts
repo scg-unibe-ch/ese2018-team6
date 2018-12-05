@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { JobListComponent } from './job-list/job-list.component';
@@ -6,25 +6,13 @@ import { ContactComponent } from './contact/contact.component';
 import { AboutComponent } from './about/about.component';
 import { UserLoginComponent } from './user-login/user-login.component';
 import { UserRegisterComponent } from './user-register/user-register.component';
-import { AdminComponent } from './admin/admin.component';
+//import { AdminComponent } from './admin/admin.component';
 import { MyAccountComponent } from './my-account/my-account.component';
 import { JobEditComponent } from './job-edit/job-edit.component';
 import { JobDetailComponent } from './job-detail/job-detail.component';
 import { JobCreateComponent } from './job-create/job-create.component';
 import { CompanyListComponent } from './company-list/company-list.component';
-=======
-import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
-import {JobListComponent} from './job-list/job-list.component';
-import {ContactComponent} from './contact/contact.component';
-import {AboutComponent} from './about/about.component';
-import {UserLoginComponent} from './user-login/user-login.component';
-import {UserRegisterComponent} from './user-register/user-register.component';
-import {MyAccountComponent} from './my-account/my-account.component';
-import {JobEditComponent} from './job-edit/job-edit.component';
-import {JobDetailComponent} from './job-detail/job-detail.component';
-import {JobCreateComponent} from './job-create/job-create.component';
->>>>>>> 032065abcc2275bfd9bbf76667edfb10f3f3a3be
+
 import {AccountSettingsComponent} from './account-settings/account-settings.component';
 import {AdminAllCompaniesComponent} from './admin-all-companies/admin-all-companies.component';
 import {AdminAllJobsComponent} from './admin-all-jobs/admin-all-jobs.component';
