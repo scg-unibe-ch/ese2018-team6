@@ -1,5 +1,10 @@
 <!-- Title -->
-<h3>{{ format.simpleText(jobData.title) }}</h3>
+<h3>
+  <span [ngClass]="{'label label-info' : jobData.featured == true}">
+    <span class="glyphicon glyphicon-star" *ngIf="jobData.featured == true" title="Featured"></span>
+  </span>
+  {{ format.simpleText(jobData.title) }}
+</h3>
 <hr>
 
 <!-- Job Details -->
@@ -91,10 +96,13 @@
   <!-- Company Name and Status Label (Green: Verified; Red: Unverified) -->
   <p>
     <strong>Company</strong>
-    <span class="label label-success pull-right" *ngIf="companyData.verified == true">Verified</span>
-    <span class="label label-warning pull-right" *ngIf="companyData.verified == null">In Review</span>
-    <span class="label label-danger pull-right" *ngIf="companyData.verified == false">Unverified</span><br>
-    <a [routerLink]="['/company/', companyData.id]">{{ format.simpleText(companyData.name) }}</a>
+    <span class="pull-right">
+      <span class="label label-success" *ngIf="companyData.verified == true">Verified</span>
+      <span class="label label-warning" *ngIf="companyData.verified == null">In Verification</span>
+      <span class="label label-danger" *ngIf="companyData.verified == false">Unverified</span>&nbsp;
+      <span class="label label-info" *ngIf="companyData.featured == true"><span class="glyphicon glyphicon-star" title="Featured"></span> Featured</span>
+    </span>
+    <br><a [routerLink]="['/company/details/', companyData.id]">{{ format.simpleText(companyData.name) }}</a>
   </p>
 
   <!-- Description -->

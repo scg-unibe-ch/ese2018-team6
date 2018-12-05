@@ -63,6 +63,10 @@ export class RequestService {
     });
   }
 
+  jobListCompany(companyId: number) {
+    return this.httpClient.get(this.backendURL + 'jobitem/ofCompany/' + companyId);
+  }
+
 
 
   /*************************************************************************
@@ -128,7 +132,7 @@ export class RequestService {
     }).subscribe(
       res => {
         this.toastr.success('Now in review by our admin', 'Job creation successful');
-        this.router.navigate(['/my-account']);
+        this.router.navigate(['/my-account/job-postings']);
       },
       err => {
         this.toastr.error(err.error.message, 'Job creation failed');

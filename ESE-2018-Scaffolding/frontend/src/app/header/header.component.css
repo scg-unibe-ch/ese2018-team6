@@ -13,7 +13,7 @@
 }
 
 .navbar-nav {
-  padding-left: 15px;
+  padding-left: 0;
   font-size: 15px;
   font-weight: 500;
 }
@@ -33,7 +33,7 @@
   margin: -4px -5px 0 -3px;
   padding: 0;
   max-height: 29px;
-  max-width: 280px;
+  max-width: 250px;
 }
 
 .navbar-right {

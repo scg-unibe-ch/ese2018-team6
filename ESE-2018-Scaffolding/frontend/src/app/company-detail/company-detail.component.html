@@ -1,3 +1,73 @@
-<p>
-  company-detail works!
-</p>
+<!-- Company Name and Featured Label -->
+<h3>
+  {{ format.simpleText(companyData.name) }}
+  <!-- Show featured label if company is featured -->
+  <span class="pull-right" *ngIf="companyData.featured == true" [ngClass]="{'label label-info' : companyData.featured == true}">
+    <span class="glyphicon glyphicon-star featured" title="Featured"></span> Featured
+  </span>
+</h3>
+<hr>
+
+<div class="col-md-12">
+  <img src="{{ format.logo(companyData.logo) }}">
+</div>
+
+<div class="col-md-12">
+  <p>
+    <strong>Description</strong><br>
+    {{ format.simpleText(companyData.description) }}
+  </p>
+</div>
+
+<div class="col-md-12">
+  <div class="col-md-4">
+    <p>
+      <strong>Address</strong><br>
+      {{ format.simpleText(companyData.name) }}<br>
+      {{ format.street(companyData.street, companyData.houseNumber) }}<br>
+      {{ format.city(companyData.postcode, companyData.city) }}
+    </p>
+  </div>
+  <div class="col-md-4" style="margin-bottom: 30px">
+    <strong>Contact Details</strong>
+
+    <table>
+      <tbody>
+      <tr *ngIf="!format.isEmpty(companyData.contactPhone)">
+        <td style="width: 25%">Phone:</td>
+        <td>{{ format.simpleText(companyData.contactPhone) }}</td>
+      </tr>
+      <tr *ngIf="!format.isEmpty(companyData.contactEmail)">
+        <td>E-Mail:</td>
+        <td><a href="mailto:{{ companyData.contactEmail }}">{{ format.simpleText(companyData.contactEmail) }}</a></td>
+      </tr>
+      <tr *ngIf="!format.isEmpty(companyData.website)">
+        <td>Website:</td>
+        <td><a href="http://www.{{ companyData.website }}">{{ format.website(companyData.website) }}</a></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-md-4">
+    <p>
+      <strong>Contact Person</strong><br>
+      {{ format.simpleText(companyData.contactName) }}
+    </p>
+  </div>
+</div>
+
+
+
+<h4>Job Postings</h4>
+<hr>
+<div *ngIf="companyJobs.length == 0">
+  <p><em>This company currently doesn't have any job postings available</em></p>
+</div>
+<div *ngIf="companyJobs.length > 0">
+  <p *ngIf="companyJobs.length == 1"><em>This company currently has <strong>1</strong> job posting available</em></p>
+  <p *ngIf="companyJobs.length > 1"><em>This company currently has <strong>{{ companyJobs.length }}</strong> job postings available</em></p>
+  <app-job-item
+    *ngFor="let companyJob of companyJobs"
+    [jobData]="companyJob">
+  </app-job-item>
+</div>

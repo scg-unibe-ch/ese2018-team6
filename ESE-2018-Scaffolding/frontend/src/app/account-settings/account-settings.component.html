@@ -73,9 +73,12 @@
       <h5>
         Company Details
         <!-- Status Label (Green: Verified; Red: Unverified) -->
-        <span class="label label-success pull-right" *ngIf="companyData.verified == true">Verified</span>
-        <span class="label label-warning pull-right" *ngIf="companyData.verified == null">In Review</span><br>
-        <span class="label label-danger pull-right" *ngIf="companyData.verified == false && companyData.onceVerified != true">Unverified</span><br>
+        <span class="pull-right">
+          <span class="label label-success" *ngIf="companyData.verified == true">Verified</span>
+          <span class="label label-warning" *ngIf="companyData.verified == null">In Verification</span>
+          <span class="label label-danger" *ngIf="companyData.verified == false && companyData.onceVerified != true">Unverified</span>&nbsp;
+          <span class="label label-info" *ngIf="companyData.featured == true"><span class="glyphicon glyphicon-star" title="Featured"></span> Featured</span>
+        </span>
       </h5>
     </div>
   </div>

@@ -23,5 +23,6 @@ export class Job {
     public messageFromAdmin: string,
     public accepted: boolean,
     public featured: boolean,
+    public companyName: string,
   ) {}
 }

@@ -16,7 +16,6 @@ import {FooterComponent} from './footer/footer.component';
 import {UserLoginComponent} from './user-login/user-login.component';
 import {UserRegisterComponent} from './user-register/user-register.component';
 import {JobEditComponent} from './job-edit/job-edit.component';
-import {ContactComponent} from './contact/contact.component';
 import {AboutComponent} from './about/about.component';
 import {MyAccountComponent} from './my-account/my-account.component';
 import {JobDetailComponent} from './job-detail/job-detail.component';
@@ -48,7 +47,6 @@ import {CompanyDetailComponent} from './company-detail/company-detail.component'
     UserLoginComponent,
     UserRegisterComponent,
     JobEditComponent,
-    ContactComponent,
     AboutComponent,
     MyAccountComponent,
     JobDetailComponent,
