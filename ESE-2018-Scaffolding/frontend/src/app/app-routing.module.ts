@@ -8,6 +8,7 @@ import {MyAccountComponent} from './my-account/my-account.component';
 import {JobEditComponent} from './job-edit/job-edit.component';
 import {JobDetailComponent} from './job-detail/job-detail.component';
 import {JobCreateComponent} from './job-create/job-create.component';
+import {CompanyListComponent} from './company-list/company-list.component';
 import {AccountSettingsComponent} from './account-settings/account-settings.component';
 import {AdminAllCompaniesComponent} from './admin-all-companies/admin-all-companies.component';
 import {AdminAllJobsComponent} from './admin-all-jobs/admin-all-jobs.component';
@@ -31,7 +32,9 @@ const routes: Routes = [
   { path: 'admin/unaccepted/jobs', component: AdminUnacceptedJobsComponent },
   { path: 'my-account/settings', component: AccountSettingsComponent },
   { path: 'my-account/job-postings', component: MyAccountComponent },
+  { path: 'companies', component: CompanyListComponent },
   { path: '**', redirectTo: '/jobs', pathMatch: 'full' },
+
 ];
 
 @NgModule({

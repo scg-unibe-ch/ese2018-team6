@@ -1,0 +1,21 @@
+<div class="form-group" id="salaryType">
+  <div>
+    <label for="datePostedSelect">Show postings posted</label><select class="form-control" [(ngModel)]="datePostedMin" id="datePostedSelect">
+      <option *ngFor="let OptionItem of datePosted" [value]="OptionItem.date">{{OptionItem.label}}</option>
+    </select>
+  </div>
+  <div>
+    <label for="startDateSelect">I would like to work from</label><select class="form-control" [(ngModel)]="startDateMin" id="startDateSelect">
+      <option *ngFor="let OptionItem of startDate" [value]="OptionItem.date">{{OptionItem.label}}</option>
+    </select>
+  </div>
+  <div>
+    <label for="endDateSelect">until</label><select class="form-control" [(ngModel)]="endDateMax" id="endDateSelect">
+      <option *ngFor="let OptionItem of endDate" [value]="OptionItem.date">{{OptionItem.label}}</option>
+    </select>
+  </div>
+</div>
+
+
+<button (click)="filter()">filter()</button>
+<button (click)="consoleLog()">ConsoleLog()</button>
