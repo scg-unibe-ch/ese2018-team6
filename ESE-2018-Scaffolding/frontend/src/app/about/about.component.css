@@ -1,6 +1,6 @@
 p {
   padding-top: 20px;
-  font-size: 16px;
+  font-size: 15px;
   text-align: justify;
   line-height: 1.8em;
 }
@@ -13,4 +13,35 @@ img {
   padding: 15px;
   margin: 5px auto 5px auto;
   border: #dddddd solid 1px;
+}
+
+a {
+  cursor: pointer;
+}
+
+span {
+  width: 30px !important;
+}
+
+.margin {
+  margin-right: 30px;
+}
+
+.glyphicon {
+  width: 30px;
+}
+
+.glyphs {
+  padding: 0;
+  margin: 0;
+}
+
+.col-md-6 {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.contact {
+  font-size: 16px;
+  line-height: 1.8em;
 }

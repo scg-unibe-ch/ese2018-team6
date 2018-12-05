@@ -49,7 +49,11 @@ export class CompanyListComponent implements OnInit {
           instance.messageFromAdmin,
           instance.verified,
           instance.onceVerified,
+<<<<<<< HEAD
           instance.featured
+=======
+          instance.featured,
+>>>>>>> 40000e62c7e6d6bd6dde5ff8defc1d77113abb79
         ))
       },
       (err) => {

@@ -14,6 +14,7 @@
           <span class="label label-success" *ngIf="myJobData.accepted == true">Approved</span>
           <span class="label label-warning" *ngIf="myJobData.accepted == null">In Review</span>
           <span class="label label-danger" *ngIf="myJobData.accepted == false">Denied</span>
+          <span class="label label-info" *ngIf="myJobData.featured == true"><span class="glyphicon glyphicon-star" title="Featured"></span> Featured</span>
           {{ format.datePosted(myJobData.datePosted) }}
            |
           <strong>{{ format.simpleText(myJobData.city) }}</strong>

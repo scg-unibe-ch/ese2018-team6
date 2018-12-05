@@ -57,10 +57,14 @@ export class RequestService {
    *  @param {string} filterValues    Values to be filtered after.
    *  @returns {Observable<Object>}   Observable of GET-Request.
    */
-  jobListFilter(filterValues: string) {
-    return this.httpClient.post(this.backendURL + 'jobitem/filer', {
-      filterValues
+  jobListFilter(filterList: string) {
+    return this.httpClient.post(this.backendURL + 'jobitem/filter', {
+      filterList:filterList
     });
+  }
+
+  jobListCompany(companyId: number) {
+    return this.httpClient.get(this.backendURL + 'jobitem/ofCompany/' + companyId);
   }
 
 
@@ -128,7 +132,7 @@ export class RequestService {
     }).subscribe(
       res => {
         this.toastr.success('Now in review by our admin', 'Job creation successful');
-        this.router.navigate(['/my-account']);
+        this.router.navigate(['/my-account/job-postings']);
       },
       err => {
         this.toastr.error(err.error.message, 'Job creation failed');

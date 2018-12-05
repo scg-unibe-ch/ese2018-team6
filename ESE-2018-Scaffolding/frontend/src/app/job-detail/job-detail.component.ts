@@ -14,49 +14,8 @@ export class JobDetailComponent implements OnInit {
 
   jobId: number;
   companyId: number;
-  jobData: Job = new Job(
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    '',
-    null,
-    null,
-  );
-  companyData: Company = new Company(
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    '',
-    null,
-    null,
-    null,
-  );
+  jobData: Job;
+  companyData: Company;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -103,6 +62,7 @@ export class JobDetailComponent implements OnInit {
         '',
         instance.accepted,
         instance.featured,
+        instance.companyName,
       )
     )
   }

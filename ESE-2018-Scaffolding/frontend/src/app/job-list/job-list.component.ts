@@ -85,6 +85,7 @@ export class JobListComponent implements OnInit {
           '',
           instance.accepted,
           instance.featured,
+          instance.companyName,
         ))
       },
       (err) => {
@@ -125,6 +126,7 @@ export class JobListComponent implements OnInit {
             '',
             instance.accepted,
             instance.featured,
+            instance.companyName,
           ))
         },
         (err) => {
@@ -146,7 +148,7 @@ export class JobListComponent implements OnInit {
     this.showResults = 'allJobs';
   }
 
-  buildFilterString() {
+  /*buildFilterString() {
     let filterData = [];
 
     let filterValue;
@@ -286,7 +288,8 @@ export class JobListComponent implements OnInit {
     console.log(JSON.stringify(filterData));
     return JSON.stringify(filterData);
   }
-
+*/
+/*
   // TODO - Use validation service to check filter input
   checkFilterData() {
     let errorFree = true;
@@ -298,11 +301,46 @@ export class JobListComponent implements OnInit {
       return false;
     }
   }
-
+*/
   /**
    *  Loads a list of all accepted job postings that match the filter values.
    */
-  loadJobListFilter() {
+  filter(filterList) {
+      this.showResults = 'filterResults';
+      this.request.jobListFilter(filterList).subscribe(
+        (response: any) => {
+          this.filterData = response.map((instance) => new Job(
+            instance.id,
+            instance.title,
+            instance.description,
+            instance.skills,
+            instance.datePosted,
+            instance.startDate,
+            instance.endDate,
+            instance.validUntil,
+            instance.workloadMin,
+            instance.workloadMax,
+            instance.firstLanguage,
+            instance.secondLanguage,
+            instance.street,
+            instance.houseNumber,
+            instance.postcode,
+            instance.city,
+            instance.salaryType,
+            instance.salaryAmount,
+            instance.companyId,
+            '',
+            instance.accepted,
+            instance.featured,
+            instance.companyName,
+          ))
+        },
+        (err) => {
+          this.toastr.error(err.error.message, 'Failed to filter job postings');
+        }
+      );
+  }
+ /* loadJobListFilter() {
     this.filterValues = this.buildFilterString();
     if(this.checkFilterData()){
       this.showResults = 'filterResults';
@@ -331,6 +369,7 @@ export class JobListComponent implements OnInit {
             '',
             instance.accepted,
             instance.featured,
+            instance.companyName,
           ))
         },
         (err) => {
@@ -341,6 +380,7 @@ export class JobListComponent implements OnInit {
       this.toastr.error('Invalid filter input', 'Filter failed');
     }
   }
+*/
 
   /**
    *  Cancels filtering by closing the box and deleting previously fetched details.

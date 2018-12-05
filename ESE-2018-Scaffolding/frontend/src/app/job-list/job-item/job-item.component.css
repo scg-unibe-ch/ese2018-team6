@@ -3,7 +3,7 @@ h4 {
 }
 
 p {
-  margin: 0 0 4px 0;
+  margin: 5px 0 0 0;
 }
 
 table {
@@ -14,4 +14,34 @@ table {
 .list-group-item {
   color: #000;
   padding: 10px;
+}
+
+.featured {
+  background-color: rgba(42, 171, 210, 0.2);
+  border-color: #036dd2;
+}
+
+.featured:hover {
+  color: #000;
+  background-color: rgba(42, 171, 210, 0.3);
+}
+
+.featured-star {
+  font-size: 15px;
+  margin-right: 2px;
+}
+
+.list-group-item-heading {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 2px 4px 2px 4px;
+}
+
+.label-default {
+  background-color: #555555;
 }

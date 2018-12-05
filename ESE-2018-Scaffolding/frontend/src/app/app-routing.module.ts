@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -13,6 +14,19 @@ import { JobDetailComponent } from './job-detail/job-detail.component';
 import { JobCreateComponent } from './job-create/job-create.component';
 import { CompanyListComponent } from './company-list/company-list.component';
 
+=======
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
+import {JobListComponent} from './job-list/job-list.component';
+import {AboutComponent} from './about/about.component';
+import {UserLoginComponent} from './user-login/user-login.component';
+import {UserRegisterComponent} from './user-register/user-register.component';
+import {MyAccountComponent} from './my-account/my-account.component';
+import {JobEditComponent} from './job-edit/job-edit.component';
+import {JobDetailComponent} from './job-detail/job-detail.component';
+import {JobCreateComponent} from './job-create/job-create.component';
+import {CompanyListComponent} from './company-list/company-list.component';
+>>>>>>> 40000e62c7e6d6bd6dde5ff8defc1d77113abb79
 import {AccountSettingsComponent} from './account-settings/account-settings.component';
 import {AdminAllCompaniesComponent} from './admin-all-companies/admin-all-companies.component';
 import {AdminAllJobsComponent} from './admin-all-jobs/admin-all-jobs.component';
@@ -27,7 +41,6 @@ const routes: Routes = [
   { path: 'jobs/edit/:id', component: JobEditComponent },
   { path: 'jobs/details/:id/:company', component: JobDetailComponent },
   { path: 'company/details/:id', component: CompanyDetailComponent },
-  { path: 'contact', component: ContactComponent },
   { path: 'about', component: AboutComponent },
   { path: 'login', component: UserLoginComponent },
   { path: 'register', component: UserRegisterComponent },

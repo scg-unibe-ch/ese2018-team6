@@ -3,12 +3,12 @@
 
 <!-- Displays message if no company needs approval -->
 <div>
-  <p *ngIf="companyList.length == 0"><em>There are currently no open company applications to approve.</em></p>
+  <p *ngIf="companyList.length == 0"><em>There are currently no open company applications to verify.</em></p>
 </div>
 
 <!-- Displays list of all unverified company applications -->
 <div>
-  <p *ngIf="companyList.length > 0"><em>The following company applications await approval:</em></p>
+  <p *ngIf="companyList.length > 0"><em>The following company applications await verification:</em></p>
   <app-company-application
     *ngFor="let companyEntry of companyList"
     [companyEntry]="companyEntry"

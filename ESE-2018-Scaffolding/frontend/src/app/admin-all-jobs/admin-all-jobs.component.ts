@@ -59,6 +59,7 @@ export class AdminAllJobsComponent implements OnInit {
           '',
           instance.accepted,
           instance.featured,
+          instance.companyName,
         ))
       }
     );
