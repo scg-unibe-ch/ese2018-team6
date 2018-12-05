@@ -320,10 +320,19 @@ router.get('/:jobItemId/:id/:token', async (req: Request, res: Response) => {
  - returns a map of all JobItems of one company that are accepted
  */
 router.get('/ofCompany/:companyId', async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
-  const instances = await JobItem.findAll({where: {companyId: id, accepted: true}});
+  const id = parseInt(req.params.companyId);
+  const instances = await JobItem.findAll({where: {
+      companyId: id,
+      accepted: true
+    }});
+  let returnArray = instances.map(e => e.toSimplification());
+  for(let i = 0; i < returnArray.length; i++){
+    const company = await Company.findOne({where: {userId: instances[i].companyId}});
+    if (company !== null)
+      returnArray[i].companyName = company.companyName;
+  }
   res.statusCode = 200;
-  res.send(instances.map(e => e.toSimplification()));
+  res.send(returnArray);
 });
 
 /*

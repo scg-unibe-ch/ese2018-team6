@@ -76,3 +76,4 @@ BACKLOG REPORT
 12 - DEC 03
 - We started to work on more upcoming features: the admin became a lot more powerful with a handful of new requests. A list of all existing companies was implemented.
 - The backend code was cleaned up, using helper functions to replace duplicated code and deleting unneccessary comments.
+- Last bugfixing
