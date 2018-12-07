@@ -1,4 +1,5 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {current} from 'codelyzer/util/syntaxKind';
 
 @Component({
@@ -17,13 +18,15 @@ export class FilterComponent implements OnInit {
   startDateMin: Date = null;
   endDateMax: Date = null;
 
-  languages: Array<string> = ["deutsch","englisch","französisch"];//[];
+  languages: Array<string> = [];
   salaryType: number = 0;
   salaryAmountMin: number = 0;
   workloadMin: number = 0;
   workloadMax: number = 0;
 
   nextMonth: Date = new Date();
+
+  newLanguageInput: string = "";
 
   @Output() sendFilter: EventEmitter<any> = new EventEmitter();
 
@@ -71,8 +74,27 @@ export class FilterComponent implements OnInit {
     this.endDate.push(new OptionItem("all", null));
   }
 
-  consoleLog(){
-    window.alert(this.datePostedMin.toString());
+
+  /**
+   * removes the specified item from the language array. Does only delete the first occurrence
+   * @param item
+   */
+  removeItemFromLanguagesArray(item: string){
+    const index = this.languages.indexOf(item);
+    if (index > -1) {
+      this.languages.splice(index, 1);
+    }
+  }
+
+  /**
+   * adds the value of the textbox to the languages array, but only if it does not exist.
+   */
+  addItemToLanguagesArray(){
+    const index = this.languages.indexOf(this.newLanguageInput);
+    if (index == -1) {
+      this.languages.push(this.newLanguageInput);
+    }
+    this.newLanguageInput = "";
   }
 
   /**
@@ -110,6 +132,12 @@ export class FilterComponent implements OnInit {
           "maxDate", this.endDateMax.getTime())
       );
     }
+    //languages
+    if(this.languages.length > 0){
+      filterList.push(
+        this.createFilterObject("language","languages",this.languages)
+      );
+    }
 
     this.sendFilter.emit(filterList);
   }
@@ -133,6 +161,7 @@ export class FilterComponent implements OnInit {
     console.log(filter);
     return filter;
   }
+
 }
 
 class OptionItem {

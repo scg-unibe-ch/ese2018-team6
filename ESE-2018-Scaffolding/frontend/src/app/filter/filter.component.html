@@ -16,16 +16,21 @@
   </div>
   <div>
     <label for="languagesBox">Languages</label>
-    <div class="btn-group" role="group" id="languagesBox" [(ngModel)]="languages">
+    <div class="btn-group" role="group" id="languagesBox">
       <div *ngFor="let LanguageItem of languages">
         <button type="button" class="btn btn-secondary">{{LanguageItem}}</button>
         <button type="button" class="btn btn-secondary">
-          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+          <span class="glyphicon glyphicon-remove" aria-hidden="true" (click)="removeItemFromLanguagesArray(LanguageItem)"></span>
         </button>
       </div>
+  </div>
+  <div class="input-group mb-3">
+    <input type="text" id="newLanguageInput" class="form-control" placeholder="New language" [(ngModel)]= "newLanguageInput">
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary" type="button" (click)="addItemToLanguagesArray();">Add</button>
+    </div>
   </div>
 </div>
 
 
 <button (click)="filter()">filter()</button>
-<button (click)="consoleLog()">ConsoleLog()</button>
