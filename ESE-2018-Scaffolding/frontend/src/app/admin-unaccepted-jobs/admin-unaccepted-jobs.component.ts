@@ -60,6 +60,7 @@ export class AdminUnacceptedJobsComponent implements OnInit {
           '',
           instance.accepted,
           instance.featured,
+          instance.companyname,
         ))
       },
       err => {

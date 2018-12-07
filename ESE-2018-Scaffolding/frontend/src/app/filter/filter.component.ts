@@ -17,7 +17,7 @@ export class FilterComponent implements OnInit {
   startDateMin: Date = null;
   endDateMax: Date = null;
 
-  languages: Array<string> = [];
+  languages: Array<string> = ["deutsch","englisch","französisch"];//[];
   salaryType: number = 0;
   salaryAmountMin: number = 0;
   workloadMin: number = 0;

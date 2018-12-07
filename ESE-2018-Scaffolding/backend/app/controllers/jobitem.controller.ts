@@ -292,13 +292,47 @@ router.get('/:id', async (req: Request, res: Response) => {
 });
 
 /*
+- returns the JobItem with jobItemId that is in the parameter
+- only available for logged in user
+- message and accepted are added
+ */
+router.get('/:jobItemId/:id/:token', async (req: Request, res: Response) => {
+  const jobItemId = parseInt(req.params.jobItemId);
+  const id = parseInt(req.params.id);
+  const token = req.params.token;
+  const user = await User.findById(id);
+  if (foundUser(user, res) && checkToken(user, res, token) && user !== null) {
+    const instance = await JobItem.findById(jobItemId);
+    if (instance == null) {
+      sendErrorResponse(res, 404, {'message': 'jobItem not found'});
+      return;
+    }
+    let newInstance = instance.toSimplification();
+    newInstance.accepted = instance.accepted;
+    newInstance.messageFromAdmin = instance.messageFromAdmin;
+    res.statusCode = 200;
+    res.send(newInstance);
+  }
+});
+
+
+/*
  - returns a map of all JobItems of one company that are accepted
  */
 router.get('/ofCompany/:companyId', async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
-  const instances = await JobItem.findAll({where: {companyId: id, accepted: true}});
+  const id = parseInt(req.params.companyId);
+  const instances = await JobItem.findAll({where: {
+      companyId: id,
+      accepted: true
+    }});
+  let returnArray = instances.map(e => e.toSimplification());
+  for(let i = 0; i < returnArray.length; i++){
+    const company = await Company.findOne({where: {userId: instances[i].companyId}});
+    if (company !== null)
+      returnArray[i].companyName = company.companyName;
+  }
   res.statusCode = 200;
-  res.send(instances.map(e => e.toSimplification()));
+  res.send(returnArray);
 });
 
 /*

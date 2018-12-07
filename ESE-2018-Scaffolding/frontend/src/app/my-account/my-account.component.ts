@@ -61,6 +61,7 @@ export class MyAccountComponent implements OnInit {
             instance.message,
             instance.accepted,
             instance.featured,
+            instance.companyName,
           )
         )
       }

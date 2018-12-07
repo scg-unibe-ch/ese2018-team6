@@ -38,6 +38,7 @@ export class JobEditComponent implements OnInit {
     null,
     null,
     null,
+    null,
   );
   startDate: String = '';
   endDate: String = '';
@@ -90,6 +91,7 @@ export class JobEditComponent implements OnInit {
         '', /* TODO - Add instance.messageFromAdmin */
         instance.accepted,
         instance.featured,
+        instance.companyName,
       ));
     setTimeout(() => {
       this.setDates();

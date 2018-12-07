@@ -16,7 +16,6 @@ import {FooterComponent} from './footer/footer.component';
 import {UserLoginComponent} from './user-login/user-login.component';
 import {UserRegisterComponent} from './user-register/user-register.component';
 import {JobEditComponent} from './job-edit/job-edit.component';
-import {ContactComponent} from './contact/contact.component';
 import {AboutComponent} from './about/about.component';
 import {MyAccountComponent} from './my-account/my-account.component';
 import {JobDetailComponent} from './job-detail/job-detail.component';
@@ -36,9 +35,10 @@ import {RequestService} from './request.service';
 import {ToastrModule} from 'ngx-toastr';
 import {AccountSettingsComponent} from './account-settings/account-settings.component';
 import {ValidationService} from './validation.service';
-import { FilterComponent } from './filter/filter.component';
-import { CompanyListComponent } from './company-list/company-list.component';
+import {FilterComponent} from './filter/filter.component';
+import {CompanyListComponent} from './company-list/company-list.component';
 import {CompanyDetailComponent} from './company-detail/company-detail.component';
+import {CompanyItemComponent} from './company-list/company-item/company-item.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +50,6 @@ import {CompanyDetailComponent} from './company-detail/company-detail.component'
     UserLoginComponent,
     UserRegisterComponent,
     JobEditComponent,
-    ContactComponent,
     AboutComponent,
     MyAccountComponent,
     JobDetailComponent,
@@ -68,6 +67,7 @@ import {CompanyDetailComponent} from './company-detail/company-detail.component'
     CompanyApplicationComponent,
     JobSubmissionComponent,
     CompanyDetailComponent,
+    CompanyItemComponent,
   ],
   imports: [
     AppRoutingModule,

@@ -15,15 +15,12 @@ import {RequestService} from '../request.service';
 export class CompanyListComponent implements OnInit {
 
   companyData: Company[] = [];
-  showResults: string = 'allCompanies';
 
-  constructor(private httpClient: HttpClient,
-              private toastr: ToastrService,
-              private format: FormatService,
-              private validation: ValidationService,
-              public request: RequestService,) {
-
-  }
+  constructor(
+    private httpClient: HttpClient,
+    private toastr: ToastrService,
+    public request: RequestService,
+  ) { }
 
   ngOnInit() {
     this.loadCompanyDetails();
@@ -32,23 +29,24 @@ export class CompanyListComponent implements OnInit {
   loadCompanyDetails() {
     this.request.companyListAll().subscribe(
       (response: any) => {
-        this.companyData = response.map((instance) => new Company(
-          instance.id,
-          instance.name,
-          instance.logo,
-          instance.street,
-          instance.houseNumber,
-          instance.postcode,
-          instance.city,
+        this.companyData = response.map((instance) => new Company (
+          instance.userId,
+          instance.companyName,
+          instance.companyLogoURL,
+          instance.companyStreet,
+          instance.companyHouseNumber,
+          instance.companyPostcode,
+          instance.companyCity,
           instance.contactName,
           instance.contactEmail,
           instance.contactPhone,
-          instance.website,
-          instance.description,
+          instance.companyWebsite,
+          instance.companyDescription,
           instance.userId,
-          instance.messageFromAdmin,
+          '',
           instance.verified,
-
+          instance.onceVerified,
+          instance.featured,
         ))
       },
       (err) => {

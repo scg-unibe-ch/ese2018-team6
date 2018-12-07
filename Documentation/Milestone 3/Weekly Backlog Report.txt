@@ -27,16 +27,23 @@ BACKLOG REPORT
 - Now that we had a better understanding of Angular on how it works and the structure of our project has been discussed, we started working on the implementation.
 - One of the first decisions we made was to change from Angular Material to the Bootstrap Framework, since we preferred the look of it and styling the website would be quite quickly and look good too.
 - We created the necessary models and compoments (Header, Footer, Contact, About, User Login/Register, Job List/Detail/Create/Edit, My Account & Admin). To each compoment was added some basic CSS and some dummy data to see the current layout.
+- In pair programming, we created the first completely new models and controllers (user, company) on the backend side.
+- We decided to implement a login mechanism with a token. For the random token creation we used some function called crypto.
 - It was this week that we really got into the project as we started to understand how everything is connected and works together. The progress we made with the corresponding results were really motivating and fun.
 
 07 - OCT 19
 - This week we updated/improved most of the models and components we had created in the previous week.
 - We also added some new compoments (My Job Item and Job Detail) which were missing
+- New functions and an admin model were added on the backend in order to execute CRUD functions and admin functionality.
 - Additionally we implemented proper navigation routing.
 - All form fields were updated with two-way databinding, which means the displayed data was now linked to an object/array of dummy-data that could later be replaced with data from the database using the HTTP-requests.
+- The first documentations were uploaded.
 - Up to this point we didn't have any major issues. Most problems we had were minor ones that were resolved rather quickly. Creating the components and designing them all worked quite well and also the databinding worked thanks to some helpful tutorials on the internet.
 
 08 - NOV 05
+- As the backend was nearly finished for the upcoming milestone, we did a lot of minor changes and bugfixing
+- We also spent some time on documentation and wrote some postman test for the backend.
+- The token we used to log in was made to have an expiration date. 
 - Now that HTTP-request from the backend were mostly ready and the frontend was also progressed far enough with all the forms etc., we started implementing the HTTP-requests.
 - Due to some changes in the models, we also updated the entire website accordingly.
 - One bigger issues we had was that in one instance we sent two requests upon loading a component. This issue was that for the second request we needed some data that was only received from the first request. Since the second request was sent before the data from the first one was received, we had annoying NULL errors.
@@ -44,20 +51,29 @@ BACKLOG REPORT
 09 - NOV 12
 - Continuing from last week, we implemented the remaining HTTP-requests.
 - The frontend also received multiple updates and improvements as far as styling goes (glyphicons, messages for user if certain lists were empty...).
+- The backend team had to fix several bugs and unwanted behaviour that was discorvered. As a consequence, more test were written.
 - Companies and jobs now also display their status with an appropriate label.
 - To reduce duplicated code and keep responsibilities together, we created a RequestService that handels all requests with the backend and a FormatService that correctly displays data in the frontend. 
+- At this time we started to see the importance of testing. As the test-writing in postman was still a complex thing, lots of tests were still made manually.
 
 10 - NOV 19
 - This week we implemented ngx-toastr for user feedback. They are very helpful and are a major improvement for the user experience.
 - We also added a first implementation of form validation that gives useful and precise feedback to the user if one of his inputs is invalid.
+- Password hashing was implemented using bycript. It was intentionally to do this that late, as it makes automated as well as manual testing more difficult, as you cannot read passwords from the database.
 - For documentation purposes we also started adding DocComments to our code.
 - The layout received some improvements and we also added details of the MIB to the header, footer, contact and about us pages.
 - Additional, we added the search feature which allows to search for strings in the title, description, skills and place of a job posting.
+- It was then where we really started to learn how to use sequelize for more advanced database operations. 
 
 11 - NOV 26
+- Backend side, we did a lot of minor bugfixes and implemented sequelize ordering of the returned item arrays.
 - After the search feature we also implemented a first version of the filter features this week, although there are still some issues with it.
-- This week we also solved an issues we had with the dates. Instead of storing them as a string or Date, we now store them in milliseconds since 1970 which makes everything a bit easier (also filtering becomes alot easier this way)
+- This week we also solved the issues we had with the dates. Instead of storing them as a string or Date, we now store them in milliseconds since 1970 which makes everything a bit easier (also filtering becomes alot easier this way)
 - Error messages are now included in their own model which tracks all errors a form has / can have.
 - Further little improvements as far as layout and user experience goes.
+- For the usability testing, a number of tasks on a pre-set up database was prepared.
 
 12 - DEC 03
+- We started to work on more upcoming features: the admin became a lot more powerful with a handful of new requests. A list of all existing companies was implemented.
+- The backend code was cleaned up, using helper functions to replace duplicated code and deleting unneccessary comments.
+- Last bugfixing

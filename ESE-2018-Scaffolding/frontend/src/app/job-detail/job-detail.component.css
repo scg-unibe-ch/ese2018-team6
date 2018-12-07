@@ -42,3 +42,8 @@ h4 {
   font-weight: 500;
   padding: 4px 4px 2px 3px;
 }
+
+.glyphicon-star {
+  padding-left: 2px;
+  padding-bottom: 3px;
+}

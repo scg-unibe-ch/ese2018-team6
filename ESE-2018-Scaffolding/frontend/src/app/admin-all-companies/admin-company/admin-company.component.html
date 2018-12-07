@@ -5,9 +5,9 @@
     <td>
       <a [routerLink]="['/company/details/', companyEntry.id]">{{ format.simpleText(companyEntry.name) }}</a>&nbsp;
       <small>
-        <span class="label label-success" *ngIf="companyEntry.verified == true">Approved</span>
-        <span class="label label-warning" *ngIf="companyEntry.verified == null">In Review</span>
-        <span class="label label-danger" *ngIf="companyEntry.verified == false">Denied</span>
+        <span class="label label-success" *ngIf="companyEntry.verified == true">Verified</span>
+        <span class="label label-warning" *ngIf="companyEntry.verified == null">In Verification</span>
+        <span class="label label-danger" *ngIf="companyEntry.verified == false">Unverified</span>
       </small>
     </td>
 
@@ -25,12 +25,12 @@
         </span>
 
         <span *ngIf="companyEntry.verified == false">
-          <button type="button" class="btn btn-success" title="Accept" (click)="onApprovedCompany()">
+          <button type="button" class="btn btn-success" title="Verify" (click)="onApprovedCompany()">
             <span class="glyphicon glyphicon-ok"></span>
           </button>
         </span>
         <span *ngIf="companyEntry.verified != false">
-          <button type="button" class="btn btn-danger" title="Deny" (click)="onDeniedCompany()">
+          <button type="button" class="btn btn-danger" title="Unverify" (click)="onDeniedCompany()">
             <span class="glyphicon glyphicon-remove"></span>
           </button>
         </span>

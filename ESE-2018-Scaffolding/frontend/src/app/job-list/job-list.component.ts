@@ -85,6 +85,7 @@ export class JobListComponent implements OnInit {
           '',
           instance.accepted,
           instance.featured,
+          instance.companyName,
         ))
       },
       (err) => {
@@ -125,6 +126,7 @@ export class JobListComponent implements OnInit {
             '',
             instance.accepted,
             instance.featured,
+            instance.companyName,
           ))
         },
         (err) => {
@@ -330,6 +332,7 @@ export class JobListComponent implements OnInit {
             '',
             instance.accepted,
             instance.featured,
+            instance.companyName,
           ))
         },
         (err) => {
@@ -366,6 +369,7 @@ export class JobListComponent implements OnInit {
             '',
             instance.accepted,
             instance.featured,
+            instance.companyName,
           ))
         },
         (err) => {

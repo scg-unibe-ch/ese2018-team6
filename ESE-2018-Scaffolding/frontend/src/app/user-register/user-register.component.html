@@ -12,7 +12,7 @@
 
   <!-- User / E-Mail -->
   <div class="form-group" id="email">
-    <label class="col-sm-3 control-label">E-Mail</label>
+    <label class="col-sm-3 control-label">E-Mail *</label>
     <div class="col-sm-9">
       <input type="email" class="form-control" placeholder="E-Mail" name="email" [(ngModel)]="userData.email">
       <div class="alert alert-danger" *ngIf="errorMessage.emailEmpty === true">
@@ -23,7 +23,7 @@
 
   <!-- User / Password -->
   <div class="form-group" id="password">
-    <label class="col-sm-3 control-label">Password</label>
+    <label class="col-sm-3 control-label">Password *</label>
     <div class="col-sm-9">
       <input type="password" class="form-control" placeholder="Password" name="password" [(ngModel)]="userData.password">
       <div class="alert alert-danger" *ngIf="errorMessage.passwordEmpty === true">
@@ -34,7 +34,7 @@
 
   <!-- User / Confirm Password -->
   <div class="form-group" id="confirmPassword">
-    <label class="col-sm-3 control-label">Confirm Password</label>
+    <label class="col-sm-3 control-label">Confirm Password *</label>
     <div class="col-sm-9">
       <input type="password" class="form-control" placeholder="Confirm Password" name="confirmPassword" [(ngModel)]="confirmPassword">
       <div class="alert alert-danger" *ngIf="errorMessage.confirmPassword === true">
@@ -50,7 +50,7 @@
 
   <!-- User / Type -->
   <div class="form-group">
-    <label class="col-sm-3 control-label">User Type</label>
+    <label class="col-sm-3 control-label">User Type *</label>
     <div class="col-sm-9">
       <select class="form-control" name="userType" [(ngModel)]="userType">
         <option>Company</option>
@@ -73,7 +73,7 @@
 
     <!-- Company / Name -->
     <div class="form-group" id="name">
-      <label class="col-sm-3 control-label">Name</label>
+      <label class="col-sm-3 control-label">Name *</label>
       <div class="col-sm-9">
         <input class="form-control" placeholder="Name" name="name" [(ngModel)]="companyData.name">
         <div class="alert alert-danger" *ngIf="errorMessage.nameEmpty === true">
@@ -84,7 +84,7 @@
 
     <!-- Company / Description -->
     <div class="form-group" id="description">
-      <label class="col-sm-3 control-label">Description</label>
+      <label class="col-sm-3 control-label">Description *</label>
       <div class="col-sm-9">
         <textarea rows="2" class="form-control" placeholder="Description" name="description" [(ngModel)]="companyData.description"></textarea>
         <div class="alert alert-danger" *ngIf="errorMessage.descriptionEmpty === true">
@@ -122,7 +122,7 @@
     <!-- Company / Street & House No. -->
     <div class="form-group">
       <div id="streetHouse">
-        <label class="col-sm-3 control-label">Street / House No.</label>
+        <label class="col-sm-3 control-label">Street / House No. *</label>
       </div>
       <div class="col-sm-7" id="street">
         <input class="form-control" placeholder="Street" name="street" [(ngModel)]="companyData.street">
@@ -138,7 +138,7 @@
     <!-- Company / Postcode & City -->
     <div class="form-group">
       <div id="postcodeCity">
-        <label class="col-sm-3 control-label">ZIP Code / Place</label>
+        <label class="col-sm-3 control-label">ZIP Code / Place *</label>
       </div>
       <div class="col-sm-2" id="postcode">
         <input class="form-control" placeholder="ZIP Code" name="zipCode" [(ngModel)]="companyData.postcode">

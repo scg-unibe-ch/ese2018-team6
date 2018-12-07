@@ -47,6 +47,10 @@ small {
   vertical-align: middle;
 }
 
+.glyphicon-star {
+  padding-bottom: 3px;
+}
+
 .text-right {
   width: 1%;
   white-space: nowrap;

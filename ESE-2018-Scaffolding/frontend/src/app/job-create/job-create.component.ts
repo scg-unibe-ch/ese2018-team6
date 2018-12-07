@@ -35,6 +35,7 @@ export class JobCreateComponent implements OnInit {
     null,
     null,
     null,
+    null,
   );
   startDate: String = '';
   endDate: String = '';
