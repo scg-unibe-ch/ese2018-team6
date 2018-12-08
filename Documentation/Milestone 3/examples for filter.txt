@@ -16,11 +16,6 @@
 			maxDate: ms since 1970 (int)
 		},
 		{
-			filter:"validUntil",
-			minDate: ms since 1970 (int),
-			maxDate: ms since 1970 (int)
-		},
-		{
 			filter:"language",
 			languages: ["lang1","lang2"]
 		},
@@ -34,13 +29,13 @@
 		},
 		{
 			filter:"salaryAmount",
-			minSalary: int,
-			maxSalary: int
+			minSalaryAmount: int,
+			maxSalaryAmount: int
 		},
 		{
 			filter:"workload",
-			minworkload: int,
-			maxworkload: int
+			minWorkload: int,
+			maxWorkload: int
 		}]
 }
 

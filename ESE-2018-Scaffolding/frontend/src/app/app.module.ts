@@ -39,6 +39,7 @@ import {FilterComponent} from './filter/filter.component';
 import {CompanyListComponent} from './company-list/company-list.component';
 import {CompanyDetailComponent} from './company-detail/company-detail.component';
 import {CompanyItemComponent} from './company-list/company-item/company-item.component';
+import { Ng5SliderModule } from 'ng5-slider';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,7 @@ import {CompanyItemComponent} from './company-list/company-item/company-item.com
     CompanyApplicationComponent,
     JobSubmissionComponent,
     CompanyDetailComponent,
-    CompanyItemComponent,
+    CompanyItemComponent
   ],
   imports: [
     AppRoutingModule,
@@ -88,6 +89,7 @@ import {CompanyItemComponent} from './company-list/company-item/company-item.com
       preventDuplicates: true,
       resetTimeoutOnDuplicate: true,
     }),
+    Ng5SliderModule
   ],
   providers: [
     FormatService,
