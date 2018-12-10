@@ -76,7 +76,7 @@ router.get('/search/:term', async (req: Request, res: Response) => {
  */
 router.post('/filter', async (req: Request, res: Response) => {
   const Op = Sequelize.Op;
-  if(req.body.filterList && req.body.filterList.constructor === Array && req.body.filterList.length > 0) {
+  if(req.body.filterList && req.body.filterList.constructor === Array) {
     let filterArray = []; //stores a list with conditions, which then are used as options for the SQL request
     for(let i = 0; i < req.body.filterList.length; i++) { //loop through every filter object
       let filterObject = req.body.filterList[i];
@@ -181,7 +181,7 @@ router.post('/filter', async (req: Request, res: Response) => {
     res.send(returnArray);
 
   } else {
-    sendErrorResponse(res, 400, {'message': 'please specify a filter list with at least filter object'});
+    sendErrorResponse(res, 400, {'message': 'please specify a filter list'});
   }
 });
 /**

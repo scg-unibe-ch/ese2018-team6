@@ -57,6 +57,25 @@ router.get('/:id/:token', async (req: Request, res: Response) => {
 });
 
 /*
+- returns boolean for frontend to check if user is logged in
+- only works for user himself (userId and token needed)
+ */
+router.get('/checkToken/:id/:token', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const token = req.params.token;
+  const instance = await User.findById(id);
+  let isLoggedIn = false;
+  if (instance !== null) {
+    if ((token == instance.token) && !(instance.tokenExpirationDate < Date.now())) {
+      isLoggedIn = true;
+    }
+  }
+  res.statusCode = 200;
+  res.json({isLoggedIn: isLoggedIn})
+});
+
+
+/*
 - for updating the user model (password and email address).
 - requires a non-empty password and email field
 - email has to be unique

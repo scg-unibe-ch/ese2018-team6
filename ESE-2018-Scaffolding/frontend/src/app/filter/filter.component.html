@@ -1,21 +1,61 @@
 <div class="form-group" id="salaryType">
   <div>
     <label for="datePostedSelect">Show postings posted</label><select class="form-control" [(ngModel)]="datePostedMin" id="datePostedSelect">
-      <option *ngFor="let OptionItem of datePosted" [value]="OptionItem.date">{{OptionItem.label}}</option>
+      <option *ngFor="let OptionItem of datePosted" [value]="OptionItem.value">{{OptionItem.label}}</option>
     </select>
   </div>
   <div>
-    <label for="startDateSelect">I would like to work from</label><select class="form-control" [(ngModel)]="startDateMin" id="startDateSelect">
-      <option *ngFor="let OptionItem of startDate" [value]="OptionItem.date">{{OptionItem.label}}</option>
+    <label for="startDateSelect">I would like to work between</label><select class="form-control" [(ngModel)]="startDateMin" id="startDateSelect">
+      <option *ngFor="let OptionItem of startDate" [value]="OptionItem.value">{{OptionItem.label}}</option>
     </select>
   </div>
   <div>
-    <label for="endDateSelect">until</label><select class="form-control" [(ngModel)]="endDateMax" id="endDateSelect">
-      <option *ngFor="let OptionItem of endDate" [value]="OptionItem.date">{{OptionItem.label}}</option>
+    <label for="endDateSelect">and</label><select class="form-control" [(ngModel)]="endDateMax" id="endDateSelect">
+      <option *ngFor="let OptionItem of endDate" [value]="OptionItem.value">{{OptionItem.label}}</option>
     </select>
   </div>
+  <div>
+    <label for="languagesBox">Languages</label>
+    <div class="btn-group" role="group" id="languagesBox">
+      <div *ngFor="let LanguageItem of languages">
+        <button type="button" class="btn btn-secondary">{{LanguageItem}}</button>
+        <button type="button" class="btn btn-secondary" (click)="removeItemFromArray('languages',LanguageItem)">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="input-group mb-3">
+    <input type="text" id="newLanguageInput" class="form-control" placeholder="New language" [(ngModel)]= "languagesInput">
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary" type="button" (click)="addItemToArray('languages','languagesInput');">Add</button>
+    </div>
+  </div>
+  <div>
+    <label for="postcodesBox">Postcodes</label>
+    <div class="btn-group" role="group" id="postcodesBox">
+      <div *ngFor="let PostcodeItem of postcodes">
+        <button type="button" class="btn btn-secondary">{{PostcodeItem}}</button>
+        <button type="button" class="btn btn-secondary" (click)="removeItemFromArray('postcodes',PostcodeItem)">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+    <div class="input-group mb-3">
+      <input type="text" id="newPostcodeInput" class="form-control" placeholder="New postcode" [(ngModel)]= "postcodesInput">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" (click)="addItemToArray('postcodes','postcodesInput');">Add</button>
+      </div>
+    </div>
+  </div>
+  <div>
+    <label for="workloadSlider">Workload</label>
+    <ng5-slider id="workloadSlider" [(value)]="workloadMin" [(highValue)]="workloadMax" [options]="workloadOptions"></ng5-slider>
+  </div>
+  <div>
+    <label for="salaryTypeSelect">Salary type</label><select class="form-control" [(ngModel)]="salaryType" id="salaryTypeSelect">
+    <option *ngFor="let OptionItem of salaryTypeArray" [value]="OptionItem.value">{{OptionItem.label}}</option>
+  </select>
+  </div>
+  <button (click)="filter()">filter()</button>
 </div>
-
-
-<button (click)="filter()">filter()</button>
-<button (click)="consoleLog()">ConsoleLog()</button>
