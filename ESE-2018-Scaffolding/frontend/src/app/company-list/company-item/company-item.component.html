@@ -1,8 +1,12 @@
 <div class="col-md-6">
   <div class="thumbnail" [ngClass]="{'featured':companyData.featured == true}" [routerLink]="['/company/details/', companyData.id]">
+
+    <!-- Company Logo -->
     <div class="emptyImage">
       <img src="{{ format.logo(companyData.logo) }}">
     </div>
+
+    <!-- Company Name and Description -->
     <div class="caption">
       <h4 class="giveMeEllipsis"><span *ngIf="companyData.featured == true" class="glyphicon glyphicon-star featured-star" title="Featured"></span>{{ format.simpleText(companyData.name) }}</h4>
       <p class="giveMeEllipsis">{{ format.simpleText(companyData.description) }}</p>

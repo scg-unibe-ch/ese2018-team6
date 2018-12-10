@@ -3,7 +3,6 @@ import {Company} from '../company.model';
 import {FormatService} from '../format.service';
 import {RequestService} from '../request.service';
 import {ToastrService} from 'ngx-toastr';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-admin-unverified-companies',
@@ -18,7 +17,6 @@ export class AdminUnverifiedCompaniesComponent implements OnInit {
     private format: FormatService,
     private request: RequestService,
     private toastr: ToastrService,
-    private router: Router,
   ) { }
 
   /**
@@ -28,6 +26,7 @@ export class AdminUnverifiedCompaniesComponent implements OnInit {
    */
   ngOnInit() {
     this.request.checkIfAdmin();
+    this.request.checkUserAccess();
     this.loadUnverifiedCompanies();
   }
 
@@ -56,6 +55,9 @@ export class AdminUnverifiedCompaniesComponent implements OnInit {
           instance.onceVerified,
           instance.featured
         ))
+      },
+      err => {
+        this.toastr.error(err.error.message, 'Company loading failed');
       }
     );
   }

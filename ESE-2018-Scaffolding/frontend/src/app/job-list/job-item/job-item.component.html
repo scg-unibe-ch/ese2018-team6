@@ -7,13 +7,6 @@
       <td style="padding-right: 10px;">
         <h4 class="list-group-item-heading giveMeEllipsis"><span *ngIf="jobData.featured == true" class="glyphicon glyphicon-star featured-star" title="Featured"></span>{{ format.simpleText(jobData.title) }}</h4>
         <span class="label label-default">{{ format.simpleText(jobData.companyName) }}</span>
-        <!--
-        &nbsp;&nbsp;
-        <small>{{ format.datePosted(jobData.datePosted) }}&nbsp;|&nbsp;
-          <strong>{{ format.simpleText(jobData.city) }}</strong>&nbsp;|&nbsp;
-          {{ format.workload(jobData.workloadMin, jobData.workloadMax) }}
-        </small>
-        -->
         <p class="list-group-item-text giveMeEllipsis">{{ format.simpleText(jobData.description) }}</p>
       </td>
 

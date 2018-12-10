@@ -28,6 +28,7 @@ export class AdminAllCompaniesComponent implements OnInit {
    */
   ngOnInit() {
     this.request.checkIfAdmin();
+    this.request.checkUserAccess();
     this.loadCompanies();
   }
 
@@ -90,6 +91,12 @@ export class AdminAllCompaniesComponent implements OnInit {
     if (this.format.isEmpty(adminMessage)) {
     } else {
       this.request.companyDeny(companyId, adminMessage);
+      for(let i = 0; i < this.companyList.length; i++){
+        if (this.companyList[i].id == companyId) {
+          this.companyList[i].verified = false;
+          break;
+        }
+      }
     }
   }
 

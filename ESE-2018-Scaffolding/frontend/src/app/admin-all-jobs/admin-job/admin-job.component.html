@@ -25,12 +25,12 @@
         </span>
 
         <span *ngIf="jobEntry.accepted == false">
-          <button type="button" class="btn btn-success" title="Approve" (click)="onApprovedJob()">
+          <button type="button" class="btn" title="Approve" (click)="onApprovedJob()">
             <span class="glyphicon glyphicon-ok"></span>
           </button>
         </span>
         <span *ngIf="jobEntry.accepted != false">
-          <button type="button" class="btn btn-danger" title="Deny" (click)="onDeniedJob()">
+          <button type="button" class="btn" title="Deny" (click)="onDeniedJob()">
             <span class="glyphicon glyphicon-remove"></span>
           </button>
         </span>

@@ -30,7 +30,7 @@
           <button type="button" class="btn btn-success" routerLink="/register">Register</button>
         </div>
 
-        <!-- Logged In Users: Admin (if Admin), My Account Dropdown and Sign Out -->
+        <!-- Logged In Users: Admin Dropdown (if Admin), My Account Dropdown (if User) and Sign Out -->
         <div *ngIf="this.request.checkIfUser()">
           <div *ngIf="this.request.checkIfAdmin()" class="dropdown dropdownAdmin">
             <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuAdmin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">

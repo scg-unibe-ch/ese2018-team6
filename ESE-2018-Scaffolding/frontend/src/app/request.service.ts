@@ -15,6 +15,7 @@ export class RequestService {
   backendURL: string = 'http://localhost:3000/';
   userId: string;
   userToken: string;
+  activeUser: boolean;
 
   constructor(
     private httpClient: HttpClient,
@@ -54,7 +55,7 @@ export class RequestService {
    *  GET-Request to fetch all approved job postings that match the filter values.
    *  Requires the filter values. Returns the observable of the request.
    *
-   *  @param {string} filterValues    Values to be filtered after.
+   *  @param {string} filterList      Values to be filtered after.
    *  @returns {Observable<Object>}   Observable of GET-Request.
    */
   jobListFilter(filterList: string) {
@@ -63,6 +64,12 @@ export class RequestService {
     });
   }
 
+  /**
+   *  GET-Request to fetch all verified or once verified companies.
+   *  Returns the observable of the request.
+   *
+   *  @param companyId                Observable of the GET-Request.
+   */
   jobListCompany(companyId: number) {
     return this.httpClient.get(this.backendURL + 'jobitem/ofCompany/' + companyId);
   }
@@ -147,6 +154,19 @@ export class RequestService {
    ************************************************************************/
 
   /**
+   *  GET-Request to fetch all details of the job posting from the given ID.
+   *  Requires the jobId. Requires userId and userToken for verification.
+   *  Returns the observable of the request. Only for user owning this job posting.
+   *
+   *  @param {number} jobId           ID of job posting to get details from.
+   *  @returns {Observable<Object>}   Observable of GET-Request.
+   */
+  jobEdit(jobId: number) {
+    this.getLocalStorage();
+    return this.httpClient.get(this.backendURL + 'jobitem/' + jobId + '/' + this.userId + '/' + this.userToken);
+  }
+
+  /**
    *  PUT-Request to update job posting. Only for users that own this job posting.
    *  Requires userId and userToken for verification and jobData with all details.
    *
@@ -188,6 +208,22 @@ export class RequestService {
 
 
   /*************************************************************************
+   COMPANY LIST
+   ************************************************************************/
+
+  /**
+   *  GET-Request to fetch all approved companies.
+   *  Returns the observable of the request.
+   *
+   *  @returns {Observable<Object>}   Observable of GET-Request.
+   */
+  companyListAll() {
+    return this.httpClient.get(this.backendURL + 'company');
+  }
+
+
+
+  /*************************************************************************
       USER LOGIN
    ************************************************************************/
 
@@ -205,35 +241,21 @@ export class RequestService {
       res => {
         localStorage.setItem('user-id', res.id);
         localStorage.setItem('user-token', res.token);
-        // TODO - Improve Admin verification with isAdmin-request
         localStorage.setItem('isAdmin', res.isAdmin);
         this.toastr.success(userData.email, 'Sign In successful');
         this.router.navigate(['']);
       },
       err => {
         this.toastr.error(err.error.message, 'Sign In failed');
-        if(err.error.message == 'Wrong Password'){
+        if(err.error.message == 'wrong password'){
           this.format.addError('password');
-        } else if(err.error.message == 'User not found'){
+        } else if(err.error.message == 'user not found'){
           this.format.addError('email');
         }
       }
     );
   }
 
-  /*************************************************************************
-   COMPANY LIST
-   ************************************************************************/
-
-  /**
-   *  GET-Request to fetch all approved companies.
-   *  Returns the observable of the request.
-   *
-   *  @returns {Observable<Object>}   Observable of GET-Request.
-   */
-  companyListAll() {
-    return this.httpClient.get(this.backendURL + 'company');
-  }
 
 
   /*************************************************************************
@@ -269,7 +291,6 @@ export class RequestService {
       },
       err => {
         this.toastr.error(err.error.message, 'Registration failed');
-        // TODO - Analyze error-message and mark fields
       }
     );
   }
@@ -315,7 +336,10 @@ export class RequestService {
       'feature': featured
     }).subscribe(
       res => {
-        this.toastr.success('', 'Company Status updated successfully');
+        this.toastr.success('', 'Company updated successfully');
+      },
+      err => {
+        this.toastr.error(err.error.message, 'Failed to feature company');
       }
     );
   }
@@ -332,7 +356,10 @@ export class RequestService {
       'verify': true
     }).subscribe(
       res => {
-        this.toastr.success('', 'Company approved successfully');
+        this.toastr.success('', 'Company verified successfully');
+      },
+      err => {
+        this.toastr.error(err.error.message, 'Failed to verify company');
       }
     );
   }
@@ -352,7 +379,10 @@ export class RequestService {
       'message': adminMessage
     }).subscribe(
       res => {
-        this.toastr.success('', 'Company denied successfully');
+        this.toastr.success('', 'Company unverified successfully');
+      },
+      err => {
+        this.toastr.error(err.error.message, 'Failed to unverify company');
       }
     );
   }
@@ -369,6 +399,9 @@ export class RequestService {
       .subscribe(
         res => {
           this.toastr.success('', 'Company deleted successfully');
+        },
+        err => {
+          this.toastr.error(err.error.message, 'Failed to delete company');
         }
       );
   }
@@ -408,7 +441,10 @@ export class RequestService {
       'feature': featured
     }).subscribe(
       res => {
-        this.toastr.success('', 'Job Status updated successfully');
+        this.toastr.success('', 'Job updated successfully');
+      },
+      err => {
+        this.toastr.error(err.error.message, 'Failed to feature job');
       }
     );
   }
@@ -426,6 +462,9 @@ export class RequestService {
     }).subscribe(
       res => {
         this.toastr.success('', 'Job accepted successfully');
+      },
+      err => {
+        this.toastr.error(err.error.message, 'Failed to approve job');
       }
     );
   }
@@ -446,6 +485,9 @@ export class RequestService {
     }).subscribe(
       res => {
         this.toastr.success('', 'Job denied successfully');
+      },
+      err => {
+        this.toastr.error(err.error.message, 'Failed to deny job');
       }
     );
   }
@@ -462,6 +504,9 @@ export class RequestService {
       .subscribe(
         res => {
           this.toastr.success('', 'Job deleted successfully');
+        },
+        err => {
+          this.toastr.error(err.error.message, 'Failed to delete job');
         }
       );
   }
@@ -598,7 +643,13 @@ export class RequestService {
   deleteMyJob(jobId: number) {
     this.getLocalStorage();
     this.httpClient.delete(this.backendURL + 'jobitem/' + jobId + '/' +  this.userId + '/' + this.userToken)
-      .subscribe();
+      .subscribe(
+        res => {
+        },
+        err => {
+          this.toastr.error(err.error.message, 'Job Deletion failed');
+        }
+      );
   }
 
 
@@ -618,13 +669,58 @@ export class RequestService {
   /**
    *  Signs out the current user by deleting the user items in LocalStorage.
    */
-  onSignOut() {
+  onSignOut(showMessage?: boolean) {
     localStorage.removeItem('user-id');
     localStorage.removeItem('user-token');
     localStorage.removeItem('isAdmin');
-    this.toastr.warning('', 'You are now signed out');
+    if(showMessage == true) {
+      this.toastr.warning('', 'You are now signed out');
+    }
     this.router.navigate(['']).then();
   }
+
+  /**
+   *  Checks if the current user has a valid token with which he can perform user actions.
+   *  Requires userId and userToken for validation. Returns the observable of the request.
+   *
+   *  @returns {Observable<Object>}   Observable of GET-Request.
+   */
+  validUser() {
+    this.getLocalStorage();
+    if(localStorage.getItem('user-token') != null){
+      this.httpClient.get(this.backendURL + 'user/checkToken/' + this.userId + '/' + this.userToken)
+        .subscribe(
+          (instance: any) => this.activeUser = instance.isLoggedIn
+        );
+    } else {
+      this.activeUser = false;
+    }
+  }
+
+  /**
+   *  After access to a page has been denied, the user gets redirected to the home page.
+   *  A message displays that access has been denied and all possible user details
+   *  from LocalStorage (userId and userToken) get deleted.
+   */
+  redirectHome() {
+    if(this.activeUser == false) {
+      this.router.navigate(['']).then();
+      this.toastr.error('You need to be logged in', 'Access failed');
+      this.onSignOut(false);
+    }
+  }
+
+  /**
+   *  Checks if the current user with his id and token can access the current page.
+   */
+  checkUserAccess() {
+    this.validUser();
+    setTimeout(() => {
+      this.redirectHome();
+    }, 30);
+  }
+
+
 
   /**
    *  Checks if the current user has a token (and is therefore logged in)
@@ -635,6 +731,11 @@ export class RequestService {
     return localStorage.getItem('user-token');
   }
 
+  /**
+   *  Checks if a user-token is stored in local storage which means
+   *  a user could be logged in and potentially access user page.
+   *  THIS IS REPLACED BY checkUserAccess()
+   */
   checkIfAccess() {
     if(!localStorage.getItem('user-token')){
       this.router.navigate(['']).then();
@@ -648,7 +749,6 @@ export class RequestService {
    *  @returns {boolean}              True if Admin; False otherwise
    */
   checkIfAdmin() {
-    /* TODO - Check with backend if current userId & userToken is admin */
     let userType: string = localStorage.getItem('isAdmin');
     return (userType == 'true');
   }

@@ -40,7 +40,6 @@ export class AdminJobComponent {
    */
   onDeniedJob() {
     this.jobDenied.emit(this.jobEntry.id);
-    this.jobEntry.accepted = false;
   }
 
   /**

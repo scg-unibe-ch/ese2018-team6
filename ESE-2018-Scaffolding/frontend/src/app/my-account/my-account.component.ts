@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Job} from '../job.model';
 import {Router} from '@angular/router';
 import {RequestService} from '../request.service';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-my-account',
@@ -20,7 +21,8 @@ export class MyAccountComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private request: RequestService
+    private request: RequestService,
+    private toastr: ToastrService,
   ) {}
 
   /**
@@ -28,7 +30,7 @@ export class MyAccountComponent implements OnInit {
    *  If there is one, it loads all his personal job postings.
    */
   ngOnInit() {
-    this.checkIfLoggedIn();
+    this.request.checkUserAccess();
     this.loadMyJobs();
   }
 
@@ -64,6 +66,9 @@ export class MyAccountComponent implements OnInit {
             instance.companyName,
           )
         )
+      },
+      err => {
+          this.toastr.error(err.error.message, 'Job Loading failed');
       }
     )
   }
@@ -141,16 +146,6 @@ export class MyAccountComponent implements OnInit {
           break;
         }
       }
-    }
-  }
-
-  /**
-   *  Checks if a token from a user is stored in LocalStorage.
-   *  If none is present (no user logged in), it will redirect to home page.
-   */
-  checkIfLoggedIn() {
-    if(!localStorage.getItem('user-token')){
-      this.router.navigate(['']).then();
     }
   }
 }

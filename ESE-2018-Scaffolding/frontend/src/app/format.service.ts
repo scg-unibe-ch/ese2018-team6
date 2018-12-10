@@ -7,7 +7,13 @@ export class FormatService {
 
   constructor() { }
 
-
+  /**
+   *  Converts a string formatted as DD.MM.YYYY which represents a date
+   *  and returns it in the amount of milliseconds since 1970.
+   *
+   *  @param stringDate           Date to be converted (DD.MM.YYYY)
+   *  @returns (number)           Date in milliseconds since 1970.
+   */
   dateFromStringToMillisecond(stringDate: String) {
     var tmpDate = stringDate.split('.');
     var year = parseInt(tmpDate[2]);
@@ -17,6 +23,13 @@ export class FormatService {
     return newDate.getTime();
   }
 
+  /**
+   *  Turns the given date in milliseconds into the equivalent
+   *  date formatted as DD.MM.YYYY and returns it as a string.
+   *
+   *  @param ms                   Date to be formatted.
+   *  @returns (string)           Formatted date as string.
+   */
   dateFromMillisecondToString(ms: number){
     var tmpDate = new Date(null, null, null, null, null, null, ms);
 
@@ -31,6 +44,13 @@ export class FormatService {
     return day + '.' + month + '.' + year;
   }
 
+  /**
+   *  Formats the date posted and returns it.
+   *  If a date is not set (<10 ms), it returns 'Not Published'
+   *
+   *  @param ms                   Date to be formatted.
+   *  @returns (string)           Formatted date posted as string.
+   */
   datePosted(ms: number){
     if(ms < 10){
       return "Not Published";
@@ -39,6 +59,14 @@ export class FormatService {
     }
   }
 
+  /**
+   *  Formats the start date and returns it.
+   *  If a date is not set (<10 ms), it returns 'By Arrangement'.
+   *  Requires the end date in milliseconds.
+   *
+   *  @param ms                  Date to be formatted.
+   *  @returns (string)          Formatted start date as string.
+   */
   startDate(ms: number){
     if(ms < 10){
       return "By Arrangement";
@@ -47,6 +75,14 @@ export class FormatService {
     }
   }
 
+  /**
+   *  Formats the end date and returns it.
+   *  If a date is not set (<10 ms), it returns 'None / Permanent'.
+   *  Requires the end date in milliseconds.
+   *
+   *  @param ms                 Date to be formatted.
+   *  @returns (string)         Formatted end date as string.
+   */
   endDate(ms: number){
     if(ms < 10){
       return "None / Permanent";
@@ -73,7 +109,7 @@ export class FormatService {
 
   /**
    *  Formats the URL of the company logo and returns it.
-   *  Requires URL as string.
+   *  Requires URL as string. (Currently without modification)
    *
    *  @param {string} logo      URL of Logo to be formatted.
    *  @returns {string}         Formatted URL as string.
@@ -131,7 +167,7 @@ export class FormatService {
   languages(fst_lan: string, sec_lan: string){
     if(fst_lan == null && sec_lan == null){
       return '-';
-    } else if(fst_lan != null && sec_lan != null){
+    } else if(!this.isEmpty(fst_lan) && !this.isEmpty(sec_lan)){
       return fst_lan + ', ' + sec_lan;
     } else if(!this.isEmpty(fst_lan) && this.isEmpty(sec_lan)){
       return fst_lan;

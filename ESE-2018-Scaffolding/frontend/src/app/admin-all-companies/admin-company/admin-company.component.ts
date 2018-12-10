@@ -40,7 +40,6 @@ export class AdminCompanyComponent {
    */
   onDeniedCompany() {
     this.companyDenied.emit(this.companyEntry.id);
-    this.companyEntry.verified = false;
   }
 
   /**

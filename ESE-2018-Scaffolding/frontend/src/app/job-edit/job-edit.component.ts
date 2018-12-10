@@ -67,7 +67,7 @@ export class JobEditComponent implements OnInit {
    *  Loads all details for a job according to the given jobId.
    */
   onLoadingJob() {
-    this.request.jobDetails(this.jobId).subscribe(
+    this.request.jobEdit(this.jobId).subscribe(
       (instance: any) => this.jobData = new Job(
         this.jobId,
         instance.title,
@@ -88,7 +88,7 @@ export class JobEditComponent implements OnInit {
         instance.salaryType,
         instance.salaryAmount,
         instance.companyId,
-        '', /* TODO - Add instance.messageFromAdmin */
+        instance.messageFromAdmin,
         instance.accepted,
         instance.featured,
         instance.companyName,

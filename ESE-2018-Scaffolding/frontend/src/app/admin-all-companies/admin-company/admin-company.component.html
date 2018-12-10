@@ -25,12 +25,12 @@
         </span>
 
         <span *ngIf="companyEntry.verified == false">
-          <button type="button" class="btn btn-success" title="Verify" (click)="onApprovedCompany()">
+          <button type="button" class="btn" title="Verify" (click)="onApprovedCompany()">
             <span class="glyphicon glyphicon-ok"></span>
           </button>
         </span>
         <span *ngIf="companyEntry.verified != false">
-          <button type="button" class="btn btn-danger" title="Unverify" (click)="onDeniedCompany()">
+          <button type="button" class="btn" title="Unverify" (click)="onDeniedCompany()">
             <span class="glyphicon glyphicon-remove"></span>
           </button>
         </span>
