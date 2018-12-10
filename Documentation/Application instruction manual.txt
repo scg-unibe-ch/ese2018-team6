@@ -1,4 +1,4 @@
-##How to create an admin
+## How to create an admin
 In order to use the application, admin accounts have to be created.
 
 To create an admin account, perform the following steps:
@@ -10,13 +10,13 @@ To create an admin account, perform the following steps:
 6. Go to table 'admin'. Add a new row. Insert the noted id into column "userId".
 7. Write your changes to the database.
 
-##Application features
+## Application features
 The application should be intuitive. Still, the most important processes are explained here.
 
-###Jobs
-####acceptance status
-####"featured"
+### Jobs
+#### acceptance status
+#### "featured"
 
-###Companies
-###verification status
+### Companies
+### verification status
 
