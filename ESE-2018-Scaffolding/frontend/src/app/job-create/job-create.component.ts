@@ -43,7 +43,7 @@ export class JobCreateComponent implements OnInit {
   error: ErrorMessage = new ErrorMessage();
 
   constructor(
-    private request: RequestService,
+    public request: RequestService,
     private toastr: ToastrService,
     private validation: ValidationService
   ) { }
@@ -53,7 +53,7 @@ export class JobCreateComponent implements OnInit {
    *  If not he will be redirected to home page.
    */
   ngOnInit() {
-    this.request.checkIfAccess();
+    this.request.checkUserAccess();
   }
 
   /**

@@ -26,6 +26,7 @@ export class AdminAllJobsComponent implements OnInit {
    */
   ngOnInit() {
     this.request.checkIfAdmin();
+    this.request.checkUserAccess();
     this.loadJobs();
   }
 
@@ -85,6 +86,12 @@ export class AdminAllJobsComponent implements OnInit {
     if (this.format.isEmpty(adminMessage)) {
     } else {
       this.request.jobDeny(jobId, adminMessage);
+      for(let i = 0; i < this.jobList.length; i++){
+        if (this.jobList[i].id == jobId) {
+          this.jobList[i].accepted = false;
+          break;
+        }
+      }
     }
   }
 

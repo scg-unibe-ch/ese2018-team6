@@ -28,6 +28,7 @@ export class AdminUnacceptedJobsComponent implements OnInit {
    */
   ngOnInit() {
     this.request.checkIfAdmin();
+    this.request.checkUserAccess();
     this.loadUnacceptedJobs();
   }
 
@@ -60,7 +61,7 @@ export class AdminUnacceptedJobsComponent implements OnInit {
           '',
           instance.accepted,
           instance.featured,
-          instance.companyname,
+          instance.companyName,
         ))
       },
       err => {

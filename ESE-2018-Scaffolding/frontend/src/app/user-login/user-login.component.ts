@@ -3,6 +3,8 @@ import {User} from '../user.model';
 import {ToastrService} from 'ngx-toastr';
 import {FormatService} from '../format.service';
 import {RequestService} from '../request.service';
+import {ValidationService} from '../validation.service';
+import {ErrorMessage} from '../errorMessage';
 
 @Component({
   selector: 'app-user-login',
@@ -15,22 +17,24 @@ export class UserLoginComponent {
     null,
     null
   );
-  errorMessage: string;
+  error: ErrorMessage = new ErrorMessage();
 
   constructor(
     private format: FormatService,
     private toastr: ToastrService,
-    private request: RequestService
+    private request: RequestService,
+    private validation: ValidationService
   ) { }
 
   /**
    *  Signs in a user with the given email and password.
    */
   onSignIn() {
-    if(this.isDataValid()) {
+    this.error = new ErrorMessage();
+    if(this.isUserDataValid()) {
       this.request.userLogin(this.userData);
     } else {
-      this.toastr.error(this.errorMessage, 'Sign In failed');
+      this.toastr.error('Invalid Input', 'Sign In failed');
     }
   }
 
@@ -42,23 +46,14 @@ export class UserLoginComponent {
    *
    *  @returns {boolean}              True if valid; false otherwise
    */
-  isDataValid(){
-    this.format.removeError('email');
-    this.format.removeError('password');
-    if(this.format.isEmpty(this.userData.email) && this.format.isEmpty(this.userData.password)){
-      this.errorMessage = 'E-Mail and Password missing';
-      this.format.addError('email');
-      this.format.addError('password');
-      return false;
-    } else if(this.format.isEmpty(this.userData.email)){
-      this.errorMessage = 'E-Mail missing';
-      this.format.addError('email');
-      return false;
-    } else if(this.format.isEmpty(this.userData.password)){
-      this.errorMessage = 'Password missing';
-      this.format.addError('password');
+  isUserDataValid(){
+    let errorFree = this.validation.validateUserLogin(this.userData);
+
+    if(errorFree){
+      return true;
+    } else {
+      this.error = this.validation.getErrorMessage();
       return false;
     }
-    return true;
   }
 }

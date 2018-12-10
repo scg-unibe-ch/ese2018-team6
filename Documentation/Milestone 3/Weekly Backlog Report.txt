@@ -5,6 +5,7 @@ BACKLOG REPORT
 
 02 - SEP 24
 - Announcement of the different groups.
+- Creation of group chat (whatsapp).
 
 03 - OCT 01
 - First short team meeting on WE getting to know each other. General discussion about project.
@@ -63,7 +64,8 @@ BACKLOG REPORT
 - For documentation purposes we also started adding DocComments to our code.
 - The layout received some improvements and we also added details of the MIB to the header, footer, contact and about us pages.
 - Additional, we added the search feature which allows to search for strings in the title, description, skills and place of a job posting.
-- It was then where we really started to learn how to use sequelize for more advanced database operations. 
+- It was then where we really started to learn how to use sequelize for more advanced database operations.
+- Also we moved from a simple txt todo list to the project tab of github, as this is a way more convenient form of a todo list.
 
 11 - NOV 26
 - Backend side, we did a lot of minor bugfixes and implemented sequelize ordering of the returned item arrays.

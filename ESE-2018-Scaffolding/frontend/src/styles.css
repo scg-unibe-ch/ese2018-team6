@@ -68,6 +68,14 @@ textarea {
   display: none
 }
 
+.label-info, .btn-info {
+  background-color: #2b669a !important;
+}
+
+.btn-info, .btn-info:hover {
+  border-color: #2b669a;
+}
+
 /* Media query to trigger mobile header */
 @media(max-width: 767px){
   .navbar-toggle-btn{display: inline-block}

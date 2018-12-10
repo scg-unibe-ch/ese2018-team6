@@ -13,7 +13,8 @@
 }
 
 .navbar-nav {
-  padding-left: 0;
+  padding-left: 15px;
+  margin-top: 4px;
   font-size: 15px;
   font-weight: 500;
 }
@@ -78,3 +79,6 @@
   padding-left: 15px;
 }
 
+li>a {
+  padding: 10px;
+}

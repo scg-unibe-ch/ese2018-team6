@@ -4,6 +4,8 @@ import {RequestService} from '../request.service';
 import {Company} from '../company.model';
 import {FormatService} from '../format.service';
 import {ToastrService} from 'ngx-toastr';
+import {ValidationService} from '../validation.service';
+import {ErrorMessage} from '../errorMessage';
 
 @Component({
   selector: 'app-account-settings',
@@ -36,11 +38,12 @@ export class AccountSettingsComponent implements OnInit {
     null,
   );
   confirmPassword: string = '';
-  errorMessage: {[k: string]: any} = {};
+  error: ErrorMessage = new ErrorMessage();
 
   constructor(
     private request: RequestService,
     private toastr: ToastrService,
+    private validation: ValidationService,
     public format: FormatService
   ) { }
 
@@ -48,6 +51,7 @@ export class AccountSettingsComponent implements OnInit {
    *  Upon loading the component, it fetches the user and company data of the current user.
    */
   ngOnInit() {
+    this.request.checkUserAccess();
     this.loadUserData();
     this.loadCompanyData();
   }
@@ -69,8 +73,8 @@ export class AccountSettingsComponent implements OnInit {
    *  Validation requires email and password (which matches confirmed password).
    */
   updateUserData() {
-    this.errorMessage = {};
-    if(this.checkUserData()){
+    this.error = new ErrorMessage();
+    if(this.isUserDataValid()){
       this.request.userDataUpdate(this.userData);
     } else {
       this.toastr.error('Invalid Input', 'User update failed');
@@ -120,11 +124,13 @@ export class AccountSettingsComponent implements OnInit {
    *  Validation requires company name, complete address and a description.
    */
   updateCompanyData() {
-    this.errorMessage = {};
-    if(this.checkCompanyData()){
-      this.request.companyDataUpdate(this.userData, this.companyData);
-    } else {
-      this.toastr.error('Invalid Input', 'Company update failed');
+    if(confirm('Are you sure that you want to save these changes?\nYou will be unverified until the admin approves your details.')) {
+      this.error = new ErrorMessage();
+      if(this.isCompanyDataValid()){
+        this.request.companyDataUpdate(this.userData, this.companyData);
+      } else {
+        this.toastr.error('Invalid Input', 'Company update failed');
+      }
     }
   }
 
@@ -134,46 +140,15 @@ export class AccountSettingsComponent implements OnInit {
    *
    *  @returns {boolean}               True if valid; false otherwise
    */
-  checkUserData() {
-    // Resets styling of all form fields
-    let elements = ['email', 'password', 'confirmPassword'];
-    for(let i=0; i < elements.length; i++){
-      this.format.removeError(elements[i]);
-    }
-    let errorFree = true;
+  isUserDataValid() {
+    let errorFree = this.validation.validateUserItem(this.userData, this.confirmPassword);
 
-    // E-Mail cannot be empty
-    if(this.format.isEmpty(this.userData.email)){
-      this.format.addError("email");
-      this.errorMessage.emailEmpty = true;
-      errorFree = false;
+    if(errorFree){
+      return true;
+    } else {
+      this.error = this.validation.getErrorMessage();
+      return false;
     }
-
-    // Password cannot be empty
-    if(this.format.isEmpty(this.userData.password)){
-      this.format.addError("password");
-      this.errorMessage.passwordEmpty = true;
-      errorFree = false;
-    }
-
-    // Confirm Password cannot be empty
-    if(this.format.isEmpty(this.confirmPassword)){
-      this.format.addError("confirmPassword");
-      this.errorMessage.confirmPassword = true;
-      this.errorMessage.confirmPasswordEmpty = true;
-      errorFree = false;
-    }
-
-    // Password and Confirm Password must match
-    if(this.userData.password != this.confirmPassword){
-      this.format.addError("confirmPassword");
-      this.errorMessage.confirmPassword = true;
-      this.errorMessage.passwordsNotEqual = true;
-      errorFree = false;
-    }
-
-    // Return validation result
-    return errorFree;
   }
 
   /**
@@ -182,81 +157,14 @@ export class AccountSettingsComponent implements OnInit {
    *
    *  @returns {boolean}                True if valid; false otherwise.
    */
-  checkCompanyData() {
-    // Resets styling of all form fields
-    let elements = ['name', 'description', 'streetHouse', 'street', 'postcodeCity', 'postcode', 'city'];
-    for(let i=0; i < elements.length; i++){
-      this.format.removeError(elements[i]);
-    }
-    let errorFree = true;
+  isCompanyDataValid() {
+    let errorFree = this.validation.validateCompanyItem(this.companyData);
 
-    // Company Name cannot be empty
-    if(this.format.isEmpty(this.companyData.name)){
-      this.format.addError("name");
-      this.errorMessage.nameEmpty = true;
-      errorFree = false;
+    if(errorFree){
+      return true;
+    } else {
+      this.error = this.validation.getErrorMessage();
+      return false;
     }
-
-    // Description cannot be empty
-    if(this.format.isEmpty(this.companyData.description)){
-      this.format.addError("description");
-      this.errorMessage.descriptionEmpty = true;
-      errorFree = false;
-    }
-
-    // Street cannot be empty
-    if(this.format.isEmpty(this.companyData.street)){
-      this.format.addError("streetHouse");
-      this.format.addError("street");
-      this.errorMessage.streetEmpty = true;
-      errorFree = false;
-    }
-
-    // Postcode cannot be empty
-    if(this.format.isEmpty(this.companyData.postcode.toString())){
-      this.format.addError("postcodeCity");
-      this.format.addError("postcode");
-      this.errorMessage.postcode = true;
-      this.errorMessage.postcodeEmpty = true;
-      errorFree = false;
-    }
-
-    // Postcode must be number between 1000 and 9999
-    if(!(this.companyData.postcode>=1000 && this.companyData.postcode <= 9999)){
-      this.format.addError("postcodeCity");
-      this.format.addError("postcode");
-      this.errorMessage.postcode = true;
-      this.errorMessage.postcodeNumber = true;
-      errorFree = false;
-    }
-
-    // Postcode must be >= 1000
-    if(this.companyData.postcode < 1000){
-      this.format.addError("postcodeCity");
-      this.format.addError("postcode");
-      this.errorMessage.postcode = true;
-      this.errorMessage.postcodeLow = true;
-      errorFree = false;
-    }
-
-    // Postcode must be <= 10'000
-    if(this.companyData.postcode > 9999){
-      this.format.addError("postcodeCity");
-      this.format.addError("postcode");
-      this.errorMessage.postcode = true;
-      this.errorMessage.postcodeHigh = true;
-      errorFree = false;
-    }
-
-    // City cannot be empty
-    if(this.format.isEmpty(this.companyData.city)){
-      this.format.addError("postcodeCity");
-      this.format.addError("city");
-      this.errorMessage.cityEmpty = true;
-      errorFree = false;
-    }
-
-    // Return validation result
-    return errorFree;
   }
 }

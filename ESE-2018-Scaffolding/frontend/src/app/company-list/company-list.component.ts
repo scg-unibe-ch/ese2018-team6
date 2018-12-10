@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {Company} from '../company.model';
 import {HttpClient} from '@angular/common/http';
 import {ToastrService} from 'ngx-toastr';
-import {FormatService} from '../format.service';
-import {ValidationService} from '../validation.service';
 import {RequestService} from '../request.service';
 
 
@@ -22,10 +20,16 @@ export class CompanyListComponent implements OnInit {
     public request: RequestService,
   ) { }
 
+  /**
+   *  Upon loading the component, it fetches the required company details.
+   */
   ngOnInit() {
     this.loadCompanyDetails();
   }
 
+  /**
+   *  Loads the details of all companies that are not unverified (verified or once verified)
+   */
   loadCompanyDetails() {
     this.request.companyListAll().subscribe(
       (response: any) => {
