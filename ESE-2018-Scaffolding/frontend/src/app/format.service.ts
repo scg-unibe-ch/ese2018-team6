@@ -219,10 +219,37 @@ export class FormatService {
    *  @returns {string}            Formatted Salary type.
    */
   salaryType(type: string){
-    if(type == null){
-      return '-'
-    } else if(type != null){
-      return type;
+    switch(parseInt(type)){
+      case 0:
+        return "Monthly";
+      case 1:
+        return "Hourly";
+      case 2:
+        return "One Time Payment";
+      case 3:
+        return "By Arrangement";
+      default:
+        return type;
+    }
+  }
+
+  /**
+   *  Returns the numerical id of a salaryType to store it in the database.
+   *
+   *  @param type                   Salary Type as string
+   */
+  getSalaryType(type: string) {
+    switch(type) {
+      case "Monthly":
+        return 0;
+      case "Hourly":
+        return 1;
+      case "One Time Payment":
+        return 2;
+      case "By Arrangement":
+        return 3;
+      default:
+        return null;
     }
   }
 
