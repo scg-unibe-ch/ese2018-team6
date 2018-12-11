@@ -12,6 +12,9 @@ export class JobItemComponent {
   @Input()
   jobData: Job;
 
+  @Input()
+  newTab: boolean;
+
   constructor(
     public format: FormatService
   ) { }

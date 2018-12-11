@@ -44,6 +44,7 @@
     <p *ngIf="jobData.length > 1"><em>We currently have <strong>{{ jobData.length }}</strong> job postings available</em></p>
     <app-job-item
       *ngFor="let jobItem of jobData"
+      [newTab]="false"
       [jobData]="jobItem">
     </app-job-item>
   </div>
@@ -59,6 +60,7 @@
     <p *ngIf="searchData.length > 1"><em>Found <strong>{{ searchData.length }}</strong> job postings matching '{{ searchTermDisplayed }}'.</em></p>
     <app-job-item
       *ngFor="let jobItem of searchData"
+      [newTab]="true"
       [jobData]="jobItem">
     </app-job-item>
   </div>
@@ -74,6 +76,7 @@
     <p *ngIf="filterData.length > 1"><em>Found <strong>{{ filterData.length }}</strong> job postings matching your request.</em></p>
     <app-job-item
       *ngFor="let jobItem of filterData"
+      [newTab]="true"
       [jobData]="jobItem">
     </app-job-item>
   </div>
