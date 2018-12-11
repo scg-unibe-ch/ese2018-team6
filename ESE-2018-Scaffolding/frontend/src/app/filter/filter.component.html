@@ -1,61 +1,97 @@
-<div class="form-group" id="salaryType">
-  <div>
-    <label for="datePostedSelect">Show postings posted</label><select class="form-control" [(ngModel)]="datePostedMin" id="datePostedSelect">
-      <option *ngFor="let OptionItem of datePosted" [value]="OptionItem.value">{{OptionItem.label}}</option>
-    </select>
+<div class="" id="filter">
+ <div class="row">
+   <div class="col-sm-6">
+     <label for="datePostedSelect" class="control-label">Show postings posted</label>
+     <select class="form-control" [(ngModel)]="datePostedMin" id="datePostedSelect">
+       <option *ngFor="let OptionItem of datePosted" [value]="OptionItem.value">{{OptionItem.label}}</option>
+     </select>
+   </div>
   </div>
-  <div>
-    <label for="startDateSelect">I would like to work between</label><select class="form-control" [(ngModel)]="startDateMin" id="startDateSelect">
-      <option *ngFor="let OptionItem of startDate" [value]="OptionItem.value">{{OptionItem.label}}</option>
-    </select>
+  <div class="row">
+    <div class="col-sm-6">
+      <label for="startDateSelect" class="control-label">Show jobs between</label>
+      <select class="form-control" (ngModelChange)="adaptDateSelect('endDate')" [(ngModel)]="startDateMin" id="startDateSelect">
+        <option *ngFor="let OptionItem of startDate" [value]="OptionItem.value">{{OptionItem.label}}</option>
+      </select>
+    </div>
+    <div class="col-sm-6">
+      <label for="endDateSelect" class="control-label">and</label>
+      <select class="form-control" (ngModelChange)="adaptDateSelect('startDate')" [(ngModel)]="endDateMax" id="endDateSelect">
+        <option *ngFor="let OptionItem of endDate" [value]="OptionItem.value">{{OptionItem.label}}</option>
+      </select>
+    </div>
   </div>
-  <div>
-    <label for="endDateSelect">and</label><select class="form-control" [(ngModel)]="endDateMax" id="endDateSelect">
-      <option *ngFor="let OptionItem of endDate" [value]="OptionItem.value">{{OptionItem.label}}</option>
-    </select>
-  </div>
-  <div>
-    <label for="languagesBox">Languages</label>
-    <div class="btn-group" role="group" id="languagesBox">
-      <div *ngFor="let LanguageItem of languages">
-        <button type="button" class="btn btn-secondary">{{LanguageItem}}</button>
-        <button type="button" class="btn btn-secondary" (click)="removeItemFromArray('languages',LanguageItem)">
-          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-        </button>
+  <div class="row">
+    <div class="col-sm-12">
+      <label for="languagesBox" class="control-label">Languages</label>
+      <div id="languagesBox" class="btn-toolbar" role="toolbar">
+        <div *ngFor="let LanguageItem of languages" role="group" class="btn-group">
+          <button type="button" class="btn btn-default">{{LanguageItem}}</button>
+          <button type="button" class="btn btn-default" (click)="removeItemFromArray('languages',LanguageItem)">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
-  <div class="input-group mb-3">
-    <input type="text" id="newLanguageInput" class="form-control" placeholder="New language" [(ngModel)]= "languagesInput">
-    <div class="input-group-append">
-      <button class="btn btn-outline-secondary" type="button" (click)="addItemToArray('languages','languagesInput');">Add</button>
-    </div>
-  </div>
-  <div>
-    <label for="postcodesBox">Postcodes</label>
-    <div class="btn-group" role="group" id="postcodesBox">
-      <div *ngFor="let PostcodeItem of postcodes">
-        <button type="button" class="btn btn-secondary">{{PostcodeItem}}</button>
-        <button type="button" class="btn btn-secondary" (click)="removeItemFromArray('postcodes',PostcodeItem)">
-          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-        </button>
-      </div>
-    </div>
-    <div class="input-group mb-3">
-      <input type="text" id="newPostcodeInput" class="form-control" placeholder="New postcode" [(ngModel)]= "postcodesInput">
-      <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button" (click)="addItemToArray('postcodes','postcodesInput');">Add</button>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="input-group">
+        <input type="text" id="newLanguageInput" class="form-control" placeholder="New language" [(ngModel)]= "languagesInput">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button" (click)="addItemToArray('languages','languagesInput');">Add</button>
+        </span>
       </div>
     </div>
   </div>
-  <div>
-    <label for="workloadSlider">Workload</label>
+  <div class="row">
+    <div class="col-sm-12">
+      <label for="postcodesBox" class="control-label">Zip codes</label>
+        <div class="btn-toolbar" role="toolbar" id="postcodesBox">
+          <div *ngFor="let PostcodeItem of postcodes" role="group" class="btn-group">
+            <button type="button" class="btn btn-default">{{PostcodeItem}}</button>
+            <button type="button" class="btn btn-default" (click)="removeItemFromArray('postcodes',PostcodeItem)">
+              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="input-group">
+        <input type="text" id="newPostcodeInput" class="form-control" placeholder="New postcode" [(ngModel)]= "postcodesInput">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button" (click)="addItemToArray('postcodes','postcodesInput');">Add</button>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+    <label for="workloadSlider" class="control-label">Workload</label>
     <ng5-slider id="workloadSlider" [(value)]="workloadMin" [(highValue)]="workloadMax" [options]="workloadOptions"></ng5-slider>
+    </div>
   </div>
-  <div>
-    <label for="salaryTypeSelect">Salary type</label><select class="form-control" [(ngModel)]="salaryType" id="salaryTypeSelect">
-    <option *ngFor="let OptionItem of salaryTypeArray" [value]="OptionItem.value">{{OptionItem.label}}</option>
-  </select>
+  <div class="row">
+    <div class="col-sm-6">
+      <label for="salaryTypeSelect" class="control-label">Salary type</label>
+      <select class="form-control" [(ngModel)]="salaryType" id="salaryTypeSelect">
+       <option *ngFor="let OptionItem of salaryTypeArray" [value]="OptionItem.value">{{OptionItem.label}}</option>
+      </select>
+    </div>
   </div>
-  <button (click)="filter()">filter()</button>
+  <div class="row">
+    <div class="col-sm-12">
+      <label for="salaryAmountSlider" class="control-label">Salary amount</label>
+      <ng5-slider id="salaryAmountSlider" [(value)]="salaryAmountMin" [(highValue)]="salaryAmountMax" [options]="salaryAmountOptions"></ng5-slider>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 btn-toolbar">
+      <button (click)="filter()" class="btn btn-success">Filter</button>
+      <button (click)="reset()" class="btn btn-default">Reset</button>
+      <button (click)="cancel()" class="btn btn-default">Close</button>
+    </div>
+  </div>
 </div>

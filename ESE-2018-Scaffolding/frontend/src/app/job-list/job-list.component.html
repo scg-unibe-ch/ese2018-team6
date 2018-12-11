@@ -30,7 +30,7 @@
 <!-- Box to specify filter values -->
 <form class="form-horizontal">
   <div class="searchFilter" *ngIf="showSearchFilter === 'filter'">
-    <app-filter (sendFilter)="filter($event)"></app-filter>
+    <app-filter (sendFilter)="filter($event)" (cancelFilter)="cancelFilter()"></app-filter>
   </div>
 </form>
 

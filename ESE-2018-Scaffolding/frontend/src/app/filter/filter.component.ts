@@ -30,6 +30,19 @@ export class FilterComponent implements OnInit {
       return value + '%';
     }
   };
+  salaryAmountOptions: Options = {
+    floor: 0,
+    ceil: 10000,
+    step: 10,
+    minRange: 10,
+    translate: (value: number): string => {
+      return value + ' CHF';
+    }
+  }
+
+  languagesInput: string = "";
+  postcodesInput: string = "";
+
 
   datePostedMin: Date = null;
   startDateMin: Date = null;
@@ -42,20 +55,18 @@ export class FilterComponent implements OnInit {
   workloadMax: number = 100;
   salaryType: number = null;
 
-
-
   salaryAmountMin: number = 0;
+  salaryAmountMax: number = 10000;
 
 
-  nextMonth: Date = new Date();
 
-  languagesInput: string = "";
-  postcodesInput: string = "";
+
 
   @Output() sendFilter: EventEmitter<any> = new EventEmitter();
+  @Output() cancelFilter: EventEmitter<any> = new EventEmitter();
 
   constructor() {
-    this.nextMonth.setMonth(6);
+
   }
 
   ngOnInit() {
@@ -78,27 +89,51 @@ export class FilterComponent implements OnInit {
       new OptionItem("all",null));
 
     //startDatum / endDatum
+    this.fillDateSelect("startDate");
+    this.fillDateSelect("endDate");
+  }
+
+  /**
+   *  fills the specified variable with OptionItem objects. It depends on the date selected in the other select.
+   */
+  adaptDateSelect(variable: string){
+    let monthsToAdd = 0;
+    if(variable == "endDate") {
+      if(this.startDateMin){
+       // monthsToAdd = (new Date(this.startDateMin).getTime() - new Date()).getTime());
+      }
+    } else if (variable == "startDate"){
+      if(this.endDateMax){
+        //monthsToAdd = new Date(this.endDateMax).getMonth() - new Date().getMonth();
+      }
+    }
+    console.log(monthsToAdd);
+    //this.fillDateSelect(variable,monthsToAdd);
+  }
+
+  /**
+   * fills the specified variable with OptionItem objects.
+   *
+   * @param variable: startDate or endDate
+   * @param monthsToAdd: how many (constant) months should be added/subtracted if negative to every item (optional)
+   */
+  fillDateSelect(variable:string, monthsToAdd: number = 0){
     const monthStrings = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     let months = [];
     for(let i = 0; i < 13; i++){
       let currentMonth = new Date();
-      currentMonth.setMonth(new Date().getMonth() + i);
+      currentMonth.setMonth(new Date().getMonth() + i + monthsToAdd);
 
       months.push(new OptionItem(monthStrings[currentMonth.getMonth()], currentMonth));
       if(i == 0 || i == 12 || currentMonth.getMonth() == 0){
-        //add  year to the first item, last item and to every january item
+        //add  year to the second item (first month after "all"-entry, last item and to every january item
         months[i].label += " " + currentMonth.getFullYear();
       }
     }
+    months.push(new OptionItem("all",null));
 
-    this.startDate = this.startDate.concat(months); //creates a new array instance
-    this.endDate = this.endDate.concat(months); //creates a new array instance
-
-    this.startDate.push(new OptionItem("all", null));
-    this.endDate.push(new OptionItem("all", null));
+    this[variable] = months;
   }
-
-
   /**
    * removes the specified item from the specified array. Does only delete the first occurrence
    * @param array
@@ -123,6 +158,29 @@ export class FilterComponent implements OnInit {
       this[array].push(this[input]);
     }
     this[input] = "";
+  }
+
+  /**
+   * resets all filters to the initial/default state
+   */
+  reset(){
+    this.datePostedMin = null;
+    this.startDateMin = null;
+    this.endDateMax = null;
+
+    this.languages = [];
+    this.postcodes = [];
+
+    this.workloadMin = 0;
+    this.workloadMax = 100;
+    this.salaryType = null;
+
+    this.salaryAmountMin = 0;
+    this.salaryAmountMax = 10000;
+
+    //reset also the text box content
+    this.languagesInput = "";
+    this.postcodesInput = "";
   }
 
   /**
@@ -186,8 +244,23 @@ export class FilterComponent implements OnInit {
         this.createFilterObject("salaryType","salaryType",this.salaryType)
       );
     }
+    //salaryAmount
+    if(this.salaryAmountMin != this.salaryAmountOptions.floor || this.salaryAmountMax != this.salaryAmountOptions.ceil){
+      let minSalaryAmount = this.salaryAmountMin == 0 ? 1 : this.salaryAmountMin; //avoid 0 as minimum value.
+      filterList.push(
+        this.createFilterObject("salaryAmount","minSalaryAmount",minSalaryAmount,
+          "maxSalaryAmount", this.salaryAmountMax)
+      );
+    }
 
     this.sendFilter.emit(filterList);
+  }
+
+  /**
+   * tells the parent container to quit filter mode and show the normal job list
+   */
+  cancel(){
+    this.cancelFilter.emit();
   }
 
   /**
