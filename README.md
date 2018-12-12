@@ -11,7 +11,8 @@ Welcome to our ESE Project. Read below in order to find everything you need.
 - A table with all the existing requests
 - SRS
 - Weekly backlog report
-- Usability testing 
+- Usability testing
+- Risks, challenges and learning outcome 
 
 ## Scaffolding folder
 [Here](https://github.com/scg-unibe-ch/ese2018-team6/tree/master/ESE-2018-Scaffolding) you'll find our coding magic.
