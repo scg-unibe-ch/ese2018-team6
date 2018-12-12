@@ -85,7 +85,7 @@ export class JobEditComponent implements OnInit {
         instance.houseNumber,
         instance.postcode,
         instance.city,
-        instance.salaryType,
+        this.format.salaryType(instance.salaryType),
         instance.salaryAmount,
         instance.companyId,
         instance.messageFromAdmin,

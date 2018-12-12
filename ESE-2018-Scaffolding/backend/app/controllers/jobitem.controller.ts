@@ -149,8 +149,15 @@ router.post('/filter', async (req: Request, res: Response) => {
           if(validateMinMaxFilter(filterObject,"minWorkload","maxWorkload",res)){
             filterArray.push({
               [Op.and]: [
-                {workloadMin: {[Op.gte]: filterObject.minWorkload}},
-                {workloadMax: {[Op.lte]: filterObject.maxWorkload}}
+                {workloadMin: {[Op.lte]: filterObject.maxWorkload}},
+                {workloadMax: {[Op.gte]: filterObject.minWorkload}}
+                /*
+                Why is here min and max strangely applied?
+                - if you have a job posting with workload 80%-100% and the user filters
+                for jobs from 70% to 80%, the job posting should be returned!
+                So the maxWorkload of the user should gte minWorkload of the job posting and
+                the minWorkload of the user lte minWorkload of the posting.
+                 */
               ]
             });
           }

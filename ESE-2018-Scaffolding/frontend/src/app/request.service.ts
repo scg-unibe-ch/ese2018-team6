@@ -131,9 +131,9 @@ export class RequestService {
       'secondLanguage': jobData.secondLanguage,
       'street': jobData.street,
       'houseNumber': jobData.houseNumber,
-      'postcode': jobData.postcode,
+      'postcode': parseInt(jobData.postcode.toString().trim()),
       'city': jobData.city,
-      'salaryType': jobData.salaryType,
+      'salaryType': this.format.getSalaryType(jobData.salaryType),
       'salaryAmount': jobData.salaryAmount,
       'skills': jobData.skills
     }).subscribe(
@@ -189,9 +189,9 @@ export class RequestService {
       'secondLanguage': jobData.secondLanguage,
       'street': jobData.street,
       'houseNumber': jobData.houseNumber,
-      'postcode': jobData.postcode,
+      'postcode': parseInt(jobData.postcode.toString().trim()),
       'city': jobData.city,
-      'salaryType': jobData.salaryType,
+      'salaryType': this.format.getSalaryType(jobData.salaryType),
       'salaryAmount': jobData.salaryAmount,
       'skills': jobData.skills
     }).subscribe(
@@ -277,7 +277,7 @@ export class RequestService {
       'companyLogoURL': companyData.logo,
       'companyStreet': companyData.street,
       'companyHouseNumber': companyData.houseNumber,
-      'companyPostcode': companyData.postcode,
+      'companyPostcode': parseInt(companyData.postcode.toString().trim()),
       'companyCity': companyData.city,
       'contactName': companyData.contactName,
       'contactEmail': companyData.contactEmail,
@@ -598,7 +598,7 @@ export class RequestService {
       'companyLogoURL': companyData.logo,
       'companyStreet': companyData.street,
       'companyHouseNumber': companyData.houseNumber,
-      'companyPostcode': companyData.postcode,
+      'companyPostcode': parseInt(companyData.postcode.toString().trim()),
       'companyCity': companyData.city,
       'contactName': companyData.contactName,
       'contactEmail': companyData.contactEmail,

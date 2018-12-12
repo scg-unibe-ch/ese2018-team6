@@ -17,7 +17,7 @@ export class Job {
     public houseNumber: string,
     public postcode: number,
     public city: string,
-    public salaryType: 'Monthly' | 'Hourly' | 'One Time' | 'By Arrangement',
+    public salaryType: string,
     public salaryAmount: number,
     public companyId: number,
     public messageFromAdmin: string,
