@@ -2,6 +2,7 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {current} from 'codelyzer/util/syntaxKind';
 import { Options } from 'ng5-slider';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-filter',
@@ -65,7 +66,7 @@ export class FilterComponent implements OnInit {
   @Output() sendFilter: EventEmitter<any> = new EventEmitter();
   @Output() cancelFilter: EventEmitter<any> = new EventEmitter();
 
-  constructor() {
+  constructor(private toastr: ToastrService) {
 
   }
 
@@ -94,21 +95,17 @@ export class FilterComponent implements OnInit {
   }
 
   /**
-   *  fills the specified variable with OptionItem objects. It depends on the date selected in the other select.
+   *  fills the endDate variable with OptionItem objects. It depends on the date selected in the startDate select,
+   *  such that the user can always choose 12 months as a maximum.
    */
-  adaptDateSelect(variable: string){
+  adaptEndDateSelect(){
     let monthsToAdd = 0;
-    if(variable == "endDate") {
-      if(this.startDateMin){
-       // monthsToAdd = (new Date(this.startDateMin).getTime() - new Date()).getTime());
-      }
-    } else if (variable == "startDate"){
-      if(this.endDateMax){
-        //monthsToAdd = new Date(this.endDateMax).getMonth() - new Date().getMonth();
-      }
+    if(this.startDateMin){
+      monthsToAdd = new Date(new Date(this.startDateMin).getTime() -  new Date().getTime()).getMonth();
     }
-    console.log(monthsToAdd);
-    //this.fillDateSelect(variable,monthsToAdd);
+
+    this.fillDateSelect("endDate",monthsToAdd);
+    this.endDateMax = null;
   }
 
   /**
@@ -120,15 +117,11 @@ export class FilterComponent implements OnInit {
   fillDateSelect(variable:string, monthsToAdd: number = 0){
     const monthStrings = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     let months = [];
-    for(let i = 0; i < 13; i++){
+    for(let i = 0; i < 12; i++){
       let currentMonth = new Date();
       currentMonth.setMonth(new Date().getMonth() + i + monthsToAdd);
 
-      months.push(new OptionItem(monthStrings[currentMonth.getMonth()], currentMonth));
-      if(i == 0 || i == 12 || currentMonth.getMonth() == 0){
-        //add  year to the second item (first month after "all"-entry, last item and to every january item
-        months[i].label += " " + currentMonth.getFullYear();
-      }
+      months.push(new OptionItem(monthStrings[currentMonth.getMonth()] + " " + currentMonth.getFullYear(), currentMonth));
     }
     months.push(new OptionItem("all",null));
 
@@ -155,7 +148,21 @@ export class FilterComponent implements OnInit {
   addItemToArray(array: string, input: string){
     const index = this[array].indexOf(this[input]);
     if (index == -1) {
-      this[array].push(this[input]);
+      if(this[input] != ""){
+        if(input == "postcodesInput") {
+          if(!isNaN(Number(this[input])) && this[input].trim().length >= 4){
+            this[array].push(this[input].trim());
+          } else {
+            this.toastr.error("This is not a zip code.");
+          }
+        } else {
+          this[array].push(this[input].trim());
+        }
+      } else {
+        this.toastr.error("Empty items are not allowed.");
+      }
+    } else {
+      this.toastr.info("This item does already exist.");
     }
     this[input] = "";
   }
@@ -200,22 +207,30 @@ export class FilterComponent implements OnInit {
     }
     //startDate
     if(this.startDateMin != null && this.startDateMin.toString() != "null"){
-      this.startDateMin = new Date(this.startDateMin);
-      let startDateMax = new Date();
-      startDateMax.setFullYear(2050);
+      let minDate = new Date(this.startDateMin);
+      minDate.setDate(1);
+      let maxDate = new Date();
+      maxDate.setFullYear(2050);
       filterList.push(
-        this.createFilterObject("startDate","minDate",this.startDateMin.getTime(),
-          "maxDate", startDateMax.getTime())
+        this.createFilterObject("startDate","minDate",minDate.getTime(),
+          "maxDate", maxDate.getTime())
       );
     }
     //endDate
     if(this.endDateMax != null && this.endDateMax.toString() != "null"){
-      this.endDateMax = new Date(this.endDateMax);
-      let endDateMin = new Date();
-      endDateMin.setFullYear(1990);
+      //this code calculates the last day of the month that the user has chosen
+      let nextMonth = new Date();
+      nextMonth.setMonth(new Date(this.endDateMax).getMonth() + 1);
+      nextMonth.setDate(0); //0 is the last day of the month before next month -> the month we want!
+      let lastDay = nextMonth.getDate(); //now get this day (between 1 and 31)
+
+      let maxDate = new Date(this.endDateMax);
+      maxDate.setDate(lastDay);
+      let minDate = new Date();
+      minDate.setFullYear(1990);
       filterList.push(
-        this.createFilterObject("endDate","minDate",endDateMin.getTime(),
-          "maxDate", this.endDateMax.getTime())
+        this.createFilterObject("endDate","minDate",minDate.getTime(),
+          "maxDate", maxDate.getTime())
       );
     }
     //languages

@@ -118,7 +118,7 @@
 					"response": []
 				},
 				{
-					"name": "Create Company: create company",
+					"name": "Create Company (empty)",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -157,7 +157,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"email\": {{uniqueemail}},\n\t\"password\": \"123\"\n}"
+							"raw": "{\n\t\"email\": {{uniqueemail}},\n\t\"password\": \"1234\"\n}"
 						},
 						"url": {
 							"raw": "http://localhost:3000/company",
@@ -174,7 +174,7 @@
 					"response": []
 				},
 				{
-					"name": "Create Company: create company with all params",
+					"name": "! Create Company: create company with all params",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -235,7 +235,7 @@
 			"name": "User",
 			"item": [
 				{
-					"name": "Get (Post) Token",
+					"name": "! Get (Post) Token",
 					"event": [
 						{
 							"listen": "prerequest",
@@ -523,7 +523,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData.userId).to.eql(pm.globals.get(\"currentuserid\"));",
 									"    pm.expect(jsonData.message).to.be.eql(undefined); //for privacy",
-									"    pm.expect(jsonData.verified).to.be.eql(false);",
+									"    pm.expect(jsonData.verified).to.be.eql(null);",
 									"    pm.expect(jsonData.companyName).to.be.not.eql(undefined);",
 									"});"
 								],
@@ -688,14 +688,14 @@
 			"name": "Admin (User-oriented)",
 			"item": [
 				{
-					"name": "Check admin existance and get token",
+					"name": "! Check admin existance and get token",
 					"event": [
 						{
 							"listen": "prerequest",
 							"script": {
 								"id": "59a9c5ea-a602-4291-b88d-2c514941c92d",
 								"exec": [
-									"pm.globals.set(\"adminpassword\", \"123\");"
+									"pm.globals.set(\"adminpassword\", \"1234\");"
 								],
 								"type": "text/javascript"
 							}
@@ -730,7 +730,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"email\":\"admin@admin.com\",\n\t\"password\":\"{{adminpassword}}\"\n}"
+							"raw": "{\n\t\"email\":\"admin\",\n\t\"password\":\"{{adminpassword}}\"\n}"
 						},
 						"url": {
 							"raw": "http://localhost:3000/user/token",
@@ -744,7 +744,7 @@
 								"token"
 							]
 						},
-						"description": "IMPORTANT: Make sure that there is an admin in the database!\nUse following entries: email: admin@admin.com, password: hashed password should be entered in the Pre-request Script!"
+						"description": "IMPORTANT: Make sure that there is an admin in the database!\nUse following entries: email: admin, password: hashed password should be entered in the Pre-request Script!"
 					},
 					"response": []
 				},
@@ -956,7 +956,7 @@
 					"response": []
 				},
 				{
-					"name": "Put Admin: verify company",
+					"name": "! Put Admin: verify company",
 					"event": [
 						{
 							"listen": "test",
@@ -1191,7 +1191,7 @@
 			"name": "Job Item (not accepted)",
 			"item": [
 				{
-					"name": "Post Jobitem create Job Item 1",
+					"name": "! Post Jobitem create Job Item 1",
 					"event": [
 						{
 							"listen": "test",
@@ -1212,10 +1212,17 @@
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\n\t\"validUntil\":1,\n\t\"startDate\":1,\n\t\"endDate\":1,\n\t\"firstLanguage\":\"1\",\n\t\"secondLanguage\":\"11\",\n\t\"postcode\":\"1000\",\n\t\"salaryType\": 0,\n\t\"salaryAmount\": 1000,\n\t\"workloadMin\":10,\n\t\"workloadMax\":11\n}"
 						},
 						"url": {
 							"raw": "http://localhost:3000/jobitem/{{currentuserid}}/{{currenttoken}}",
@@ -1234,7 +1241,7 @@
 					"response": []
 				},
 				{
-					"name": "Post Jobitem create Job Item 2",
+					"name": "! Post Jobitem create Job Item 2",
 					"event": [
 						{
 							"listen": "test",
@@ -1255,10 +1262,17 @@
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\n\t\"validUntil\":2,\n\t\"startDate\":2,\n\t\"endDate\":2,\n\t\"firstLanguage\":\"2\",\n\t\"secondLanguage\":\"22\",\n\t\"postcode\":\"2000\",\n\t\"salaryType\": 1,\n\t\"salaryAmount\": 2000,\n\t\"workloadMin\":20,\n\t\"workloadMax\":22\n}"
 						},
 						"url": {
 							"raw": "http://localhost:3000/jobitem/{{currentuserid}}/{{currenttoken}}",
@@ -1277,7 +1291,7 @@
 					"response": []
 				},
 				{
-					"name": "Post Jobitem create Job Item 3",
+					"name": "! Post Jobitem create Job Item 3",
 					"event": [
 						{
 							"listen": "test",
@@ -1298,10 +1312,17 @@
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\n\t\"validUntil\":3,\n\t\"startDate\":3,\n\t\"endDate\":3,\n\t\"firstLanguage\":\"3\",\n\t\"secondLanguage\":\"33\",\n\t\"postcode\":\"3000\",\n\t\"salaryType\": 2,\n\t\"salaryAmount\": 3000,\n\t\"workloadMin\":30,\n\t\"workloadMax\":33\n}"
 						},
 						"url": {
 							"raw": "http://localhost:3000/jobitem/{{currentuserid}}/{{currenttoken}}",
@@ -1368,7 +1389,7 @@
 			"name": "Admin (Jobitem-oriented)",
 			"item": [
 				{
-					"name": "Put Admin accept Jobitem 1",
+					"name": "! Put Admin accept Jobitem 1",
 					"event": [
 						{
 							"listen": "test",
@@ -1385,10 +1406,17 @@
 					],
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\n\t\"accept\": true\n}"
 						},
 						"url": {
 							"raw": "http://localhost:3000/admin/accept/{{item1id}}/{{adminid}}/{{admintoken}}",
@@ -1409,7 +1437,7 @@
 					"response": []
 				},
 				{
-					"name": "Put Admin accept Jobitem 2",
+					"name": "! Put Admin accept Jobitem 2",
 					"event": [
 						{
 							"listen": "test",
@@ -1426,10 +1454,17 @@
 					],
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\n\t\"accept\": true\n}"
 						},
 						"url": {
 							"raw": "http://localhost:3000/admin/accept/{{item2id}}/{{adminid}}/{{admintoken}}",
@@ -1450,7 +1485,7 @@
 					"response": []
 				},
 				{
-					"name": "Put Admin accept Jobitem 3",
+					"name": "! Put Admin accept Jobitem 3",
 					"event": [
 						{
 							"listen": "test",
@@ -1467,10 +1502,17 @@
 					],
 					"request": {
 						"method": "PUT",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\n\t\"accept\": true\n}"
 						},
 						"url": {
 							"raw": "http://localhost:3000/admin/accept/{{item3id}}/{{adminid}}/{{admintoken}}",
@@ -1495,6 +1537,491 @@
 		{
 			"name": "Jobitem (accepted)",
 			"item": []
+		},
+		{
+			"name": "Filter",
+			"item": [
+				{
+					"name": "Filter validUntil",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a777c31e-a60f-4c43-b2f0-334219988f9f",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Jobitem 2 and 3 is displayed and Jobitem 1 is not displayed\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var i;",
+									"    var found1 = false;",
+									"    var found2 = false;",
+									"    var found3 = false;",
+									"    for (i=0; i<jsonData.length; i++){",
+									"        if(jsonData[i].id == pm.globals.get(\"item1id\")){found1 = true}",
+									"        if(jsonData[i].id == pm.globals.get(\"item2id\")){found2 = true}",
+									"        if(jsonData[i].id == pm.globals.get(\"item3id\")){found3 = true}",
+									"    }",
+									"    pm.expect(found1).to.eql(false);",
+									"    pm.expect(found2).to.eql(true);",
+									"    pm.expect(found3).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"filterList\":[\r\n\t\t{\r\n\t\t\t\"filter\":\"validUntil\",\r\n\t\t\t\"minDate\":2,\r\n\t\t\t\"maxDate\":3\r\n\t\t}\r\n\t]\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/jobitem/filter",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"jobitem",
+								"filter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter endDate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a777c31e-a60f-4c43-b2f0-334219988f9f",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Jobitem 2 and 3 is displayed and Jobitem 1 is not displayed\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var i;",
+									"    var found1 = false;",
+									"    var found2 = false;",
+									"    var found3 = false;",
+									"    for (i=0; i<jsonData.length; i++){",
+									"        if(jsonData[i].id == pm.globals.get(\"item1id\")){found1 = true}",
+									"        if(jsonData[i].id == pm.globals.get(\"item2id\")){found2 = true}",
+									"        if(jsonData[i].id == pm.globals.get(\"item3id\")){found3 = true}",
+									"    }",
+									"    pm.expect(found1).to.eql(false);",
+									"    pm.expect(found2).to.eql(true);",
+									"    pm.expect(found3).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"filterList\":[\r\n\t\t{\r\n\t\t\t\"filter\":\"endDate\",\r\n\t\t\t\"minDate\":2,\r\n\t\t\t\"maxDate\":3\r\n\t\t}\r\n\t]\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/jobitem/filter",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"jobitem",
+								"filter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter startDate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a777c31e-a60f-4c43-b2f0-334219988f9f",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Jobitem 2 and 3 is displayed and Jobitem 1 is not displayed\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var i;",
+									"    var found1 = false;",
+									"    var found2 = false;",
+									"    var found3 = false;",
+									"    for (i=0; i<jsonData.length; i++){",
+									"        if(jsonData[i].id == pm.globals.get(\"item1id\")){found1 = true}",
+									"        if(jsonData[i].id == pm.globals.get(\"item2id\")){found2 = true}",
+									"        if(jsonData[i].id == pm.globals.get(\"item3id\")){found3 = true}",
+									"    }",
+									"    pm.expect(found1).to.eql(false);",
+									"    pm.expect(found2).to.eql(true);",
+									"    pm.expect(found3).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"filterList\":[\r\n\t\t{\r\n\t\t\t\"filter\":\"startDate\",\r\n\t\t\t\"minDate\":2,\r\n\t\t\t\"maxDate\":3\r\n\t\t}\r\n\t]\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/jobitem/filter",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"jobitem",
+								"filter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter language",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a777c31e-a60f-4c43-b2f0-334219988f9f",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Jobitem 2 and 3 is displayed and Jobitem 1 is not displayed\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var i;",
+									"    var found1 = false;",
+									"    var found2 = false;",
+									"    var found3 = false;",
+									"    for (i=0; i<jsonData.length; i++){",
+									"        if(jsonData[i].id == pm.globals.get(\"item1id\")){found1 = true}",
+									"        if(jsonData[i].id == pm.globals.get(\"item2id\")){found2 = true}",
+									"        if(jsonData[i].id == pm.globals.get(\"item3id\")){found3 = true}",
+									"    }",
+									"    pm.expect(found1).to.eql(false);",
+									"    pm.expect(found2).to.eql(true);",
+									"    pm.expect(found3).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"filterList\":[\r\n\t\t{\r\n\t\t\t\"filter\":\"language\",\r\n\t\t\t\"languages\":[\"2\",\"22\",\"3\"]\r\n\t\t}\r\n\t]\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/jobitem/filter",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"jobitem",
+								"filter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter postcode",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a777c31e-a60f-4c43-b2f0-334219988f9f",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Jobitem 2 and 3 is displayed and Jobitem 1 is not displayed\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var i;",
+									"    var found1 = false;",
+									"    var found2 = false;",
+									"    var found3 = false;",
+									"    for (i=0; i<jsonData.length; i++){",
+									"        if(jsonData[i].id == pm.globals.get(\"item1id\")){found1 = true}",
+									"        if(jsonData[i].id == pm.globals.get(\"item2id\")){found2 = true}",
+									"        if(jsonData[i].id == pm.globals.get(\"item3id\")){found3 = true}",
+									"    }",
+									"    pm.expect(found1).to.eql(false);",
+									"    pm.expect(found2).to.eql(true);",
+									"    pm.expect(found3).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"filterList\":[\r\n\t\t{\r\n\t\t\t\"filter\":\"postcode\",\r\n\t\t\t\"postcodes\":[\"2000\",\"3000\"]\r\n\t\t}\r\n\t]\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/jobitem/filter",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"jobitem",
+								"filter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter salaryType",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a777c31e-a60f-4c43-b2f0-334219988f9f",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Jobitem 2 and 3 is displayed and Jobitem 1 is not displayed\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var i;",
+									"    var found1 = false;",
+									"    var found2 = false;",
+									"    var found3 = false;",
+									"    for (i=0; i<jsonData.length; i++){",
+									"        if(jsonData[i].id == pm.globals.get(\"item1id\")){found1 = true}",
+									"        if(jsonData[i].id == pm.globals.get(\"item2id\")){found2 = true}",
+									"        if(jsonData[i].id == pm.globals.get(\"item3id\")){found3 = true}",
+									"    }",
+									"    pm.expect(found1).to.eql(false);",
+									"    pm.expect(found2).to.eql(true);",
+									"    pm.expect(found3).to.eql(false);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"filterList\":[\r\n\t\t{\r\n\t\t\t\"filter\":\"salaryType\",\r\n\t\t\t\"salaryType\":1\r\n\t\t}\r\n\t]\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/jobitem/filter",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"jobitem",
+								"filter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter salaryAmount",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a777c31e-a60f-4c43-b2f0-334219988f9f",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Jobitem 2 and 3 is displayed and Jobitem 1 is not displayed\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var i;",
+									"    var found1 = false;",
+									"    var found2 = false;",
+									"    var found3 = false;",
+									"    for (i=0; i<jsonData.length; i++){",
+									"        if(jsonData[i].id == pm.globals.get(\"item1id\")){found1 = true}",
+									"        if(jsonData[i].id == pm.globals.get(\"item2id\")){found2 = true}",
+									"        if(jsonData[i].id == pm.globals.get(\"item3id\")){found3 = true}",
+									"    }",
+									"    pm.expect(found1).to.eql(false);",
+									"    pm.expect(found2).to.eql(true);",
+									"    pm.expect(found3).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"filterList\":[\r\n\t\t{\r\n\t\t\t\"filter\":\"salaryAmount\",\r\n\t\t\t\"minSalaryAmount\":2000,\r\n\t\t\t\"maxSalaryAmount\":3000\r\n\t\t}\r\n\t]\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/jobitem/filter",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"jobitem",
+								"filter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filter workload",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a777c31e-a60f-4c43-b2f0-334219988f9f",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test(\"Jobitem 2 and 3 is displayed and Jobitem 1 is not displayed\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var i;",
+									"    var found1 = false;",
+									"    var found2 = false;",
+									"    var found3 = false;",
+									"    for (i=0; i<jsonData.length; i++){",
+									"        if(jsonData[i].id == pm.globals.get(\"item1id\")){found1 = true}",
+									"        if(jsonData[i].id == pm.globals.get(\"item2id\")){found2 = true}",
+									"        if(jsonData[i].id == pm.globals.get(\"item3id\")){found3 = true}",
+									"    }",
+									"    pm.expect(found1).to.eql(false);",
+									"    pm.expect(found2).to.eql(true);",
+									"    pm.expect(found3).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"filterList\":[\r\n\t\t{\r\n\t\t\t\"filter\":\"workload\",\r\n\t\t\t\"minWorkload\":20,\r\n\t\t\t\"maxWorkload\":33\r\n\t\t}\r\n\t]\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/jobitem/filter",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"jobitem",
+								"filter"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Uncategorized",

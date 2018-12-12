@@ -10,13 +10,13 @@
   <div class="row">
     <div class="col-sm-6">
       <label for="startDateSelect" class="control-label">Show jobs between</label>
-      <select class="form-control" (ngModelChange)="adaptDateSelect('endDate')" [(ngModel)]="startDateMin" id="startDateSelect">
+      <select class="form-control" (change)="adaptEndDateSelect()" [(ngModel)]="startDateMin" id="startDateSelect">
         <option *ngFor="let OptionItem of startDate" [value]="OptionItem.value">{{OptionItem.label}}</option>
       </select>
     </div>
     <div class="col-sm-6">
       <label for="endDateSelect" class="control-label">and</label>
-      <select class="form-control" (ngModelChange)="adaptDateSelect('startDate')" [(ngModel)]="endDateMax" id="endDateSelect">
+      <select class="form-control" [(ngModel)]="endDateMax" id="endDateSelect">
         <option *ngFor="let OptionItem of endDate" [value]="OptionItem.value">{{OptionItem.label}}</option>
       </select>
     </div>
