@@ -1,4 +1,4 @@
-# ESE 2018 - Team 6
+# ESE 2018 - Team 6 
 
 Welcome to our ESE Project. Read below in order to find everything you need.
 
