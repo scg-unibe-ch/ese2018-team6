@@ -1,0 +1,20 @@
+1. page without login
+cicks:
+- all jobs (mention order and featured, mention)
+- filtering example
+- searching example -> click on one, new tab
+- read job post
+- see company and all of one companys posts
+- all companies (mention featured)
+- about us
+
+2. page for logged in users
+- show registration formular (try to register without inserting anything, see what happens)
+- log in with existing user
+- account page, my job items page
+- show posting, editing -> show admin message system
+optional: show admin message with unverified user
+
+3. admin page (use private window where already logged in)
+- show admin page and do some stuff (accept, deny, verify, unverify, feature)
+optional: switch back to logged in user and show changes
